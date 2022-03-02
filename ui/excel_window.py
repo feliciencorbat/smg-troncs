@@ -12,7 +12,6 @@ def excel_window():
     window.title("Test Chi-2")
     window.geometry("640x640")
     window.minsize(480, 360)
-    window.iconbitmap("logo.ico")
     window.config(background="#FFFFFF")
 
     # Titre de la page

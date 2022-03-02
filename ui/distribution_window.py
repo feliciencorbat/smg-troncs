@@ -12,7 +12,6 @@ def distribution_window():
     window.title("Distribution")
     window.geometry("640x480")
     window.minsize(480, 360)
-    window.iconbitmap("logo.ico")
     window.config(background="#FFFFFF")
 
     # Titre de la page
