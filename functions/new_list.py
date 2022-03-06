@@ -9,24 +9,78 @@ Fonction de création d'une liste de données à partir du fichier liste_origina
 
 
 def new_list(data: pd.DataFrame, export_directory: str, with_gbif: bool) -> None:
+    error = pd.DataFrame([], )
+
+    """
+    Enlever les cf., ? et parenthèses des genres et espèces
+    """
+    data["Genre"] = data["Genre"].str.replace(r"\(.*?\)", "", regex=True)
+    data["Genre"] = data["Genre"].str.replace("cf.", "", regex=False)
+    data["Genre"] = data["Genre"].str.replace("cf", "", regex=False)
+    data["Genre"] = data["Genre"].str.replace("?", "", regex=False)
+    data["Genre"] = data["Genre"].str.strip()
+
+    data["Espèce"] = data["Espèce"].str.replace(r"\(.*?\)", "", regex=True)
+    data["Espèce"] = data["Espèce"].str.replace("cf.", "", regex=False)
+    data["Espèce"] = data["Espèce"].str.replace("cf", "", regex=False)
+    data["Espèce"] = data["Espèce"].str.replace("?", "", regex=False)
+    data["Espèce"] = data["Espèce"].str.strip()
 
     """
     Création colonne Nom binomial
     """
-    data["Nom binomial"] = data["Genre"] + " " + data["Espèce"]
+    data["Nom"] = data["Genre"] + " " + data["Espèce"]
+
+    """
+    Suppression de certaines colonnes
+    """
+    data = data.drop(columns=['Genre', 'Espèce', 'Zone/Lieu', 'Auteurs', 'Abondance', 'X', 'Y', 'Canton', 'Alt',
+                              'Végétation', 'Photo', 'B/A/M', 'm/nm/i', 'Fréq', 'Legit', 'Dét', 'Exsiccata',
+                              'Réf Litt Déter'])
+
+    """
+    Création du nouveau dataframe species avec 2 colonnes (nom binomial et liste rouge) et tri par ordre alphabétique
+    """
+    species = data[['Nom', 'LR']].drop_duplicates()
+    species = species.sort_values("Nom")
+
+    """
+    Afficher les erreurs dans les noms qui contiennent une parenthèse non fermée ou égal
+    """
+    errors = data.loc[data["Nom"].str.contains("\)|\(|\=", case=False)]
+    errors = errors.drop(columns=['Substrat', 'Espèce du substrat', 'Date', 'LR'])
+    errors["Type d'erreur"] = "Erreur de parenthèse non fermée ou de caractère indésirable"
+    errors["Ligne"] = errors.index + 2
+    error = pd.concat([error, errors])
+
+    """
+    Chercher les incohérences entre Nom et LR
+    """
+    size = species.groupby(['Nom']).size()
+    errors = size[size >= 2].index
+    for err in errors:
+        print(err + "a une incohérence avec la liste rouge")
+        error_row = pd.DataFrame({'Nom': [err],
+                                  "Type d'erreur": ["Il y a une incohérence entre l'espèce et la liste rouge"]})
+        error = pd.concat([error, error_row])
+
+    """
+    Suppression de certaines colonnes
+    """
+    data = data.drop(columns=['LR'])
 
     """
     Création colonne Menace
     """
     conditions = [
-        (data['LR'] == 'EX'),
-        (data['LR'] == 'EW'),
-        (data['LR'] == 'RE'),
-        (data['LR'] == 'CR'),
-        (data['LR'] == 'EN'),
-        (data['LR'] == 'VU'),
-        (data['LR'] == 'LC'),
-        (data['LR'] == 'NT')
+        (species['LR'] == 'EX'),
+        (species['LR'] == 'EW'),
+        (species['LR'] == 'RE'),
+        (species['LR'] == 'CR'),
+        (species['LR'] == 'EN'),
+        (species['LR'] == 'VU'),
+        (species['LR'] == 'LC'),
+        (species['LR'] == 'NT')
     ]
     choices = [
         'Eteint',
@@ -38,7 +92,7 @@ def new_list(data: pd.DataFrame, export_directory: str, with_gbif: bool) -> None
         'Non menacé',
         'Non menacé'
     ]
-    data["Menace"] = np.select(condlist=conditions, choicelist=choices, default='Menace inconnue')
+    species["Menace"] = np.select(condlist=conditions, choicelist=choices, default='Menace inconnue')
 
     """
     Création colonne Mois
@@ -49,40 +103,78 @@ def new_list(data: pd.DataFrame, export_directory: str, with_gbif: bool) -> None
     Création colonnes GBIF
     """
     if with_gbif:
-        error = pd.DataFrame([], )
-        data["GBIF id"] = None
-        data["GBIF statut"] = None
-        data["GBIF Matching"] = None
-        data["GBIF Nom scientifique"] = None
-        data["GBIF Nom canonique"] = None
-        data["GBIF Phylum"] = None
-        data["GBIF Order"] = None
-        for row in data.itertuples():
+        species["Nom actuel"] = None
+        species["Phylum"] = None
+        species["Ordre"] = None
+        for row in species.itertuples():
             try:
-                name = str(row.Genre) + " " + str(row.Espèce)
-                print(name)
-                name_url = urllib.parse.quote(name)
-                response = urllib.request.urlopen("https://api.gbif.org/v1/species/match?name=" + name_url)
+                name_url = urllib.parse.quote(row.Nom)
+                response = urllib.request.urlopen(
+                    "https://api.gbif.org/v1/species/match?kingdom=Fungi&name=" + name_url)
 
                 json_data = response.read().decode("utf-8", "replace")
                 gbif_match = json.loads(json_data)
                 if gbif_match["rank"] == "SPECIES" or gbif_match["rank"] == "VARIETY" \
                         or gbif_match["rank"] == "SUBSPECIES" or gbif_match["rank"] == "FORM":
-                    data.at[row.Index, "GBIF id"] = gbif_match["usageKey"]
-                    data.at[row.Index, "GBIF statut"] = gbif_match["status"]
-                    data.at[row.Index, "GBIF Matching"] = gbif_match["matchType"]
-                    data.at[row.Index, "GBIF Nom scientifique"] = gbif_match["scientificName"]
-                    data.at[row.Index, "GBIF Nom canonique"] = gbif_match["canonicalName"]
-                    data.at[row.Index, "GBIF Phylum"] = gbif_match["phylum"]
-                    data.at[row.Index, "GBIF Order"] = gbif_match["order"]
+
+                    species.at[row.Index, "Nom actuel"] = gbif_match["canonicalName"]
+                    if "phylum" in gbif_match:
+                        species.at[row.Index, "Phylum"] = gbif_match["phylum"]
+
+                    if "order" in gbif_match:
+                        species.at[row.Index, "Ordre"] = gbif_match["order"]
+
+                    if "acceptedUsageKey" in gbif_match:
+                        accepted_key = gbif_match["acceptedUsageKey"]
+
+                        try:
+                            response = urllib.request.urlopen(
+                                "https://api.gbif.org/v1/species/" + str(accepted_key))
+
+                            json_data = response.read().decode("utf-8", "replace")
+                            gbif_species = json.loads(json_data)
+
+                            species.at[row.Index, "Nom actuel"] = gbif_species["canonicalName"]
+                            if "phylum" in gbif_match:
+                                species.at[row.Index, "Phylum"] = gbif_species["phylum"]
+
+                            if "order" in gbif_match:
+                                species.at[row.Index, "Ordre"] = gbif_species["order"]
+
+                            print("Nouveau nom: " + gbif_species["canonicalName"])
+
+                        except:
+                            print("Erreur de communication avec GBIF")
+
                 else:
-                    error_row = pd.DataFrame({'Ligne': [row.Index+2], 'Genre': [row.Genre], 'Espèce': [row.Espèce]})
+                    print(row.Nom + " non récupérée par GBIF")
+                    error_row = pd.DataFrame({'Ligne': [row.Index + 2], 'Nom': [row.Nom],
+                                              "Type d'erreur": ["L'espèce n'a pas été trouvée par GBIF"]})
                     error = pd.concat([error, error_row], ignore_index=True, axis=0)
             except:
-                print(row.Genre + " " + row.Espèce + " non récupérée")
-                error_row = pd.DataFrame({'Ligne': [row.Index+2], 'Genre': [row.Genre], 'Espèce': [row.Espèce]})
-                error = pd.concat([error, error_row], ignore_index=True, axis=0)
+                print("Erreur de communication avec GBIF")
+            finally:
+                print(row.Nom)
 
-        error.to_excel(export_directory + "/liste_modifiee_erreurs.xlsx")
+        # Joindre le dataframe species au dataframe data
+        data = data.set_index('Nom').join(species.set_index('Nom'), lsuffix='_left', rsuffix='_right')
+        data = data.sort_values(by=['Date'])
 
+        species.to_excel(export_directory + "/liste_modifiee_especes.xlsx", index=False)
+
+        """
+        Chercher les synonymes
+        """
+        species = species.drop(columns=['LR', 'Phylum', 'Ordre', 'Menace'])
+        species = species[['Nom', 'Nom actuel']].drop_duplicates()
+        size = species.groupby(['Nom actuel']).size()
+
+        errors = size[size >= 2].index
+        for err in errors:
+            print(err + " a une synonymie")
+            error_row = pd.DataFrame({'Nom': [err],
+                                      "Type d'erreur": ["Il y a une synonymie détectée par GBIF"]})
+            error = pd.concat([error, error_row])
+
+    error.to_excel(export_directory + "/liste_modifiee_erreurs.xlsx", index=False)
     data.to_excel(export_directory + "/liste_modifiee.xlsx")

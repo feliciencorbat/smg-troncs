@@ -9,13 +9,13 @@ from functions.new_list import new_list
 def excel_window():
     # Fenêtre
     window = Tk()
-    window.title("Test Chi-2")
+    window.title("Générer nouveau fichier excel")
     window.geometry("640x640")
     window.minsize(480, 360)
     window.config(background="#FFFFFF")
 
     # Titre de la page
-    label_title = Label(window, text="Transformer le fichier excel", font="Helvetica, 40", bg="#FFFFFF", fg="#000000")
+    label_title = Label(window, text="Générer nouveau fichier excel", font="Helvetica, 40", bg="#FFFFFF", fg="#000000")
     label_title.pack()
 
     # Importer fichier
