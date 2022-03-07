@@ -8,7 +8,10 @@ Fonction de création d'une liste de données à partir du fichier liste_origina
 """
 
 
-def new_list(data: pd.DataFrame, export_directory: str, with_gbif: bool) -> None:
+def new_list(filename: str, export_directory: str, with_gbif: bool) -> None:
+
+    data = pd.read_excel(filename, sheet_name="Observations")
+    trunks = pd.read_excel(filename, sheet_name="Troncs")
     error = pd.DataFrame([], )
 
     """
@@ -157,8 +160,7 @@ def new_list(data: pd.DataFrame, export_directory: str, with_gbif: bool) -> None
                 print(row.Nom)
 
         # Joindre le dataframe species au dataframe data
-        data = data.set_index('Nom').join(species.set_index('Nom'), lsuffix='_left', rsuffix='_right')
-        data = data.sort_values(by=['Date'])
+        data = data.join(species.set_index('Nom'), on="Nom", lsuffix='_left', rsuffix='_right')
 
         species.to_excel(export_directory + "/liste_modifiee_especes.xlsx", index=False)
 
@@ -175,6 +177,35 @@ def new_list(data: pd.DataFrame, export_directory: str, with_gbif: bool) -> None
             error_row = pd.DataFrame({'Nom': [err],
                                       "Type d'erreur": ["Il y a une synonymie détectée par GBIF"]})
             error = pd.concat([error, error_row])
+
+    """
+    Gestion des troncs
+    """
+    # Enlever les parenthèses des troncs et supprimer certaines colonnes
+    trunks["Identifiant"] = trunks["Identifiant"].str.replace(r"\(.*?\)", "", regex=True)
+    trunks["Identifiant"] = trunks["Identifiant"].str.strip()
+    trunks["Coupé entre"] = trunks["Coupé entre"].str.replace("?", "", regex=False)
+    trunks = trunks.drop(columns=['Diamètres', 'Rem.', 'Pourriture'])
+
+    # Joindre le dataframe trunks au dataframe data
+    data["Substrat"] = data["Substrat"].str.replace("tronc ", "", regex=False)
+    data = data.join(trunks.set_index('Identifiant'), on="Substrat", lsuffix='_left', rsuffix='_right')
+    data = data.sort_index()
+
+    # Erreurs: Espèce du substrat absente
+    errors = data[data['Espèce du substrat_right'].isnull()]
+    errors = errors[['Nom']]
+    errors["Type d'erreur"] = "Absence de l'espèce du substrat (tronc absent dans la feuille Troncs)"
+    errors["Ligne"] = errors.index + 2
+    error = pd.concat([error, errors])
+
+    # Erreurs: Incohérence dans l'espèce du substrat
+    errors = data[(data['Espèce du substrat_left'] != data['Espèce du substrat_right'])
+                  & data['Espèce du substrat_right'].notnull()]
+    errors = errors[['Nom']]
+    errors["Type d'erreur"] = "Incohérence dans l'espèce du substrat"
+    errors["Ligne"] = errors.index + 2
+    error = pd.concat([error, errors])
 
     error.to_excel(export_directory + "/liste_modifiee_erreurs.xlsx", index=False)
     data.to_excel(export_directory + "/liste_modifiee.xlsx")

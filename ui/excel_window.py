@@ -1,8 +1,5 @@
 from tkinter import *
 from tkinter import filedialog
-
-import pandas as pd
-
 from functions.new_list import new_list
 
 
@@ -25,7 +22,6 @@ def excel_window():
         filename.set(filedialog.askopenfilename(
             title='Choisir le fichier excel à transformer',
         ))
-        data = pd.read_excel(filename.get())
 
         # Ajouter colonnes GBIF
         def checked():
@@ -45,7 +41,7 @@ def excel_window():
             ))
 
             def validation():
-                new_list(data, directory.get(), gbif_checked.get())
+                new_list(filename.get(), directory.get(), gbif_checked.get())
 
                 window.destroy()
 
