@@ -8,81 +8,68 @@ from functions.distribution import distribution_bar
 
 def distribution_window():
     # Fenêtre
-    window = Tk()
+    window = Toplevel()
     window.title("Distribution")
     window.geometry("640x480")
     window.minsize(480, 360)
-    window.config(background="#FFFFFF")
 
     # Titre de la page
-    label_title = Label(window, text="Distributions", font="Helvetica, 40", bg="#FFFFFF", fg="#000000")
+    label_title = Label(window, text="Distributions", font="Helvetica, 20")
     label_title.pack()
     # Importer fichier
     filename = StringVar()
+
+    # Label bouton de sélection du fichier
+    label_select_file = Label(window, text="Le fichier à sélectionner est le fichier liste_modifiee.xlsx."
+                                           "\nCe fichier se trouve dans le dossier export."
+                                           "\nIl faut au préalable avoir généré le fichier excel pour les statistiques."
+                              )
+    label_select_file.pack(pady=15)
 
     def select_file():
         filename.set(filedialog.askopenfilename(
             title='Choisir le fichier excel',
         ))
-        data = pd.read_excel(filename.get())
+        data = pd.read_excel(filename.get(), sheet_name="Sheet1")
 
         # Menu variable
         variable = StringVar()
+
+        # Label variable
+        label_limit = Label(window, text="Choisir la variable qualitative")
+        label_limit.pack()
 
         def variable_selected(event):
             variable.set(clicked.get())
 
         options = data.columns.values
         clicked = StringVar()
-        clicked.set(options[0])
+        clicked.set("Choisir la variable...")
         variable_list = OptionMenu(window, clicked, *options, command=variable_selected)
         variable_list.pack(pady=20)
 
         # Limite
-        label_limit = Label(window, text="Limite (si 0, sans limite)", font="Helvetica, 20", bg="#FFFFFF", fg="#000000")
+        label_limit = Label(window, text="Limite (si 0, sans limite)")
         label_limit.pack()
 
         default_limit = StringVar(window, value='0')
-        limit_input = Entry(window, bg="#FFFFFF", fg="#000000", textvariable=default_limit)
+        limit_input = Entry(window, textvariable=default_limit)
         limit_input.pack(pady=20)
 
-        # Exporter résultat
-        directory = StringVar()
+        def validation():
+            distribution_bar(data, filename.get(), variable.get(), True, True, int(limit_input.get()))
 
-        def select_directory():
-            directory.set(filedialog.askdirectory(
-                title='Choisir la destination',
-            ))
+            window.destroy()
 
-            def validation():
-                distribution_bar(data, variable.get(), True, True, directory.get(),
-                                 int(limit_input.get()))
-
-                window.destroy()
-
-            # Bouton validation
-            validation_button = Button(window, text="Valider", bg="#FFFFFF", fg="#000000",
-                                       command=validation, font="Helvetica, 20")
-            validation_button.pack()
-
-        open_directory_button = Button(
-            window,
-            text='Choisir le dossier de destination du résultat',
-            command=select_directory,
-            font="Helvetica, 20",
-            bg="#FFFFFF",
-            fg="#000000"
-        )
-        open_directory_button.pack(pady=20)
+        # Bouton validation
+        validation_button = Button(window, text="Valider", command=validation)
+        validation_button.pack()
 
     open_file_button = Button(
         window,
         text='Choisir le fichier excel',
-        command=select_file,
-        font="Helvetica, 20",
-        bg="#FFFFFF",
-        fg="#000000"
+        command=select_file
     )
-    open_file_button.pack(pady=20)
+    open_file_button.pack()
 
     window.mainloop()

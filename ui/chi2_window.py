@@ -7,27 +7,33 @@ from functions.chi2 import chi2_heatmap
 
 def chi2_window():
     # Fenêtre
-    window = Tk()
+    window = Toplevel()
     window.title("Test Chi-2")
     window.geometry("640x640")
     window.minsize(480, 360)
-    window.config(background="#FFFFFF")
 
     # Titre de la page
-    label_title = Label(window, text="Test Chi-2", font="Helvetica, 40", bg="#FFFFFF", fg="#000000")
+    label_title = Label(window, text="Test Chi-2", font="Helvetica, 20")
     label_title.pack()
 
     # Importer fichier
     filename = StringVar()
 
+    # Label bouton de sélection du fichier
+    label_select_file = Label(window, text="Le fichier à sélectionner est le fichier liste_modifiee.xlsx."
+                                           "\nCe fichier se trouve dans le dossier export."
+                                           "\nIl faut au préalable avoir généré le fichier excel pour les statistiques."
+                              )
+    label_select_file.pack(pady=15)
+
     def select_file():
         filename.set(filedialog.askopenfilename(
             title='Choisir le fichier excel',
         ))
-        data = pd.read_excel(filename.get())
+        data = pd.read_excel(filename.get(), sheet_name="Sheet1")
 
         # Titre variable 1
-        label_variable1 = Label(window, text="Choix variable 1", font="Helvetica, 20", bg="#FFFFFF", fg="#000000")
+        label_variable1 = Label(window, text="Choix variable 1")
         label_variable1.pack()
 
         # Menu variable 1
@@ -38,13 +44,13 @@ def chi2_window():
             variable1.set(clicked1.get())
 
         clicked1 = StringVar()
-        clicked1.set(options[0])
+        clicked1.set("Choisir la variable 1...")
 
         variable1_list = OptionMenu(window, clicked1, *options, command=variable1_selected)
         variable1_list.pack(pady=20)
 
         # Titre variable 2
-        label_variable2 = Label(window, text="Choix variable 2", font="Helvetica, 20", bg="#FFFFFF", fg="#000000")
+        label_variable2 = Label(window, text="Choix variable 2")
         label_variable2.pack()
 
         # Menu variable 2
@@ -54,18 +60,18 @@ def chi2_window():
             variable2.set(clicked2.get())
 
         clicked2 = StringVar()
-        clicked2.set(options[0])
+        clicked2.set("Choisir la variable 2...")
 
         variable2_list = OptionMenu(window, clicked2, *options, command=variable2_selected)
         variable2_list.pack(pady=20)
 
         # Titre du graphe
-        label_title_graph = Label(window, text="Titre du graphe", font="Helvetica, 20", bg="#FFFFFF", fg="#000000")
+        label_title_graph = Label(window, text="Titre du graphe")
         label_title_graph.pack()
 
         # Titre du graphe
         default_title = StringVar(window, value="Titre du graphe")
-        title_input = Entry(window, bg="#FFFFFF", fg="#000000", textvariable=default_title)
+        title_input = Entry(window, textvariable=default_title)
         title_input.pack(pady=20)
 
         # Aggrégation nom binomial
@@ -73,49 +79,20 @@ def chi2_window():
             species_check.set(not species_check.get())
 
         species_check = BooleanVar()
-        species_agg = Checkbutton(window, text="Aggrégation espèce",
-                                  variable=species_check, bg="#FFFFFF", fg="#000000", command=checked)
+        species_agg = Checkbutton(window, text="Aggrégation espèce", variable=species_check, command=checked)
         species_agg.pack()
 
-        # Exporter résultat
-        directory = StringVar()
+        def validation():
+            chi2_heatmap(data, filename.get(), variable1.get(), variable2.get(), title_input.get(), True, True,
+                         species_check.get())
+            window.destroy()
 
-        def select_directory():
-            directory.set(filedialog.askdirectory(
-                title='Choisir la destination',
-            ))
-
-            def validation():
-                chi2_heatmap(data, variable1.get(),
-                             variable2.get(), title_input.get(), True, True,
-                             directory.get(), species_check.get())
-
-                window.destroy()
-
-            # Bouton de validation
-            validation_button = Button(window, text="Valider", bg="#FFFFFF", borderwidth=0,
-                                       command=validation, font="Helvetica, 20",
-                                       fg="#000000")
-            validation_button.pack()
-
-        open_directory_button = Button(
-            window,
-            text='Choisir le dossier de destination du résultat',
-            command=select_directory,
-            font="Helvetica, 20",
-            bg="#FFFFFF",
-            fg="#000000"
-        )
-        open_directory_button.pack(pady=20)
+        # Bouton de validation
+        validation_button = Button(window, text="Valider", command=validation)
+        validation_button.pack()
 
     open_file_button = Button(
-        window,
-        text='Choisir le fichier excel',
-        command=select_file,
-        font="Helvetica, 20",
-        bg="#FFFFFF",
-        fg="#000000"
-    )
-    open_file_button.pack(pady=20)
+        window, text='Choisir le fichier excel', command=select_file)
+    open_file_button.pack()
 
     window.mainloop()

@@ -9,8 +9,9 @@ Fonction Chi-2 entre 2 variables qualitatives et création heatmap
 """
 
 
-def chi2_heatmap(data: pd.DataFrame, variable1: str, variable2: str, title: str, show_plot: bool, export_files: bool,
-                 export_directory: str, species_agg: bool) -> None:
+def chi2_heatmap(data: pd.DataFrame, filename: str, variable1: str, variable2: str, title: str, show_plot: bool,
+                 export_files: bool, species_agg: bool) -> None:
+
     # Si aggrégation par nom binomial
     if species_agg:
         contingency = data.pivot_table(values="Nom binomial", index=variable1, columns=variable2,
@@ -21,11 +22,10 @@ def chi2_heatmap(data: pd.DataFrame, variable1: str, variable2: str, title: str,
     print("\nTest Chi-2 pour les variables " + contingency.index.name + " et " + contingency.columns.name + "\n")
 
     # dossier d'export
-    directory = None
-    if export_files:
-        directory = export_directory + "/chi2 " + contingency.index.name + " " + contingency.columns.name
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+    dirname = os.path.dirname(filename)
+    directory = dirname + "/chi2 " + contingency.index.name + " " + contingency.columns.name
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
     # affichage du tableau de contingence (contingency)
     print("Tableau de contingence\n")

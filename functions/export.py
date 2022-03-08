@@ -1,14 +1,20 @@
 import json
+import os
 import urllib.request
 import numpy as np
 import pandas as pd
 
 """
-Fonction de création d'une liste de données à partir du fichier liste_originale.xls
+Fonction de création d'une liste de données pour les statistiques
 """
 
 
-def new_list(filename: str, export_directory: str, with_gbif: bool) -> None:
+def export(filename: str, with_gbif: bool) -> None:
+    # dossier d'export
+    dirname = os.path.dirname(filename)
+    export_directory = dirname + "/export"
+    if not os.path.exists(export_directory):
+        os.makedirs(export_directory)
 
     data = pd.read_excel(filename, sheet_name="Observations")
     trunks = pd.read_excel(filename, sheet_name="Troncs")
@@ -162,8 +168,6 @@ def new_list(filename: str, export_directory: str, with_gbif: bool) -> None:
         # Joindre le dataframe species au dataframe data
         data = data.join(species.set_index('Nom'), on="Nom", lsuffix='_left', rsuffix='_right')
 
-        species.to_excel(export_directory + "/liste_modifiee_especes.xlsx", index=False)
-
         """
         Chercher les synonymes
         """
@@ -207,5 +211,6 @@ def new_list(filename: str, export_directory: str, with_gbif: bool) -> None:
     errors["Ligne"] = errors.index + 2
     error = pd.concat([error, errors])
 
+    species.to_excel(export_directory + "/liste_modifiee_especes.xlsx", index=False)
     error.to_excel(export_directory + "/liste_modifiee_erreurs.xlsx", index=False)
-    data.to_excel(export_directory + "/liste_modifiee.xlsx")
+    data.to_excel(export_directory + "/liste_modifiee.xlsx", index=False)
