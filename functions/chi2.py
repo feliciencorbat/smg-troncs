@@ -9,9 +9,8 @@ Fonction Chi-2 entre 2 variables qualitatives et création heatmap
 """
 
 
-def chi2_heatmap(data: pd.DataFrame, filename: str, variable1: str, variable2: str, title: str, show_plot: bool,
-                 export_files: bool, species_agg: bool) -> None:
-
+def chi2_heatmap(data: pd.DataFrame, filename: str, variable1: str, variable2: str, title: str, species_agg: bool) \
+        -> None:
     # Si aggrégation par nom binomial
     if species_agg:
         contingency = data.pivot_table(values="Nom", index=variable1, columns=variable2,
@@ -30,8 +29,7 @@ def chi2_heatmap(data: pd.DataFrame, filename: str, variable1: str, variable2: s
     # affichage du tableau de contingence (contingency)
     print("Tableau de contingence\n")
     print(contingency)
-    if export_files:
-        contingency.to_excel(directory + "/tableau_contingence.xlsx")
+    contingency.to_excel(directory + "/tableau_contingence.xlsx")
 
     # création du tableau des effectifs attendus (expected)
     chi2, p_value, deg_freedom, expected = stats.chi2_contingency(contingency)
@@ -47,15 +45,13 @@ def chi2_heatmap(data: pd.DataFrame, filename: str, variable1: str, variable2: s
     print("\nTableau des effectifs attendus")
     print("Attention: il ne doit pas y avoir d'effectif inférieur à 5...\n")
     print(expected)
-    if export_files:
-        expected.to_excel(directory + "/tableau_effectifs_attendus.xlsx")
+    expected.to_excel(directory + "/tableau_effectifs_attendus.xlsx")
 
     # création du tableau des différences
     differences = contingency - expected
     print("\nTableau des différences\n")
     print(differences)
-    if export_files:
-        differences.to_excel(directory + "/tableau_differences.xlsx")
+    differences.to_excel(directory + "/tableau_differences.xlsx")
 
     # récupérer la valeur absolue des différences
     absolute = differences / differences.abs()
@@ -65,25 +61,20 @@ def chi2_heatmap(data: pd.DataFrame, filename: str, variable1: str, variable2: s
 
     print("\nTableau des contribution à la dépendance\n")
     print(dependence_contribution)
-    if export_files:
-        dependence_contribution.to_excel(directory + "/tableau_contribution_dependance.xlsx")
+    dependence_contribution.to_excel(directory + "/tableau_contribution_dependance.xlsx")
 
     # affichage des données chi2, p-value, degré de liberté
     print("\nP-value: " + str(p_value) + "\n")
     print("Chi2: " + str(chi2) + "\n")
     print("Degré de liberté: " + str(deg_freedom) + "\n")
 
-    if export_files:
-        pd.DataFrame(data={'P_value': [p_value], 'Chi2': [chi2], 'Degré liberté': [deg_freedom]}) \
-            .to_excel(directory + "/donnees_chi.xlsx", index=False)
+    pd.DataFrame(data={'P_value': [p_value], 'Chi2': [chi2], 'Degré liberté': [deg_freedom]}) \
+        .to_excel(directory + "/donnees_chi.xlsx", index=False)
 
     # création du graphe des contributions à la dépendance
     sns.heatmap(dependence_contribution,
                 annot=contingency, fmt='d', vmin=-100, vmax=100, cmap="PiYG",
                 cbar_kws={'label': 'Pourcentage contribution à la dépendance'})
     plt.title(title, fontsize=16)
-    if export_files:
-        plt.savefig(directory + "/dependance_contribution_heatmap.svg", bbox_inches='tight')
-        plt.savefig(directory + "/dependance_contribution_heatmap.png", bbox_inches='tight')
-    if show_plot:
-        plt.show()
+    plt.savefig(directory + "/dependance_contribution_heatmap.png", bbox_inches='tight')
+    plt.show()

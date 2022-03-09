@@ -7,8 +7,7 @@ Fonction de distribution d'une variable et création d'un graphe en tuyaux d'org
 """
 
 
-def distribution_bar(data: pd.DataFrame, filename: str, variable: str, show_plot: bool, export_files: bool,
-                     limit: int = 0) -> None:
+def distribution_bar(data: pd.DataFrame, filename: str, variable: str, limit: int = 0) -> None:
     print("\nDistribution de la variable " + variable + "\n")
 
     # Gestion de la limite
@@ -23,9 +22,7 @@ def distribution_bar(data: pd.DataFrame, filename: str, variable: str, show_plot
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    if export_files:
-        plt.savefig(directory + "/bar.svg", bbox_inches='tight')
-        plt.savefig(directory + "/bar.png", bbox_inches='tight')
+    plt.savefig(directory + "/bar.svg", bbox_inches='tight')
+    plt.savefig(directory + "/bar.png", bbox_inches='tight')
 
-    if show_plot:
-        plt.show()
+    plt.show()

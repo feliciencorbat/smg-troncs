@@ -57,7 +57,7 @@ def distribution_window():
         limit_input.pack(pady=20)
 
         def validation():
-            distribution_bar(data, filename.get(), variable.get(), True, True, int(limit_input.get()))
+            distribution_bar(data, filename.get(), variable.get(), int(limit_input.get()))
 
             window.destroy()
 
