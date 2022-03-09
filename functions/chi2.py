@@ -14,7 +14,7 @@ def chi2_heatmap(data: pd.DataFrame, filename: str, variable1: str, variable2: s
 
     # Si aggrégation par nom binomial
     if species_agg:
-        contingency = data.pivot_table(values="Nom binomial", index=variable1, columns=variable2,
+        contingency = data.pivot_table(values="Nom", index=variable1, columns=variable2,
                                        aggfunc=pd.Series.nunique, fill_value=0)
     else:
         contingency = pd.crosstab(data[variable1], data[variable2])
