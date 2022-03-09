@@ -26,4 +26,3 @@ nb_species_evolution = Button(window, text="Evolution du nombre d'espèces", com
 nb_species_evolution.pack(pady=15)
 
 window.mainloop()
-

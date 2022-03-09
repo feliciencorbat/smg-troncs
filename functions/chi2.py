@@ -87,16 +87,3 @@ def chi2_heatmap(data: pd.DataFrame, filename: str, variable1: str, variable2: s
         plt.savefig(directory + "/dependance_contribution_heatmap.png", bbox_inches='tight')
     if show_plot:
         plt.show()
-
-
-"""
-Chi-2 compléments à intégrer
-"""
-
-# supprimer certaines colonnes et lignes (les colonnes inutiles, fusionnées ou manquant de données)
-# contengency = contengency.drop(columns=['Menace inconnue'], index=['?', 'conifère'])
-
-# renommer les axes
-# contengency = contengency.rename_axis("Arbres", axis=0)
-# contengency = contengency.rename_axis("Liste rouge", axis=1)
-# contengency = contengency.rename(index={"saule": "Saule", "marronnier": "Marronnier", "chêne": "Chêne", "peuplier": "Peuplier"})

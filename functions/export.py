@@ -193,7 +193,7 @@ def export(filename: str, with_gbif: bool) -> None:
 
     # Joindre le dataframe trunks au dataframe data
     data["Substrat"] = data["Substrat"].str.replace("tronc ", "", regex=False)
-    data = data.join(trunks.set_index('Identifiant'), on="Substrat", lsuffix='_left', rsuffix='_right')
+    data = data.join(trunks.set_index('Identifiant'), on="Substrat", rsuffix='_right')
     data = data.sort_index()
 
     # Erreurs: Espèce du substrat absente
@@ -204,7 +204,7 @@ def export(filename: str, with_gbif: bool) -> None:
     error = pd.concat([error, errors])
 
     # Erreurs: Incohérence dans l'espèce du substrat
-    errors = data[(data['Espèce du substrat_left'] != data['Espèce du substrat_right'])
+    errors = data[(data['Espèce du substrat'] != data['Espèce du substrat_right'])
                   & data['Espèce du substrat_right'].notnull()]
     errors = errors[['Nom']]
     errors["Type d'erreur"] = "Incohérence dans l'espèce du substrat"

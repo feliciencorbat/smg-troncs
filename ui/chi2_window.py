@@ -75,7 +75,7 @@ def chi2_window():
         title_input.pack(pady=20)
 
         # Aggrégation nom binomial
-        def checked():
+        def checked(event):
             species_check.set(not species_check.get())
 
         species_check = BooleanVar()
