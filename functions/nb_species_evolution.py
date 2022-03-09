@@ -1,4 +1,6 @@
 import os
+
+import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 
@@ -19,7 +21,8 @@ def nb_species_evolution(filename: str) -> None:
     # Fonction de cumulation des espèces
     def cumulative_species(dataframe: pd.DataFrame) -> pd.DataFrame:
         dataframe = dataframe[['Nom', 'Date']].sort_values(by=["Date"])
-        prov_cumulative_species = dataframe.groupby(pd.Grouper(key='Date', freq='1M'))["Nom"].apply(list)
+        prov_cumulative_species = dataframe.groupby(pd.Grouper(key='Date', freq='1M'))["Nom"].apply(
+            lambda x: list(np.unique(x)))
         cumulative_species_data = pd.DataFrame(columns=['Date', 'Nouvelles espèces', 'Total espèces'])
         i = int(0)
         for index, value in prov_cumulative_species.items():
@@ -29,12 +32,12 @@ def nb_species_evolution(filename: str) -> None:
             else:
                 new_species = []
                 for species in value:
-                    if species not in cumulative_species_data.iloc[-1, cumulative_species_data.columns.get_loc("Total "
-                                                                                                               "espèces")]:
-                        if species not in new_species:
-                            new_species.append(species)
+                    if species not in \
+                            cumulative_species_data.iloc[-1, cumulative_species_data.columns.get_loc("Total espèces")]:
+                        new_species.append(species)
 
-                old_species = cumulative_species_data.iloc[-1, cumulative_species_data.columns.get_loc("Total espèces")]+new_species
+                old_species = cumulative_species_data.iloc[
+                                  -1, cumulative_species_data.columns.get_loc("Total espèces")] + new_species
                 temporary_row = pd.DataFrame(
                     {'Date': [index], 'Nouvelles espèces': [new_species], 'Total espèces': [old_species]})
                 cumulative_species_data = pd.concat([cumulative_species_data, temporary_row])

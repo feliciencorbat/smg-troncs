@@ -165,9 +165,6 @@ def export(filename: str, with_gbif: bool) -> None:
             finally:
                 print(row.Nom)
 
-        # Joindre le dataframe species au dataframe data
-        data = data.join(species.set_index('Nom'), on="Nom", lsuffix='_left', rsuffix='_right')
-
         """
         Chercher les synonymes
         """
@@ -181,6 +178,9 @@ def export(filename: str, with_gbif: bool) -> None:
             error_row = pd.DataFrame({'Nom': [err],
                                       "Type d'erreur": ["Il y a une synonymie détectée par GBIF"]})
             error = pd.concat([error, error_row])
+
+    # Joindre le dataframe species au dataframe data
+    data = data.join(species.set_index('Nom'), on="Nom", lsuffix='_left', rsuffix='_right')
 
     """
     Gestion des troncs
@@ -211,6 +211,10 @@ def export(filename: str, with_gbif: bool) -> None:
     errors["Ligne"] = errors.index + 2
     error = pd.concat([error, errors])
 
+    # Liste des espèces par tronc
+    trunks_species = data[["Substrat", "Nom"]].groupby("Substrat")["Nom"].apply(lambda x: list(np.unique(x)))
+
     species.to_excel(export_directory + "/liste_modifiee_especes.xlsx", index=False)
+    trunks_species.to_excel(export_directory + "/liste_especes_par_tronc.xlsx")
     error.to_excel(export_directory + "/liste_modifiee_erreurs.xlsx", index=False)
     data.to_excel(export_directory + "/liste_modifiee.xlsx", index=False)
