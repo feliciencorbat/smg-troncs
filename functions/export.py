@@ -44,13 +44,13 @@ def export(filename: str, with_gbif: bool) -> None:
     Suppression de certaines colonnes
     """
     data = data.drop(columns=['Genre', 'Espèce', 'Zone/Lieu', 'Auteurs', 'Abondance', 'X', 'Y', 'Canton', 'Alt',
-                              'Végétation', 'Photo', 'B/A/M', 'm/nm/i', 'Fréq', 'Legit', 'Dét', 'Exsiccata',
+                              'Végétation', 'Photo', 'B/A/M', 'm/nm/i', 'Legit', 'Dét', 'Exsiccata',
                               'Réf Litt Déter'])
 
     """
     Création du nouveau dataframe species avec 2 colonnes (nom binomial et liste rouge) et tri par ordre alphabétique
     """
-    species = data[['Nom', 'LR']].drop_duplicates()
+    species = data[['Nom', 'LR', 'Fréq']].drop_duplicates()
     species = species.sort_values("Nom")
 
     """
@@ -68,7 +68,7 @@ def export(filename: str, with_gbif: bool) -> None:
     size = species.groupby(['Nom']).size()
     errors = size[size >= 2].index
     for err in errors:
-        print(err + "a une incohérence avec la liste rouge")
+        print(err + " a une incohérence avec la liste rouge")
         error_row = pd.DataFrame({'Nom': [err],
                                   "Type d'erreur": ["Il y a une incohérence entre l'espèce et la liste rouge"]})
         error = pd.concat([error, error_row])
@@ -76,12 +76,13 @@ def export(filename: str, with_gbif: bool) -> None:
     """
     Suppression de certaines colonnes
     """
-    data = data.drop(columns=['LR'])
+    data = data.drop(columns=['LR', 'Fréq'])
 
     """
     Création colonne Menace
     """
     conditions = [
+        (species['Fréq'] == 'R'),
         (species['LR'] == 'EX'),
         (species['LR'] == 'EW'),
         (species['LR'] == 'RE'),
@@ -92,6 +93,7 @@ def export(filename: str, with_gbif: bool) -> None:
         (species['LR'] == 'NT')
     ]
     choices = [
+        'Menacé',
         'Eteint',
         'Eteint',
         'Eteint',
