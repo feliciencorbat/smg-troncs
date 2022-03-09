@@ -48,6 +48,7 @@ def nb_species_evolution(filename: str) -> None:
         cumulative_species_data["Nb total espèces"] = cumulative_species_data['Total espèces'].apply(lambda x: len(x))
         return cumulative_species_data
 
+    # Données cumulation d'espèces
     all_species_cumulative = cumulative_species(data)
     lr_data = data.loc[data["Menace"] == "Menacé"]
     lr_species_cumulative = cumulative_species(lr_data)
@@ -60,11 +61,11 @@ def nb_species_evolution(filename: str) -> None:
     marronnier_data = data.loc[data["Espèce du substrat"] == "marronnier"]
     marronnier_species_cumulative = cumulative_species(marronnier_data)
 
-    # Enregistrement fichier excel
+    # Enregistrement fichiers excel cumulation d'espèces
     all_species_cumulative.to_excel(directory + "/especes_cumulees_par_mois.xlsx")
     lr_species_cumulative.to_excel(directory + "/especes_lr_cumulees_par_mois.xlsx")
 
-    # Création du graphique
+    # Création du graphique cumulation d'espèces
     plt.figure()
     plt.plot(all_species_cumulative["Date"], all_species_cumulative["Nb total espèces"], label="Toutes les espèces")
     plt.ylabel("Nombre d'espèces")
@@ -82,6 +83,35 @@ def nb_species_evolution(filename: str) -> None:
              label="Les espèces sur marronnier")
     plt.legend(loc="upper left")
     plt.savefig(directory + "/especes_cumulees_par_mois.png", bbox_inches='tight')
+    plt.show(block=False)
+
+    # Données cumulation d'espèces liste rouge
+    lr_peuplier_data = data.loc[(data["Menace"] == "Menacé") & (data["Espèce du substrat"] == "peuplier")]
+    lr_peuplier_data_cumulative = cumulative_species(lr_peuplier_data)
+    lr_chene_data = data.loc[(data["Menace"] == "Menacé") & (data["Espèce du substrat"] == "chêne")]
+    lr_chene_data_cumulative = cumulative_species(lr_chene_data)
+    lr_saule_data = data.loc[(data["Menace"] == "Menacé") & (data["Espèce du substrat"] == "saule")]
+    lr_saule_data_cumulative = cumulative_species(lr_saule_data)
+    lr_marronnier_data = data.loc[(data["Menace"] == "Menacé") & (data["Espèce du substrat"] == "marronnier")]
+    lr_marronnier_data_cumulative = cumulative_species(lr_marronnier_data)
+
+    # Création du graphique cumulation d'espèces liste rouge
+    plt.figure()
+    plt.plot(lr_species_cumulative["Date"], lr_species_cumulative["Nb total espèces"],
+             label="Les espèces de la liste rouge")
+    plt.ylabel("Nombre d'espèces")
+    plt.title("Evolution du nombre d'espèces de la liste rouge")
+    plt.ylim(ymin=0)
+    plt.plot(lr_peuplier_data_cumulative["Date"], lr_peuplier_data_cumulative["Nb total espèces"],
+             label="Les espèces du peuplier de la liste rouge")
+    plt.plot(lr_chene_data_cumulative["Date"], lr_chene_data_cumulative["Nb total espèces"],
+             label="Les espèces du chêne de la liste rouge")
+    plt.plot(lr_saule_data_cumulative["Date"], lr_saule_data_cumulative["Nb total espèces"],
+             label="Les espèces du saule de la liste rouge")
+    plt.plot(lr_marronnier_data_cumulative["Date"], lr_marronnier_data_cumulative["Nb total espèces"],
+             label="Les espèces du marronnier de la liste rouge")
+    plt.legend(loc="upper left")
+    plt.savefig(directory + "/especes_cumulees_par_mois_lr.png", bbox_inches='tight')
     plt.show(block=False)
 
     # Nombre d'espèces par mois
