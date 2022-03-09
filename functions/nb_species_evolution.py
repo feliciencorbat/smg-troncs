@@ -64,7 +64,8 @@ def nb_species_evolution(filename: str) -> None:
     plt.show(block=False)
 
     # Nombre d'espèces par mois
-    number_species_by_month = data.groupby(pd.Grouper(key='Date', freq='1M')).nunique()
+    number_species_by_month = data[['Nom', 'Date']].sort_values(by=["Date"])
+    number_species_by_month = number_species_by_month.groupby(pd.Grouper(key='Date', freq='1M')).nunique()
     number_species_by_month.to_excel(directory + "/nbre_especes_par_mois.xlsx")
     plt.figure()
     plt.bar(number_species_by_month.index, number_species_by_month["Nom"], ec='blue')
