@@ -170,9 +170,9 @@ def export(filename: str, with_gbif: bool) -> None:
         """
         Chercher les synonymes
         """
-        species = species.drop(columns=['LR', 'Phylum', 'Ordre', 'Menace'])
-        species = species[['Nom', 'Nom actuel']].drop_duplicates()
-        size = species.groupby(['Nom actuel']).size()
+        species_synonyms = species.drop(columns=['LR', 'Phylum', 'Ordre', 'Menace'])
+        species_synonyms = species_synonyms[['Nom', 'Nom actuel']].drop_duplicates()
+        size = species_synonyms.groupby(['Nom actuel']).size()
 
         errors = size[size >= 2].index
         for err in errors:
