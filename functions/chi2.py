@@ -9,7 +9,7 @@ Fonction Chi-2 entre 2 variables qualitatives et création heatmap
 """
 
 
-def chi2_heatmap(data: pd.DataFrame, filename: str, variable1: str, variable2: str, title: str, species_agg: bool) \
+def chi2_test(data: pd.DataFrame, filename: str, variable1: str, variable2: str, title: str, species_agg: bool) \
         -> None:
     # Si aggrégation par nom binomial
     if species_agg:
@@ -77,4 +77,14 @@ def chi2_heatmap(data: pd.DataFrame, filename: str, variable1: str, variable2: s
                 cbar_kws={'label': 'Pourcentage contribution à la dépendance'})
     plt.title(title, fontsize=16)
     plt.savefig(directory + "/dependance_contribution_heatmap.png", bbox_inches='tight')
+    plt.show(block=False)
+
+    # création du graphe à barres
+    contingency.plot(kind="bar")
+    if species_agg:
+        plt.ylabel("Nombre d'espèces")
+    else:
+        plt.ylabel("Nombre d'observations")
+    plt.title(title)
+    plt.savefig(directory + "/contingence_bar.png", bbox_inches='tight')
     plt.show()

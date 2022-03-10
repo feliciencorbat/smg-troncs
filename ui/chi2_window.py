@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 
 import pandas as pd
-from functions.chi2 import chi2_heatmap
+from functions.chi2 import chi2_test
 
 
 def chi2_window():
@@ -81,7 +81,7 @@ def chi2_window():
         species_agg.pack()
 
         def validation():
-            chi2_heatmap(data, filename.get(), variable1.get(), variable2.get(), title_input.get(), species_check.get())
+            chi2_test(data, filename.get(), variable1.get(), variable2.get(), title_input.get(), species_check.get())
             window.destroy()
 
         # Bouton de validation
