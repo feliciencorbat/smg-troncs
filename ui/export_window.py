@@ -28,14 +28,11 @@ def excel_window():
         ))
 
         # Ajouter colonnes GBIF
-        def checked(event):
-            gbif_checked.set(not gbif_checked.get())
-
         gbif_checked = BooleanVar()
         gbif = Checkbutton(window, text="Ajouter les colonnes GBIF avec le nom actuel et de la systématique.\n"
                                         "Cela nécessite internet et prend quelques minutes.\n"
                                         "Permet également de vérifier la synonymie.",
-                           variable=gbif_checked, command=checked)
+                           variable=gbif_checked, onvalue=True, offvalue=False)
         gbif.pack(pady=15)
 
         def validation():
