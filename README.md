@@ -1,6 +1,19 @@
 # Statistiques Troncs SMG
 
-## Fonctions
+## Sommaire
+- [Fonctions](#fonctions)
+- [Installation](#installation) 
+  - [Installer Python](#installerpython)
+  - [Installer PyCharm](#installerpycharm)
+  - [Ajouter le dépôt Github à PyCharm](#ajoutergithub)
+  - [Lier Python au projet](#lierpython)
+  - [Indiquer où se trouve le fichier de lancement](#lancement)
+  - [Ajouter les librairies](#librairies)
+- [Utilisation](#utilisation)
+  - [Lancer l'application](#lancer)
+  - [Récupérer les dernières mises à jour](#miseajour)
+
+## Fonctions <a id="fonctions"></a>
 
 - créer un fichier Excel modifié à partir de la liste originale
 - vérifier les synonymies, les erreurs, les incohérences, ... de la liste originale
@@ -8,9 +21,9 @@
 - créer des tests Chi-2 avec affichage en heatmap
 - créer des graphes d'évolution des espèces
 
-## Installation
+## Installation <a id="installation"></a>
 
-### Installer Python
+### Installer Python <a id="installerpython"></a>
 
 Télécharger et installer Python à l'adresse: https://www.python.org/downloads/
 
@@ -18,13 +31,13 @@ Télécharger et installer Python à l'adresse: https://www.python.org/downloads
 
 Ne pas oublier de cocher "Add Python 3.x to PATH"
 
-### Installer PyCharm
+### Installer PyCharm <a id="installerpycharm"></a>
 
 Télécharger et installer PyCharm à l'adresse: https://www.jetbrains.com/fr-fr/pycharm/download/
 
 Il faut choisir la version Community (gratuite et open source)
 
-### Ajouter le dépôt Github à PyCharm
+### Ajouter le dépôt Github à PyCharm <a id="ajoutergithub"></a>
 
 Au lancement de PyCharm, vous obtenez cette fenêtre:
 
@@ -50,7 +63,7 @@ Enfin, cliquer sur "Clone"
 
 Tous les fichiers du projet sont ajoutés au dossier et affichés dans PyCharm
 
-### Lier Python au projet
+### Lier Python au projet <a id="lierpython"></a>
 
 ![](readme/5.png)
 
@@ -75,7 +88,7 @@ Cliquer "OK"
 
 Votre environnement virtuel avec Python est installé.
 
-### Indiquer où se trouve le fichier de lancement
+### Indiquer où se trouve le fichier de lancement <a id="lancement"></a>
 
 ![](readme/9.png)
 
@@ -95,7 +108,7 @@ Dans le champ "Python interpreter:", l'interpréteur Python créé précédemmen
 
 Cliquer "OK"
 
-### Ajouter les librairies
+### Ajouter les librairies <a id="librairies"></a>
 
 ![](readme/14.png)
 
@@ -111,4 +124,14 @@ Il faut réaliser l'opération jusqu'à ce que toutes les librairies soient inst
 
 ![](readme/16.png)
 
-L'autre solution est de naviguer dans les fichiers (le dossier "functions" en particulier). Une fois que le projet est indexé (ce qui peut prendre un peu de temps) par PyCharm, les librairies non installées sont surlignée en rouge. En les survolant, il est proposé de les installer ("install package matplotlib" par exemple)
+L'autre solution est de naviguer dans les fichiers (le dossier "functions" en particulier). Une fois que le projet est indexé (ce qui peut prendre un peu de temps) par PyCharm, les librairies non installées sont surlignée en rouge. En les survolant, il est proposé de les installer ("install package matplotlib" par exemple).
+
+## Utilisation <a id="utilisation"></a>
+
+### Lancer l'application <a id="lancer"></a>
+
+Il suffit de cliquer sur le triangle vert.
+
+### Récupérer les dernières mises à jour <a id="miseajour"></a>
+
+Cliquer sur la "Flèche bleue Update Project..." et cliquer OK.
