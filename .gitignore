@@ -1,9 +1,4 @@
-/build/
-/dist/
-/SMG.spec
 /venv/
 /venv2/
 /.idea/
-/SMG_mac.spec
-/SMG_windows.spec
 /export/
