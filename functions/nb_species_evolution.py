@@ -9,13 +9,17 @@ Evolution du nombre d'espèces avec le temps
 """
 
 
-def nb_species_evolution() -> None:
+def nb_species_evolution(with_cf: bool) -> None:
     # dossier d'export
     directory = "export/Evolution especes"
     if not os.path.exists(directory):
         os.makedirs(directory)
 
     data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Sheet1")
+
+    # Si sans cf
+    if not with_cf:
+        data = data.loc[data["cf"] != "cf."]
 
     # Fonction de cumulation des espèces
     def cumulative_species(dataframe: pd.DataFrame) -> pd.DataFrame:

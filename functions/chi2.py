@@ -9,8 +9,12 @@ Fonction Chi-2 entre 2 variables qualitatives et création heatmap
 """
 
 
-def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, species_agg: bool) \
+def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, species_agg: bool, with_cf: bool) \
         -> None:
+    # Si sans cf
+    if not with_cf:
+        data = data.loc[data["cf"] != "cf."]
+
     # Si aggrégation par nom binomial
     if species_agg:
         contingency = data.pivot_table(values="Nom", index=variable1, columns=variable2,
