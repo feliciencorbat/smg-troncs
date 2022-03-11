@@ -20,6 +20,13 @@ def export(filename: str, with_gbif: bool) -> None:
     error = pd.DataFrame([], )
 
     """
+    Ajouter colonne cf.
+    """
+    data['cf'] = data["Espèce"].str.contains('cf|\?', regex=True)
+    data["cf"] = data["cf"].replace(False, "", regex=False)
+    data["cf"] = data["cf"].replace(True, "cf.", regex=False)
+
+    """
     Enlever les cf., ? et parenthèses des genres et espèces
     """
     data["Genre"] = data["Genre"].str.replace(r"\(.*?\)", "", regex=True)
