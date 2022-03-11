@@ -11,8 +11,7 @@ Fonction de création d'une liste de données pour les statistiques
 
 def export(filename: str, with_gbif: bool) -> None:
     # dossier d'export
-    dirname = os.path.dirname(filename)
-    export_directory = dirname + "/export"
+    export_directory = "export"
     if not os.path.exists(export_directory):
         os.makedirs(export_directory)
 

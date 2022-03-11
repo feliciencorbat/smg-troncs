@@ -9,7 +9,7 @@ Fonction Chi-2 entre 2 variables qualitatives et création heatmap
 """
 
 
-def chi2_test(data: pd.DataFrame, filename: str, variable1: str, variable2: str, title: str, species_agg: bool) \
+def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, species_agg: bool) \
         -> None:
     # Si aggrégation par nom binomial
     if species_agg:
@@ -21,8 +21,7 @@ def chi2_test(data: pd.DataFrame, filename: str, variable1: str, variable2: str,
     print("\nTest Chi-2 pour les variables " + contingency.index.name + " et " + contingency.columns.name + "\n")
 
     # dossier d'export
-    dirname = os.path.dirname(filename)
-    directory = dirname + "/chi2 " + contingency.index.name + " " + contingency.columns.name
+    directory = "export/chi2 " + contingency.index.name + " " + contingency.columns.name
     if not os.path.exists(directory):
         os.makedirs(directory)
 

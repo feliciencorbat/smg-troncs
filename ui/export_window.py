@@ -47,7 +47,7 @@ def excel_window():
         # Label bouton de sélection du fichier
         label_validation = Label(window,
                                  text="Le fichier liste_modifiee.xlsx est créé dans le dossier export."
-                                      "\n Ce dossier se trouve au même emplacement que le fichier original."
+                                      "\n Ce dossier se trouve au même emplacement que le projet python."
                                       "\n En plus, un fichier avec les erreurs et un fichier avec la liste "
                                       "des espèces y sont créés.")
         label_validation.pack(pady=15)

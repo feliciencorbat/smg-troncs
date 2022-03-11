@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter import filedialog
 
 import pandas as pd
 
@@ -16,69 +15,45 @@ def distribution_window():
     # Titre de la page
     label_title = Label(window, text="Distributions", font="Helvetica, 20")
     label_title.pack()
-    # Importer fichier
-    filename = StringVar()
 
-    # Label bouton de sélection du fichier
-    label_select_file = Label(window, text="Le fichier à sélectionner est le fichier liste_modifiee.xlsx."
-                                           "\nCe fichier se trouve dans le dossier export."
-                                           "\nIl faut au préalable avoir généré le fichier excel pour les statistiques."
-                              )
-    label_select_file.pack(pady=15)
+    data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Sheet1")
 
-    def select_file():
-        filename.set(filedialog.askopenfilename(
-            title='Choisir le fichier excel',
-        ))
-        data = pd.read_excel(filename.get(), sheet_name="Sheet1")
+    # Menu variable
+    variable = StringVar()
 
-        # Menu variable
-        variable = StringVar()
+    def variable_selected(event):
+        variable.set(clicked.get())
 
-        # Label variable
-        label_limit = Label(window, text="Choisir la variable qualitative")
-        label_limit.pack()
+    options = data.columns.values
+    clicked = StringVar()
+    clicked.set("Choisir la variable...")
+    variable_list = OptionMenu(window, clicked, *options, command=variable_selected)
+    variable_list.pack(pady=20)
 
-        def variable_selected(event):
-            variable.set(clicked.get())
+    # Titre du graphe
+    label_title_graph = Label(window, text="Titre du graphe")
+    label_title_graph.pack()
 
-        options = data.columns.values
-        clicked = StringVar()
-        clicked.set("Choisir la variable...")
-        variable_list = OptionMenu(window, clicked, *options, command=variable_selected)
-        variable_list.pack(pady=20)
+    # Titre du graphe
+    default_title = StringVar(window, value="Titre du graphe")
+    title_input = Entry(window, textvariable=default_title)
+    title_input.pack(pady=20)
 
-        # Titre du graphe
-        label_title_graph = Label(window, text="Titre du graphe")
-        label_title_graph.pack()
+    # Limite
+    label_limit = Label(window, text="Limite (si 0, sans limite)")
+    label_limit.pack()
 
-        # Titre du graphe
-        default_title = StringVar(window, value="Titre du graphe")
-        title_input = Entry(window, textvariable=default_title)
-        title_input.pack(pady=20)
+    default_limit = StringVar(window, value='0')
+    limit_input = Entry(window, textvariable=default_limit)
+    limit_input.pack(pady=20)
 
-        # Limite
-        label_limit = Label(window, text="Limite (si 0, sans limite)")
-        label_limit.pack()
+    def validation():
+        distribution_bar(data, variable.get(), default_title.get(), int(limit_input.get()))
 
-        default_limit = StringVar(window, value='0')
-        limit_input = Entry(window, textvariable=default_limit)
-        limit_input.pack(pady=20)
+        window.destroy()
 
-        def validation():
-            distribution_bar(data, filename.get(), variable.get(), default_title.get(), int(limit_input.get()))
-
-            window.destroy()
-
-        # Bouton validation
-        validation_button = Button(window, text="Valider", command=validation)
-        validation_button.pack()
-
-    open_file_button = Button(
-        window,
-        text='Choisir le fichier excel',
-        command=select_file
-    )
-    open_file_button.pack()
+    # Bouton validation
+    validation_button = Button(window, text="Valider", command=validation)
+    validation_button.pack()
 
     window.mainloop()
