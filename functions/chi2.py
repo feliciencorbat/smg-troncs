@@ -37,7 +37,6 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
     # affichage du tableau de contingence (contingency)
     print("Tableau de contingence\n")
     print(contingency)
-    contingency.to_excel(directory + "/tableau_contingence.xlsx")
 
     # création du tableau des effectifs attendus (expected)
     chi2, p_value, deg_freedom, expected = stats.chi2_contingency(contingency)
@@ -53,13 +52,11 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
     print("\nTableau des effectifs attendus")
     print("Attention: il ne doit pas y avoir d'effectif inférieur à 5...\n")
     print(expected)
-    expected.to_excel(directory + "/tableau_effectifs_attendus.xlsx")
 
     # création du tableau des différences
     differences = contingency - expected
     print("\nTableau des différences\n")
     print(differences)
-    differences.to_excel(directory + "/tableau_differences.xlsx")
 
     # récupérer la valeur absolue des différences
     absolute = differences / differences.abs()
@@ -69,15 +66,21 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
 
     print("\nTableau des contribution à la dépendance\n")
     print(dependence_contribution)
-    dependence_contribution.to_excel(directory + "/tableau_contribution_dependance.xlsx")
 
     # affichage des données chi2, p-value, degré de liberté
     print("\nP-value: " + str(p_value) + "\n")
     print("Chi2: " + str(chi2) + "\n")
     print("Degré de liberté: " + str(deg_freedom) + "\n")
 
+    # Enregistrer le fichier excel
+    writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter')
     pd.DataFrame(data={'P_value': [p_value], 'Chi2': [chi2], 'Degré liberté': [deg_freedom]}) \
-        .to_excel(directory + "/donnees_chi.xlsx", index=False)
+        .to_excel(writer, sheet_name='P_value, Chi2, Deg', index=False)
+    contingency.to_excel(writer, sheet_name='Tab contingence')
+    expected.to_excel(writer, sheet_name='Effectifs attendus')
+    differences.to_excel(writer, sheet_name='Différences')
+    dependence_contribution.to_excel(writer, sheet_name='Contribution dépendance')
+    writer.save()
 
     # création du graphe des contributions à la dépendance
     sns.heatmap(dependence_contribution,
