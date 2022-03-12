@@ -66,10 +66,6 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     marronnier_data = data.loc[data["Espèce du substrat"] == "marronnier"]
     marronnier_species_cumulative = cumulative_species(marronnier_data)
 
-    # Enregistrement fichiers excel cumulation d'espèces
-    all_species_cumulative.to_excel(directory + "/especes_cumulees_par_mois.xlsx")
-    lr_species_cumulative.to_excel(directory + "/especes_lr_cumulees_par_mois.xlsx")
-
     # Création du graphique cumulation d'espèces
     plt.figure()
     plt.plot(all_species_cumulative["Date"], all_species_cumulative["Nb total espèces"], label="Toutes les espèces")
@@ -122,10 +118,16 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     # Nombre d'espèces par mois
     number_species_by_month = data[['Nom', 'Date']].sort_values(by=["Date"])
     number_species_by_month = number_species_by_month.groupby(pd.Grouper(key='Date', freq='1M')).nunique()
-    number_species_by_month.to_excel(directory + "/nbre_especes_par_mois.xlsx")
     plt.figure()
     plt.bar(number_species_by_month.index, number_species_by_month["Nom"], ec='blue')
     plt.title("Nombre d'espèces par mois")
     plt.ylabel("Nombre d'espèces")
     plt.savefig(directory + "/nbre_especes_par_mois.png", bbox_inches='tight')
     plt.show()
+
+    # Enregistrer le fichier excel
+    writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter')
+    number_species_by_month.to_excel(writer, sheet_name='Nb espèces par mois')
+    all_species_cumulative.to_excel(writer, sheet_name='Espèces cumulées', index=False)
+    lr_species_cumulative.to_excel(writer, sheet_name='Espèces cumulées LR', index=False)
+    writer.save()
