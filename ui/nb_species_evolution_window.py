@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter import filedialog
 
 import numpy as np
 import pandas as pd
@@ -18,7 +17,7 @@ def nb_species_evolution_window():
     label_title = Label(window, text="Evolution du nombre d'espèces", font="Helvetica, 20")
     label_title.pack()
 
-    data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Sheet1")
+    data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Statistiques")
 
     # Menu lieu
     options = data["Lieu"].unique()

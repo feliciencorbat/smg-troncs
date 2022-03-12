@@ -63,7 +63,7 @@ def export(filename: str, with_gbif: bool) -> None:
     Afficher les erreurs dans les noms qui contiennent une parenthèse non fermée ou égal
     """
     errors = data.loc[data["Nom"].str.contains("\)|\(|\=", case=False)]
-    errors = errors.drop(columns=['Substrat', 'Espèce du substrat', 'Date', 'LR'])
+    errors = errors.drop(columns=['Substrat', 'Espèce du substrat', 'Date', 'LR', 'Fréq', 'cf'])
     errors["Type d'erreur"] = "Erreur de parenthèse non fermée ou de caractère indésirable"
     errors["Ligne"] = errors.index + 2
     error = pd.concat([error, errors])
@@ -222,7 +222,10 @@ def export(filename: str, with_gbif: bool) -> None:
     # Liste des espèces par tronc
     trunks_species = data[["Substrat", "Nom"]].groupby("Substrat")["Nom"].apply(lambda x: list(np.unique(x)))
 
-    species.to_excel(export_directory + "/liste_modifiee_especes.xlsx", index=False)
-    trunks_species.to_excel(export_directory + "/liste_especes_par_tronc.xlsx")
-    error.to_excel(export_directory + "/liste_modifiee_erreurs.xlsx", index=False)
-    data.to_excel(export_directory + "/liste_modifiee.xlsx", index=False)
+    # Enregistrer le fichier excel
+    writer = pd.ExcelWriter(export_directory + '/liste_modifiee.xlsx', engine='xlsxwriter')
+    data.to_excel(writer, sheet_name='Statistiques', index=False)
+    species.to_excel(writer, sheet_name='Espèces', index=False)
+    trunks_species.to_excel(writer, sheet_name='Espèces par tronc')
+    error.to_excel(writer, sheet_name='Erreurs', index=False)
+    writer.save()
