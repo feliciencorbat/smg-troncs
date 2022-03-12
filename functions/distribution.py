@@ -7,8 +7,12 @@ Fonction de distribution d'une variable et création d'un graphe en tuyaux d'org
 """
 
 
-def distribution_bar(data: pd.DataFrame, variable: str, title: str, limit: int, with_cf: bool) -> None:
+def distribution_bar(data: pd.DataFrame, variable: str, title: str, limit: int, with_cf: bool, location: str) -> None:
     print("\nDistribution de la variable " + variable + "\n")
+
+    # Filtrer lieu
+    if location != "Tous les lieux":
+        data = data.loc[data["Lieu"] == location]
 
     # Si sans cf
     if not with_cf:

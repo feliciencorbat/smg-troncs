@@ -9,8 +9,13 @@ Fonction Chi-2 entre 2 variables qualitatives et création heatmap
 """
 
 
-def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, species_agg: bool, with_cf: bool) \
-        -> None:
+def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, species_agg: bool,
+              with_cf: bool, location: str) -> None:
+
+    # Filtrer lieu
+    if location != "Tous les lieux":
+        data = data.loc[data["Lieu"] == location]
+
     # Si sans cf
     if not with_cf:
         data = data.loc[data["cf"] != "cf."]
