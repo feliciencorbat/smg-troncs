@@ -115,6 +115,40 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     plt.savefig(directory + "/especes_cumulees_par_mois_lr.png", bbox_inches='tight')
     plt.show(block=False)
 
+    # Données cumulation d'espèces EX, EW, RE, CR, EN, VU total
+    exewre_species = data.loc[(data["LR"] == "EX") | (data["LR"] == "EW") | (data["LR"] == "RE")]
+    exewre_species_cumulative = cumulative_species(exewre_species)
+    cr_species = data.loc[data["LR"] == "CR"]
+    cr_species_cumulative = cumulative_species(cr_species)
+    en_species = data.loc[data["LR"] == "EN"]
+    en_species_cumulative = cumulative_species(en_species)
+    vu_species = data.loc[data["LR"] == "VU"]
+    vu_species_cumulative = cumulative_species(vu_species)
+
+    # Création du graphique cumulation d'espèces EX, EW, RE, CR, EN, VU total
+    plt.figure()
+    if len(lr_species_cumulative) > 0:
+        plt.plot(lr_species_cumulative["Date"], lr_species_cumulative["Nb total espèces"],
+                 label="Les espèces de la liste rouge")
+    if len(exewre_species_cumulative) > 0:
+        plt.plot(exewre_species_cumulative["Date"], exewre_species_cumulative["Nb total espèces"],
+                 label="Les espèces éteintes ou disparues")
+    if len(cr_species_cumulative) > 0:
+        plt.plot(cr_species_cumulative["Date"], cr_species_cumulative["Nb total espèces"],
+                 label="Les espèces en danger critique (CR)")
+    if len(en_species_cumulative) > 0:
+        plt.plot(en_species_cumulative["Date"], en_species_cumulative["Nb total espèces"],
+                 label="Les espèces en danger (EN)")
+    if len(vu_species_cumulative) > 0:
+        plt.plot(vu_species_cumulative["Date"], vu_species_cumulative["Nb total espèces"],
+                 label="Les espèces vulnérables (VU)")
+    plt.ylabel("Nombre d'espèces")
+    plt.title("Evolution du nombre d'espèces de la liste rouge détaillée")
+    plt.ylim(ymin=0)
+    plt.legend(loc="upper left")
+    plt.savefig(directory + "/especes_cumulees_par_mois_lr_detaillee.png", bbox_inches='tight')
+    plt.show(block=False)
+
     # Nombre d'espèces par mois
     number_species_by_month = data[['Nom', 'Date']].sort_values(by=["Date"])
     number_species_by_month = number_species_by_month.groupby(pd.Grouper(key='Date', freq='1M')).nunique()
@@ -127,7 +161,24 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
 
     # Enregistrer le fichier excel
     writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter')
+
     number_species_by_month.to_excel(writer, sheet_name='Nb espèces par mois')
+
     all_species_cumulative.to_excel(writer, sheet_name='Espèces cumulées', index=False)
     lr_species_cumulative.to_excel(writer, sheet_name='Espèces cumulées LR', index=False)
+
+    peuplier_species_cumulative.to_excel(writer, sheet_name='Espèces du peuplier', index=False)
+    chene_species_cumulative.to_excel(writer, sheet_name='Espèces du chêne', index=False)
+    saule_species_cumulative.to_excel(writer, sheet_name='Espèces du saule', index=False)
+    marronnier_species_cumulative.to_excel(writer, sheet_name='Espèces du marronnier', index=False)
+
+    lr_peuplier_data_cumulative.to_excel(writer, sheet_name='Espèces du peuplier LR', index=False)
+    lr_chene_data_cumulative.to_excel(writer, sheet_name='Espèces du chêne LR', index=False)
+    lr_saule_data_cumulative.to_excel(writer, sheet_name='Espèces du saule LR', index=False)
+    lr_marronnier_data_cumulative.to_excel(writer, sheet_name='Espèces du marronnier LR', index=False)
+
+    exewre_species_cumulative.to_excel(writer, sheet_name='Espèces éteintes ou disparues', index=False)
+    cr_species_cumulative.to_excel(writer, sheet_name='Espèces CR', index=False)
+    en_species_cumulative.to_excel(writer, sheet_name='Espèces EN', index=False)
+    vu_species_cumulative.to_excel(writer, sheet_name='Espèces VU', index=False)
     writer.save()
