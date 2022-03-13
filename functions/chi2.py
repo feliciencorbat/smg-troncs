@@ -72,6 +72,15 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
     print("Chi2: " + str(chi2) + "\n")
     print("Degré de liberté: " + str(deg_freedom) + "\n")
 
+    if p_value < 0.05:
+        print("L'hypothèse H0 qui indique qu'il n'y a pas de dépendance entre la variable " + variable1 +
+              " et la variable " + variable2 + " est rejetée car p-value est inférieure à 0.5. "
+              "\nIl y a donc une dépendance entre ces 2 variables.")
+    else:
+        print("L'hypothèse H0 qui indique qu'il n'y a pas de dépendance entre la variable " + variable1 +
+              " et la variable " + variable2 + " est acceptée car p-value est supérieure à 0.5. "
+              "\nIl n'y a donc pas de dépendance entre ces 2 variables.")
+
     # Enregistrer le fichier excel
     writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter')
     pd.DataFrame(data={'P_value': [p_value], 'Chi2': [chi2], 'Degré liberté': [deg_freedom]}) \
