@@ -48,6 +48,14 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
                 cumulative_species_data = pd.concat([cumulative_species_data, temporary_row])
             i = int(i) + 1
 
+        # Ajouter une ligne de la dernière date du dataframe total si absente
+        if len(cumulative_species_data) > 0:
+            if cumulative_species_data.iloc[-1]["Date"] < data.iloc[-1]["Date"]:
+                new_row = cumulative_species_data.iloc[-1:]
+                new_row.at[0, 'Date'] = data.iloc[-1]["Date"]
+                cumulative_species_data = pd.concat([cumulative_species_data, new_row])
+
+        # Comptage des espèces
         cumulative_species_data["Nb nouvelles espèces"] = cumulative_species_data['Nouvelles espèces'].apply(
             lambda x: len(x))
         cumulative_species_data["Nb total espèces"] = cumulative_species_data['Total espèces'].apply(lambda x: len(x))
