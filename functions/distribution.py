@@ -41,7 +41,7 @@ def distribution_bar(data: pd.DataFrame, variable: str, title: str, limit: int, 
     plt.savefig(directory + "/" + variable + "_barres_" + str(limit) + ".png", bbox_inches='tight')
     plt.show(block=False)
 
-    # Graphe tuyaux d'orgue
+    # Graphe camembert
     plt.figure()
     plt.pie(data, labels=data.index)
     plt.title(title)
