@@ -81,6 +81,10 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
               " et la variable " + variable2 + " est acceptée car p-value est supérieure à 0.5. "
               "\nIl n'y a donc pas de dépendance entre ces 2 variables.")
 
+    if expected.min().min() < 5:
+        print("\nAttention, il y a dans le tableau des effectifs attendus une ou des valeurs inférieures à 5."
+              "\nCela peut rendre le test chi-2 caduque.")
+
     # Enregistrer le fichier excel
     writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter')
     pd.DataFrame(data={'P_value': [p_value], 'Chi2': [chi2], 'Degré liberté': [deg_freedom]}) \
