@@ -7,7 +7,7 @@ from ui.nb_species_evolution_window import nb_species_evolution_window
 window = Tk()
 
 window.title("Statistiques Troncs SMG")
-window.geometry("640x480")
+window.geometry("480x360")
 window.minsize(480, 360)
 
 label_title = Label(window, text="Statistiques Troncs SMG", font="Helvetica, 20")

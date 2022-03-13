@@ -1,18 +1,12 @@
 from tkinter import *
 from tkinter import filedialog
 from functions.export import export
+from ui.components.window import window_title
 
 
 def excel_window():
-    # Fenêtre
-    window = Toplevel()
-    window.title("Générer le fichier excel pour les statistiques")
-    window.geometry("640x640")
-    window.minsize(480, 360)
 
-    # Titre de la page
-    label_title = Label(window, text="Générer le fichier excel pour les statistiques", font="Helvetica, 20")
-    label_title.pack()
+    window = window_title("Générer le fichier excel pour les statistiques", False)
 
     # Importer fichier
     filename = StringVar()

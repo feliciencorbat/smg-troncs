@@ -1,23 +1,13 @@
 from tkinter import *
-
 import numpy as np
-import pandas as pd
 
 from functions.distribution import distribution_bar
+from ui.components.window import window_title
 
 
 def distribution_window():
-    # Fenêtre
-    window = Toplevel()
-    window.title("Distribution")
-    window.geometry("640x480")
-    window.minsize(480, 360)
 
-    # Titre de la page
-    label_title = Label(window, text="Distributions", font="Helvetica, 20")
-    label_title.pack()
-
-    data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    window, data = window_title("Distribution")
 
     # Menu lieu
     options = data["Lieu"].dropna().unique()

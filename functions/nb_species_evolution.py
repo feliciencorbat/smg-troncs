@@ -23,52 +23,13 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     if not with_cf:
         data = data.loc[data["cf"] != "cf."]
 
-    # Fonction de cumulation des espèces
-    def cumulative_species(dataframe: pd.DataFrame) -> pd.DataFrame:
-        dataframe = dataframe[['Nom', 'Date']].sort_values(by=["Date"])
-        prov_cumulative_species = dataframe.groupby(pd.Grouper(key='Date', freq='1M'))["Nom"].apply(
-            lambda x: list(np.unique(x)))
-        cumulative_species_data = pd.DataFrame(columns=['Date', 'Nouvelles espèces', 'Total espèces'])
-        i = int(0)
-        for index, value in prov_cumulative_species.items():
-            if i == 0:
-                temporary_row = pd.DataFrame({'Date': [index], 'Nouvelles espèces': [value], 'Total espèces': [value]})
-                cumulative_species_data = pd.concat([cumulative_species_data, temporary_row])
-            else:
-                new_species = []
-                for species in value:
-                    if species not in \
-                            cumulative_species_data.iloc[-1, cumulative_species_data.columns.get_loc("Total espèces")]:
-                        new_species.append(species)
-
-                old_species = cumulative_species_data.iloc[
-                                  -1, cumulative_species_data.columns.get_loc("Total espèces")] + new_species
-                temporary_row = pd.DataFrame(
-                    {'Date': [index], 'Nouvelles espèces': [new_species], 'Total espèces': [old_species]})
-                cumulative_species_data = pd.concat([cumulative_species_data, temporary_row])
-            i = int(i) + 1
-
-        # Ajouter une ligne de la dernière date du dataframe total si absente
-        if len(cumulative_species_data) > 0:
-            if cumulative_species_data.iloc[-1]["Date"] < data.iloc[-1]["Date"]:
-                new_row = cumulative_species_data.iloc[-1:]
-                new_row.at[0, 'Date'] = data.iloc[-1]["Date"]
-                new_row.at[0, 'Nouvelles espèces'] = []
-                cumulative_species_data = pd.concat([cumulative_species_data, new_row])
-
-        # Comptage des espèces
-        cumulative_species_data["Nb nouvelles espèces"] = cumulative_species_data['Nouvelles espèces'].apply(
-            lambda x: len(x))
-        cumulative_species_data["Nb total espèces"] = cumulative_species_data['Total espèces'].apply(lambda x: len(x))
-        return cumulative_species_data
-
     # Enregistrer le fichier excel
     writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter')
 
     # Données cumulation d'espèces
-    all_species_cumulative = cumulative_species(data)
+    all_species_cumulative = cumulative_species(data, data)
     lr_data = data.loc[data["Menace"] == "Menacé"]
-    lr_species_cumulative = cumulative_species(lr_data)
+    lr_species_cumulative = cumulative_species(lr_data, data)
 
     all_species_cumulative.to_excel(writer, sheet_name='Espèces cumulées', index=False)
     lr_species_cumulative.to_excel(writer, sheet_name='Espèces cumulées LR', index=False)
@@ -78,7 +39,7 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     plt.plot(all_species_cumulative["Date"], all_species_cumulative["Nb total espèces"], label="Toutes les espèces")
     for tree in data["Espèce du substrat"].dropna().unique():
         tree_species = data.loc[(data["Espèce du substrat"] == tree)]
-        tree_species_cumulative = cumulative_species(tree_species)
+        tree_species_cumulative = cumulative_species(tree_species, data)
         plt.plot(tree_species_cumulative["Date"], tree_species_cumulative["Nb total espèces"],
                  label="Les espèces sur " + str(tree))
         tree_species_cumulative.to_excel(writer, sheet_name="Espèces sur " + tree.replace("?", "inconnu"),
@@ -96,7 +57,7 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
              label="Les espèces de la liste rouge")
     for tree in data["Espèce du substrat"].dropna().unique():
         tree_lr_species = data.loc[(data["Espèce du substrat"] == tree) & (data["Menace"] == "Menacé")]
-        tree_lr_species_cumulative = cumulative_species(tree_lr_species)
+        tree_lr_species_cumulative = cumulative_species(tree_lr_species, data)
         plt.plot(tree_lr_species_cumulative["Date"], tree_lr_species_cumulative["Nb total espèces"],
                  label="Les espèces de la liste rouge sur " + str(tree))
         tree_lr_species_cumulative.to_excel(writer, sheet_name="Espèces LR sur " +
@@ -116,7 +77,7 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     for lr in data["LR"].dropna().unique():
         if lr != "LC":
             lr_group_species = data.loc[data["LR"] == lr]
-            lr_group_species_cumulative = cumulative_species(lr_group_species)
+            lr_group_species_cumulative = cumulative_species(lr_group_species, data)
             plt.plot(lr_group_species_cumulative["Date"], lr_group_species_cumulative["Nb total espèces"],
                      label="Les espèces de la liste rouge " + str(lr))
             lr_group_species_cumulative.to_excel(writer, sheet_name='Espèces ' + str(lr), index=False)
@@ -131,7 +92,7 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     plt.figure()
     for tree_group in data["Groupe troncs"].dropna().unique():
         tree_group_species = data.loc[data["Groupe troncs"] == tree_group]
-        tree_group_species_cumulative = cumulative_species(tree_group_species)
+        tree_group_species_cumulative = cumulative_species(tree_group_species, data)
         plt.plot(tree_group_species_cumulative["Date"], tree_group_species_cumulative["Nb total espèces"],
                  label="Les espèces du groupe de troncs " + str(tree_group))
         tree_group_species_cumulative.to_excel(writer, sheet_name="Espèces par troncs " + str(tree_group),
@@ -155,3 +116,43 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
 
     number_species_by_month.to_excel(writer, sheet_name='Nb espèces par mois')
     writer.save()
+
+
+# Fonction de cumulation des espèces
+def cumulative_species(dataframe: pd.DataFrame, data: pd.DataFrame) -> pd.DataFrame:
+    dataframe = dataframe[['Nom', 'Date']].sort_values(by=["Date"])
+    prov_cumulative_species = dataframe.groupby(pd.Grouper(key='Date', freq='1M'))["Nom"].apply(
+        lambda x: list(np.unique(x)))
+    cumulative_species_data = pd.DataFrame(columns=['Date', 'Nouvelles espèces', 'Total espèces'])
+    i = int(0)
+    for index, value in prov_cumulative_species.items():
+        if i == 0:
+            temporary_row = pd.DataFrame({'Date': [index], 'Nouvelles espèces': [value], 'Total espèces': [value]})
+            cumulative_species_data = pd.concat([cumulative_species_data, temporary_row])
+        else:
+            new_species = []
+            for species in value:
+                if species not in \
+                        cumulative_species_data.iloc[-1, cumulative_species_data.columns.get_loc("Total espèces")]:
+                    new_species.append(species)
+
+            old_species = cumulative_species_data.iloc[
+                              -1, cumulative_species_data.columns.get_loc("Total espèces")] + new_species
+            temporary_row = pd.DataFrame(
+                {'Date': [index], 'Nouvelles espèces': [new_species], 'Total espèces': [old_species]})
+            cumulative_species_data = pd.concat([cumulative_species_data, temporary_row])
+        i = int(i) + 1
+
+    # Ajouter une ligne de la dernière date du dataframe total si absente
+    if len(cumulative_species_data) > 0:
+        if cumulative_species_data.iloc[-1]["Date"] < data.iloc[-1]["Date"]:
+            new_row = cumulative_species_data.iloc[-1:]
+            new_row.at[0, 'Date'] = data.iloc[-1]["Date"]
+            new_row.at[0, 'Nouvelles espèces'] = []
+            cumulative_species_data = pd.concat([cumulative_species_data, new_row])
+
+    # Comptage des espèces
+    cumulative_species_data["Nb nouvelles espèces"] = cumulative_species_data['Nouvelles espèces'].apply(
+        lambda x: len(x))
+    cumulative_species_data["Nb total espèces"] = cumulative_species_data['Total espèces'].apply(lambda x: len(x))
+    return cumulative_species_data

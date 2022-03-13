@@ -1,22 +1,11 @@
 from tkinter import *
-
 import numpy as np
-import pandas as pd
 from functions.chi2 import chi2_test
+from ui.components.window import window_title
 
 
 def chi2_window():
-    # Fenêtre
-    window = Toplevel()
-    window.title("Test Chi-2")
-    window.geometry("640x640")
-    window.minsize(480, 360)
-
-    # Titre de la page
-    label_title = Label(window, text="Test Chi-2", font="Helvetica, 20")
-    label_title.pack()
-
-    data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    window, data = window_title("Test Chi-2")
 
     # Menu lieu
     options = data["Lieu"].dropna().unique()
