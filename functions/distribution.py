@@ -29,11 +29,21 @@ def distribution_bar(data: pd.DataFrame, variable: str, title: str, limit: int, 
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+    # export excel
+    data.to_excel(directory + "/" + variable + "_" + str(limit) + ".xlsx")
+
+    # Graphe tuyaux d'orgue
     plt.figure()
     plt.bar(data.index, data.values)
     plt.ylabel("Nombre d'observations")
     plt.xticks(rotation=90)
     plt.title(title)
-    plt.savefig(directory + "/" + variable + "_" + str(limit) + ".png", bbox_inches='tight')
+    plt.savefig(directory + "/" + variable + "_barres_" + str(limit) + ".png", bbox_inches='tight')
+    plt.show(block=False)
+
+    # Graphe tuyaux d'orgue
+    plt.figure()
+    plt.pie(data, labels=data.index)
+    plt.title(title)
+    plt.savefig(directory + "/" + variable + "_camembert_" + str(limit) + ".png", bbox_inches='tight')
     plt.show()
-    data.to_excel(directory + "/" + variable + "_" + str(limit) + ".xlsx")
