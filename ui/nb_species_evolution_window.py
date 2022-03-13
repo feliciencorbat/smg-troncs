@@ -20,7 +20,7 @@ def nb_species_evolution_window():
     data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Statistiques")
 
     # Menu lieu
-    options = data["Lieu"].unique()
+    options = data["Lieu"].dropna().unique()
     options = np.append(options, ["Tous les lieux"])
     location = StringVar()
     location.set("Tous les lieux")
