@@ -112,7 +112,7 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     plt.title("Nombre d'espèces par mois")
     plt.ylabel("Nombre d'espèces")
     plt.savefig(directory + "/nbre_especes_par_mois.png", bbox_inches='tight')
-    plt.show()
+    plt.show(block=False)
 
     number_species_by_month.to_excel(writer, sheet_name='Nb espèces par mois')
     writer.save()

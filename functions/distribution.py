@@ -46,4 +46,4 @@ def distribution_bar(data: pd.DataFrame, variable: str, title: str, limit: int, 
     plt.pie(data, labels=data.index)
     plt.title(title)
     plt.savefig(directory + "/" + variable + "_camembert_" + str(limit) + ".png", bbox_inches='tight')
-    plt.show()
+    plt.show(block=False)

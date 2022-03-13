@@ -8,7 +8,7 @@ def window_title(title: str, with_data: bool = True):
     window = Toplevel()
 
     window.title(title)
-    window.geometry("480x480")
+    window.geometry("480x480-500+0")
     window.minsize(480, 360)
 
     # Titre de la page

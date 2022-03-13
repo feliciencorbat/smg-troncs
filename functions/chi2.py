@@ -98,4 +98,4 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
         plt.ylabel("Nombre d'observations")
     plt.title(title)
     plt.savefig(directory + "/contingence_bar.png", bbox_inches='tight')
-    plt.show()
+    plt.show(block=False)
