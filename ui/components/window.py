@@ -15,9 +15,8 @@ def window_title(title: str, with_data: bool = True):
     label_title = Label(window, text=title, font="Helvetica, 20")
     label_title.pack()
 
-    data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Statistiques")
-
     if with_data:
+        data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Statistiques")
         return window, data
     else:
         return window
