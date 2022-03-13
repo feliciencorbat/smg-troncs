@@ -127,20 +127,20 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     plt.savefig(directory + "/especes_cumulees_par_mois_lr_detaillee.png", bbox_inches='tight')
     plt.show(block=False)
 
-    # Création du graphique cumulation d'espèces selon groupe d'arbres
+    # Création du graphique cumulation d'espèces selon groupe de troncs
     plt.figure()
-    for tree_group in data["Groupe arbres"].dropna().unique():
-        tree_group_species = data.loc[data["Groupe arbres"] == tree_group]
+    for tree_group in data["Groupe troncs"].dropna().unique():
+        tree_group_species = data.loc[data["Groupe troncs"] == tree_group]
         tree_group_species_cumulative = cumulative_species(tree_group_species)
         plt.plot(tree_group_species_cumulative["Date"], tree_group_species_cumulative["Nb total espèces"],
-                 label="Les espèces du groupe d'arbres " + str(tree_group))
-        tree_group_species_cumulative.to_excel(writer, sheet_name="Espèces par groupe d'arbres " + str(tree_group),
+                 label="Les espèces du groupe de troncs " + str(tree_group))
+        tree_group_species_cumulative.to_excel(writer, sheet_name="Espèces par troncs " + str(tree_group),
                                                index=False)
     plt.ylabel("Nombre d'espèces")
-    plt.title("Evolution du nombre d'espèces des groupes d'arbres")
+    plt.title("Evolution du nombre d'espèces des groupes de troncs")
     plt.ylim(ymin=0)
     plt.legend(loc="upper left")
-    plt.savefig(directory + "/especes_cumulees_par_mois_groupe_arbres.png", bbox_inches='tight')
+    plt.savefig(directory + "/especes_cumulees_par_mois_groupe_troncs.png", bbox_inches='tight')
     plt.show(block=False)
 
     # Nombre d'espèces par mois
