@@ -21,11 +21,13 @@ def excel_window():
             title='Choisir le fichier excel à transformer',
         ))
 
+        open_file_button["state"] = "disabled"
+
         # Ajouter colonnes GBIF
         gbif_checked = BooleanVar()
-        gbif = Checkbutton(window, text="Ajouter les colonnes GBIF avec le nom actuel et de la systématique.\n"
+        gbif = Checkbutton(window, text="Ajouter les colonnes GBIF avec le nom actuel, le phylum et l'ordre.\n"
                                         "Cela nécessite internet et prend quelques minutes.\n"
-                                        "Permet également de vérifier la synonymie.",
+                                        "Cela permet également de vérifier la synonymie.",
                            variable=gbif_checked, onvalue=True, offvalue=False)
         gbif.pack(pady=15)
 
@@ -42,12 +44,12 @@ def excel_window():
         label_validation = Label(window,
                                  text="Le fichier liste_modifiee.xlsx est créé dans le dossier export."
                                       "\n Ce dossier se trouve au même emplacement que le projet python."
-                                      "\n En plus, un fichier avec les erreurs et un fichier avec la liste "
-                                      "des espèces y sont créés.")
+                                      "\n En plus, le fichier contient les feuilles avec les erreurs, la liste " 
+                                      "\ndes espèces et la liste des espèces par tronc.")
         label_validation.pack(pady=15)
 
     open_file_button = Button(
-        window, text='Choisir le fichier excel', command=select_file
+        window, state="normal", text='Choisir le fichier excel', command=select_file
     )
     open_file_button.pack()
 
