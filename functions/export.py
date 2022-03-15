@@ -218,7 +218,7 @@ def export(filename: str, with_gbif: bool) -> None:
 
     # Bien typer et garder uniquement les colonnes nécessaires
     if with_gbif:
-        data = data[["Date", "Mois", "Nom", "Nom actuel", "cf", "LR", "Menace", "Substrat", "Espèce du substrat",
+        data = data[["Date", "Mois", "Nom", "Nom actuel", "Phylum", "Ordre", "cf", "LR", "Menace", "Substrat", "Espèce du substrat",
                      "D. moyen", "Longueur", "Pourriture", "Lieu", "Groupe troncs", "Age tronc"]]
     else:
         data = data[["Date", "Mois", "Nom", "cf", "LR", "Menace", "Substrat", "Espèce du substrat", "D. moyen",
