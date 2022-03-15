@@ -47,13 +47,6 @@ def export(filename: str, with_gbif: bool) -> None:
     data["Nom"] = data["Genre"] + " " + data["Espèce"]
 
     """
-    Suppression de certaines colonnes
-    """
-    data = data.drop(columns=['Genre', 'Espèce', 'Zone/Lieu', 'Auteurs', 'Abondance', 'X', 'Y', 'Canton', 'Alt',
-                              'Végétation', 'Photo', 'B/A/M', 'm/nm/i', 'Legit', 'Dét', 'Exsiccata',
-                              'Réf Litt Déter'])
-
-    """
     Création du nouveau dataframe species avec 2 colonnes (nom binomial et liste rouge) et tri par ordre alphabétique
     """
     species = data[['Nom', 'LR', 'Fréq']].drop_duplicates()
@@ -63,7 +56,7 @@ def export(filename: str, with_gbif: bool) -> None:
     Afficher les erreurs dans les noms qui contiennent une parenthèse non fermée ou égal
     """
     errors = data.loc[data["Nom"].str.contains("\)|\(|\=", case=False)]
-    errors = errors.drop(columns=['Substrat', 'Espèce du substrat', 'Date', 'LR', 'Fréq', 'cf'])
+    errors = errors[["Nom"]]
     errors["Type d'erreur"] = "Erreur de parenthèse non fermée ou de caractère indésirable"
     errors["Ligne"] = errors.index + 2
     error = pd.concat([error, errors])
@@ -78,11 +71,6 @@ def export(filename: str, with_gbif: bool) -> None:
         error_row = pd.DataFrame({'Nom': [err],
                                   "Type d'erreur": ["Il y a une incohérence entre l'espèce et la liste rouge"]})
         error = pd.concat([error, error_row])
-
-    """
-    Suppression de certaines colonnes
-    """
-    data = data.drop(columns=['LR', 'Fréq'])
 
     """
     Création colonne Menace
@@ -176,8 +164,7 @@ def export(filename: str, with_gbif: bool) -> None:
         """
         Chercher les synonymes
         """
-        species_synonyms = species.drop(columns=['LR', 'Phylum', 'Ordre', 'Menace'])
-        species_synonyms = species_synonyms[['Nom', 'Nom actuel']].drop_duplicates()
+        species_synonyms = species[['Nom', 'Nom actuel']].drop_duplicates()
         size = species_synonyms.groupby(['Nom actuel']).size()
 
         errors = size[size >= 2].index
@@ -188,7 +175,7 @@ def export(filename: str, with_gbif: bool) -> None:
             error = pd.concat([error, error_row])
 
     # Joindre le dataframe species au dataframe data
-    data = data.join(species.set_index('Nom'), on="Nom", lsuffix='_left', rsuffix='_right')
+    data = data.join(species.set_index('Nom'), on="Nom", rsuffix='_right')
 
     """
     Gestion des troncs
@@ -196,13 +183,23 @@ def export(filename: str, with_gbif: bool) -> None:
     # Enlever les parenthèses des troncs et supprimer certaines colonnes
     trunks["Identifiant"] = trunks["Identifiant"].str.replace(r"\(.*?\)", "", regex=True)
     trunks["Identifiant"] = trunks["Identifiant"].str.strip()
+
+    # Ajouter une colonne âge du tronc moyen
     trunks["Coupé entre"] = trunks["Coupé entre"].str.replace("?", "", regex=False)
-    trunks = trunks.drop(columns=['Diamètres', 'Rem.', 'Pourriture'])
+    trunks["Coupé entre"] = trunks["Coupé entre"].str.replace("-", "", regex=False)
+    trunks["Coupé entre"] = trunks["Coupé entre"].str.replace("hiver", "", regex=False)
+    trunks["Coupé entre"] = trunks["Coupé entre"].str.replace("Hiver", "", regex=False)
+    trunks["Coupé entre"] = trunks["Coupé entre"].str.replace(" ", "", regex=False)
+    trunks["Coupé début"] = pd.to_datetime(((trunks["Coupé entre"].str[:4]) + "0101").astype(int), format='%Y%m%d')
+    trunks["Coupé fin"] = pd.to_datetime(((trunks["Coupé entre"].str[-4:]) + "1231").astype(int), format='%Y%m%d')
+    trunks["Coupé moyen"] = trunks["Coupé début"] + ((trunks["Coupé fin"] - trunks["Coupé début"]) / 2)
 
     # Joindre le dataframe trunks au dataframe data
     data["Substrat"] = data["Substrat"].str.replace("tronc ", "", regex=False)
     data = data.join(trunks.set_index('Identifiant'), on="Substrat", rsuffix='_right')
-    data = data.sort_index()
+
+    # Ajouter une colonne âge du tronc
+    data["Age tronc"] = (data["Date"] - data["Coupé moyen"]) / 365.25
 
     # Erreurs: Espèce du substrat absente
     errors = data[data['Espèce du substrat_right'].isnull()]
@@ -219,11 +216,21 @@ def export(filename: str, with_gbif: bool) -> None:
     errors["Ligne"] = errors.index + 2
     error = pd.concat([error, errors])
 
+    # Bien typer et garder uniquement les colonnes nécessaires
+    if with_gbif:
+        data = data[["Date", "Mois", "Nom", "Nom actuel", "cf", "LR", "Menace", "Substrat", "Espèce du substrat",
+                     "D. moyen", "Longueur", "Pourriture", "Lieu", "Groupe troncs", "Age tronc"]]
+    else:
+        data = data[["Date", "Mois", "Nom", "cf", "LR", "Menace", "Substrat", "Espèce du substrat", "D. moyen",
+                     "Longueur", "Pourriture", "Lieu", "Groupe troncs", "Age tronc"]]
+    error = error[["Ligne", "Nom", "Type d'erreur"]]
+
     # Liste des espèces par tronc
     trunks_species = data[["Substrat", "Nom"]].groupby("Substrat")["Nom"].apply(lambda x: list(np.unique(x)))
 
     # Enregistrer le fichier excel
-    writer = pd.ExcelWriter(export_directory + '/liste_modifiee.xlsx', engine='xlsxwriter')
+    writer = pd.ExcelWriter(export_directory + '/liste_modifiee.xlsx', engine='xlsxwriter',
+                            datetime_format='dd mm yyyyy', date_format='dd mm yyyyy')
     data.to_excel(writer, sheet_name='Statistiques', index=False)
     species.to_excel(writer, sheet_name='Espèces', index=False)
     trunks_species.to_excel(writer, sheet_name='Espèces par tronc')
