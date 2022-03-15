@@ -3,6 +3,7 @@ import unittest
 
 import pandas as pd
 
+from functions.anova import anova_test
 from functions.chi2 import chi2_test
 from functions.distribution import distribution_bar
 from functions.export import export
@@ -24,6 +25,9 @@ class Tests(unittest.TestCase):
         chi2_test(data, "Espèce du substrat", "Menace", "Titre du graphe", False,
                   True, "Tous les lieux")
 
+        print("Test de la fonction ANOVA")
+        anova_test(data, "Menace", "Age tronc", "Titre du graphe", True, "Tous les lieux")
+
         print("Test de la fonction évolution espèces")
         nb_species_evolution(data, True, "Tous les lieux")
 
@@ -38,6 +42,9 @@ class Tests(unittest.TestCase):
         print("Test de la fonction chi 2")
         chi2_test(data, "Espèce du substrat", "Menace", "Titre du graphe", False,
                   True, "Tous les lieux")
+
+        print("Test de la fonction ANOVA")
+        anova_test(data, "Menace", "Age tronc", "Titre du graphe", True, "Tous les lieux")
 
         print("Test de la fonction évolution espèces")
         nb_species_evolution(data, True, "Tous les lieux")
