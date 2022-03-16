@@ -3,6 +3,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
 from scipy import stats
+import researchpy as rp
 
 """
 Fonction ANOVA entre variable qualitative et quantitative
@@ -35,15 +36,31 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
     plt.savefig(directory + "/boite_moustaches.png", bbox_inches='tight')
     plt.show(block=False)
 
-    # Anova one-way
+    # Analyse des données
+    print("Analyse des données\n\n")
+    print(rp.summary_cont(data[variable2].groupby(data[variable1])))
+
     mods = data[variable1].unique()
 
     args = []
     for mod in mods:
         args.append(data[variable2][data[variable1] == mod])
 
+    # Test de Levene
+    print("\n\nTest de Levene (égalité des variances)")
+    statistic_levene, p_value_levene = stats.levene(*args, center="mean")
+    print("\nP-value de Levene est " + str(p_value_levene))
+
+    if p_value_levene < 0.05:
+        print("\nLes variances des populations ne sont pas égales."
+              "\nLe test ANOVA est donc caduque.")
+    else:
+        print("\nLes variances des populations sont égales.")
+
+    # Anova one-way
+    print("\n\nTest ANOVA one-way")
     statistic_anova, p_value_anova = stats.f_oneway(*args)
-    print("P-value de l'ANOVA est " + str(p_value_anova))
+    print("\nP-value de l'ANOVA est " + str(p_value_anova))
 
     if p_value_anova < 0.05:
         print("\nL'hypothèse H0 est rejetée car la p-value est inférieure à 0.05."
