@@ -12,6 +12,7 @@
 - [Utilisation](#utilisation)
   - [Lancer l'application](#lancer)
   - [Récupérer les dernières mises à jour](#miseajour)
+  - [Une libraire est manquante](#librairie)
 
 ## Fonctions <a id="fonctions"></a>
 
@@ -132,6 +133,23 @@ L'autre solution est de naviguer dans les fichiers (le dossier "functions" en pa
 
 Il suffit de cliquer sur le triangle vert.
 
+![](readme/17.png)
+
 ### Récupérer les dernières mises à jour <a id="miseajour"></a>
 
 Cliquer sur la "Flèche bleue Update Project..." et cliquer OK.
+
+![](readme/18.png)
+
+### Une libraire est manquante <a id="librairie"></a>
+
+![](readme/19.png)
+
+Lors de l'utilisation de l'application, une erreur avec le message: 
+"ModuleNotFoundError: No module named 'nom_module' apparaît.
+
+![](readme/20.png)
+
+- Il faut cliquer sur l'onglet "Python Packages"
+- Dans le champ de recherche, écrire le nom de la librairie manquante
+- Cliquer sur le bouton Install
