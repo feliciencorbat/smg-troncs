@@ -243,6 +243,9 @@ def export(filename: str, with_gbif: bool) -> None:
     errors["Ligne"] = errors.index + 2
     error = pd.concat([error, errors])
 
+    # Colonne date de type datetime en type date
+    data["Date"] = pd.to_datetime(data['Date']).dt.date
+
     # Bien typer et garder uniquement les colonnes nécessaires
     if with_gbif:
         data = data[["Date", "Saison", "Mois", "Nom", "Nom actuel", "Phylum", "Ordre", "cf", "LR", "Menace", "Substrat",
@@ -258,7 +261,7 @@ def export(filename: str, with_gbif: bool) -> None:
 
     # Enregistrer le fichier excel
     writer = pd.ExcelWriter(export_directory + '/liste_modifiee.xlsx', engine='xlsxwriter',
-                            datetime_format='dd mm yyyyy', date_format='dd mm yyyyy')
+                            datetime_format='dd.mm.yyyyy', date_format='dd.mm.yyyyy')
     data.to_excel(writer, sheet_name='Statistiques', index=False)
     species.to_excel(writer, sheet_name='Espèces', index=False)
     trunks_species.to_excel(writer, sheet_name='Espèces par tronc')

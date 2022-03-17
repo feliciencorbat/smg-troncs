@@ -24,7 +24,8 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
         data = data.loc[data["cf"] != "cf."]
 
     # Enregistrer le fichier excel
-    writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter')
+    writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter',
+                            datetime_format='dd.mm.yyyyy', date_format='dd.mm.yyyyy')
 
     # Données cumulation d'espèces
     all_species_cumulative = cumulative_species(data, data)
