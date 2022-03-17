@@ -46,6 +46,9 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
     for mod in mods:
         args.append(data[variable2][data[variable1] == mod])
 
+    # Validité de l'ANOVA
+    anova_validity = True
+
     # Test de distribution Jarque-Bera
     i = 0
     for arg in args:
@@ -57,6 +60,7 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
         if p_value_jarque_bera < 0.05:
             print("\nLa distribution ne suit pas une loi normale"
                   "\nLe test ANOVA sera donc caduque.")
+            anova_validity = False
         else:
             print("\nLa distribution suit une loi normale.")
 
@@ -68,6 +72,7 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
     if p_value_levene < 0.05:
         print("\nLes variances des populations ne sont pas homogènes."
               "\nLe test ANOVA sera donc caduque.")
+        anova_validity = False
     else:
         print("\nLes variances des populations sont homogènes.")
 
@@ -80,3 +85,8 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
         print("\nDonc il y a bien une différence observée entre les moyennes des modalités.")
     else:
         print("\nIl n'y a pas de différence observée entre les moyennes des modalités.")
+
+    if anova_validity:
+        print("Les tests de normalité et d'homogénéité des variances rendent le test ANOVA valide.")
+    else:
+        print("Les tests de normalité et d'homogénéité des variances rendent le test ANOVA non valide.")
