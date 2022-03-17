@@ -89,4 +89,16 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
     if anova_validity:
         print("Les tests de normalité et d'homogénéité des variances rendent le test ANOVA valide.")
     else:
-        print("Les tests de normalité et d'homogénéité des variances rendent le test ANOVA non valide.")
+        print("Les tests de normalité et d'homogénéité des variances rendent le test ANOVA non valide."
+              "\nNous utilisons alors un test non paramétrique.")
+
+        print("\n\nTest de Kruskal-Wallis")
+        statistic_kruskal, p_value_kruskal = stats.kruskal(*args)
+        print("\nP-value de Kruskal-Wallis est " + str(p_value_kruskal))
+
+        if p_value_kruskal < 0.05:
+            print("\nAu moins un échantillon domine stochastiquement un autre échantillon.")
+        else:
+            print("\nIl n'y a pas de différences entre les échantillons.")
+
+
