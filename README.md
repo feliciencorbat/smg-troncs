@@ -152,4 +152,5 @@ Lors de l'utilisation de l'application, une erreur avec le message:
 
 - Il faut cliquer sur l'onglet "Python Packages"
 - Dans le champ de recherche, écrire le nom de la librairie manquante
+- Sélectionner la librairie
 - Cliquer sur le bouton Install
