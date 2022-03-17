@@ -20,6 +20,33 @@ def export(filename: str, with_gbif: bool) -> None:
     error = pd.DataFrame([], )
 
     """
+    Création  colonne saison
+    """
+    conditions = [
+        (data['Date'].dt.month < 3),
+        np.logical_and(data['Date'].dt.month == 3, data['Date'].dt.day < 21),
+        (data['Date'].dt.month < 6),
+        np.logical_and(data['Date'].dt.month == 6, data['Date'].dt.day < 21),
+        (data['Date'].dt.month < 9),
+        np.logical_and(data['Date'].dt.month == 9, data['Date'].dt.day < 21),
+        (data['Date'].dt.month < 12),
+        np.logical_and(data['Date'].dt.month == 12, data['Date'].dt.day < 21),
+        np.logical_and(data['Date'].dt.month == 12, data['Date'].dt.day >= 21),
+    ]
+    choices = [
+        'Hiver',
+        'Hiver',
+        'Printemps',
+        'Printemps',
+        'Eté',
+        'Eté',
+        'Automne',
+        'Automne',
+        'Hiver'
+    ]
+    data["Saison"] = np.select(condlist=conditions, choicelist=choices)
+
+    """
     Ajouter colonne cf.
     """
     data['cf'] = data["Espèce"].str.contains('cf|\?', regex=True)
@@ -218,10 +245,11 @@ def export(filename: str, with_gbif: bool) -> None:
 
     # Bien typer et garder uniquement les colonnes nécessaires
     if with_gbif:
-        data = data[["Date", "Mois", "Nom", "Nom actuel", "Phylum", "Ordre", "cf", "LR", "Menace", "Substrat", "Espèce du substrat",
+        data = data[["Date", "Saison", "Mois", "Nom", "Nom actuel", "Phylum", "Ordre", "cf", "LR", "Menace", "Substrat",
+                     "Espèce du substrat",
                      "D. moyen", "Longueur", "Pourriture", "Lieu", "Groupe troncs", "Age tronc"]]
     else:
-        data = data[["Date", "Mois", "Nom", "cf", "LR", "Menace", "Substrat", "Espèce du substrat", "D. moyen",
+        data = data[["Date", "Saison", "Mois", "Nom", "cf", "LR", "Menace", "Substrat", "Espèce du substrat", "D. moyen",
                      "Longueur", "Pourriture", "Lieu", "Groupe troncs", "Age tronc"]]
     error = error[["Ligne", "Nom", "Type d'erreur"]]
 
