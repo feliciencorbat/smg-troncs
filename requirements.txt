@@ -9,7 +9,11 @@ altgraph==0.17.2
     #   -r requirements.in
     #   macholib
 certifi==2021.10.8
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   requests
+charset-normalizer==2.0.12
+    # via requests
 click==8.0.4
     # via
     #   -r requirements.in
@@ -34,6 +38,8 @@ fonttools==4.31.1
     # via
     #   -r requirements.in
     #   matplotlib
+idna==3.3
+    # via requests
 joblib==1.1.0
     # via
     #   -r requirements.in
@@ -42,11 +48,14 @@ kiwisolver==1.4.0
     # via
     #   -r requirements.in
     #   matplotlib
+littleutils==0.2.2
+    # via outdated
 macholib==1.16
     # via -r requirements.in
 matplotlib==3.5.1
     # via
     #   -r requirements.in
+    #   pingouin
     #   prince
     #   seaborn
 numpy==1.22.3
@@ -55,26 +64,36 @@ numpy==1.22.3
     #   matplotlib
     #   pandas
     #   patsy
+    #   pingouin
     #   prince
     #   researchpy
     #   scikit-learn
     #   scipy
     #   seaborn
     #   statsmodels
+    #   xarray
 openpyxl==3.0.9
     # via -r requirements.in
+outdated==0.2.1
+    # via pingouin
 packaging==21.3
     # via
     #   -r requirements.in
     #   matplotlib
     #   statsmodels
+    #   xarray
 pandas==1.4.1
     # via
     #   -r requirements.in
+    #   pandas-flavor
+    #   pingouin
     #   prince
     #   researchpy
     #   seaborn
     #   statsmodels
+    #   xarray
+pandas-flavor==0.2.0
+    # via pingouin
 patsy==0.5.2
     # via
     #   -r requirements.in
@@ -88,6 +107,8 @@ pillow==9.0.1
     # via
     #   -r requirements.in
     #   matplotlib
+pingouin==0.5.1
+    # via -r requirements.in
 pip-tools==6.5.1
     # via -r requirements.in
 platformdirs==2.5.1
@@ -110,22 +131,28 @@ pytz==2021.3
     # via
     #   -r requirements.in
     #   pandas
+requests==2.27.1
+    # via outdated
 researchpy==0.3.2
     # via -r requirements.in
 scikit-learn==1.0.2
     # via
     #   -r requirements.in
+    #   pingouin
     #   prince
 scipy==1.8.0
     # via
     #   -r requirements.in
+    #   pingouin
     #   prince
     #   researchpy
     #   scikit-learn
     #   seaborn
     #   statsmodels
 seaborn==0.11.2
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pingouin
 six==1.16.0
     # via
     #   -r requirements.in
@@ -135,7 +162,10 @@ six==1.16.0
 statsmodels==0.13.2
     # via
     #   -r requirements.in
+    #   pingouin
     #   researchpy
+tabulate==0.8.9
+    # via pingouin
 threadpoolctl==3.1.0
     # via
     #   -r requirements.in
@@ -144,12 +174,16 @@ tomli==2.0.1
     # via
     #   -r requirements.in
     #   pep517
+urllib3==1.26.9
+    # via requests
 virtualenv==20.13.4
     # via -r requirements.in
 virtualenv-clone==0.5.7
     # via -r requirements.in
 wheel==0.37.1
     # via pip-tools
+xarray==2022.3.0
+    # via pandas-flavor
 xlrd==2.0.1
     # via -r requirements.in
 xlsxwriter==3.0.3
