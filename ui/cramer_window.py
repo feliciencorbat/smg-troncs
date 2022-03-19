@@ -5,7 +5,7 @@ from ui.components.window import window_title
 
 
 def cramer_window():
-    window, data = window_title("Matrice Cramer")
+    window, data = window_title("Matrice V de Cramer")
 
     # Menu lieu
     options = data["Lieu"].dropna().unique()

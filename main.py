@@ -22,7 +22,7 @@ excel_button.pack(pady=15)
 distr_button = Button(window, text="Distribution (1 variable)", command=distribution_window)
 distr_button.pack(pady=15)
 
-matrix_cramer_button = Button(window, text="Matrice Cramer", command=cramer_window)
+matrix_cramer_button = Button(window, text="Matrice V de Cramer", command=cramer_window)
 matrix_cramer_button.pack(pady=15)
 
 chi2_button = Button(window, text="Test Chi-2 (2 variables qualitatives)", command=chi2_window)
