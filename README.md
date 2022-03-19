@@ -9,10 +9,14 @@
   - [Lier Python au projet](#lierpython)
   - [Indiquer où se trouve le fichier de lancement](#lancement)
   - [Ajouter les librairies](#librairies)
+    - [Méthode automatique (recommandée)](#librairies_auto)
+    - [Méthode manuelle (non recommandée)](#librairies_manual)
 - [Utilisation](#utilisation)
   - [Lancer l'application](#lancer)
   - [Récupérer les dernières mises à jour](#miseajour)
   - [Une libraire est manquante](#librairie)
+    - [Méthode automatique (recommandée)](#librairie_auto)
+    - [Méthode manuelle (non recommandée)](#librairie_manual)
 
 ## Fonctions <a id="fonctions"></a>
 
@@ -111,6 +115,41 @@ Cliquer "OK"
 
 ### Ajouter les librairies <a id="librairies"></a>
 
+#### Méthode automatique (recommandée) <a id="librairies_auto"></a>
+
+![](readme/21.png)
+
+- Il faut cliquer sur l'onglet "Python Packages"
+- Dans le champ de recherche, écrire "pip-tools"
+- Sélectionner la librairie "pip-tools"
+- Cliquer sur le bouton Install
+
+![](readme/22.png)
+
+- Cliquer sur le bouton main
+- Cliquer sur "Edit Configurations"
+
+![](readme/23.png)
+
+- Cliquer sur le bouton +
+- Cliquer sur "Shell Script"
+
+![](readme/24.png)
+
+- Dans le champ "Name", donner un nom comme par exemple "libraries"
+- Cocher "Script text"
+- Dans le champ "Script text:", écrire: "venv/Scripts/pip-sync"
+  - (si vous êtes sur mac, remplacer par "venv/bin/pip-sync")
+- Cliquer OK
+
+![](readme/25.png)
+
+- Sélectionner "libraries"
+- Cliquer sur le triangle vert
+- Toutes les librairies vont s'installer
+
+#### Méthode manuelle (non recommandée) <a id="librairies_manual"></a>
+
 ![](readme/14.png)
 
 En lançant l'application en cliquant sur le triangle vert "Run 'main'", des erreurs seront affichées car des librairies manquent. Dans le message en rouge, il est indiqué qu'il manque le module 'pandas'.
@@ -147,6 +186,20 @@ Cliquer sur la "Flèche bleue Update Project..." et cliquer OK.
 
 Lors de l'utilisation de l'application, une erreur avec le message: 
 "ModuleNotFoundError: No module named 'nom_module' apparaît.
+
+#### Méthode automatique (recommandée) <a id="librairie_auto"></a>
+
+Il faut au préalable avoir ajouté [les librariries de manière automatique](#librairies_auto)
+
+![](readme/25.png)
+
+- Sélectionner "libraries"
+- Cliquer sur le triangle vert
+- La ou les libraririe(s) sera/ont installées
+
+Vous pouvez aussi réaliser cette opération pour mettre à jour les librairies. 
+
+#### Méthode manuelle (non recommandée) <a id="librairie_manual"></a>
 
 ![](readme/20.png)
 
