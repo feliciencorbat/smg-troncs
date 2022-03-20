@@ -9,14 +9,9 @@
   - [Lier Python au projet](#lierpython)
   - [Indiquer où se trouve le fichier de lancement](#lancement)
   - [Ajouter les librairies](#librairies)
-    - [Méthode automatique (recommandée)](#librairies_auto)
-    - [Méthode manuelle (non recommandée)](#librairies_manual)
 - [Utilisation](#utilisation)
   - [Lancer l'application](#lancer)
   - [Récupérer les dernières mises à jour](#miseajour)
-  - [Une libraire est manquante](#librairie)
-    - [Méthode automatique (recommandée)](#librairie_auto)
-    - [Méthode manuelle (non recommandée)](#librairie_manual)
 
 ## Fonctions <a id="fonctions"></a>
 
@@ -115,8 +110,6 @@ Cliquer "OK"
 
 ### Ajouter les librairies <a id="librairies"></a>
 
-#### Méthode automatique (recommandée) <a id="librairies_auto"></a>
-
 ![](readme/21.png)
 
 - Il faut cliquer sur l'onglet "Python Packages"
@@ -136,35 +129,13 @@ Cliquer "OK"
 
 ![](readme/24.png)
 
-- Dans le champ "Name", donner un nom comme par exemple "libraries"
-- Cocher "Script text"
-- Dans le champ "Script text:", écrire: "venv/Scripts/pip-sync"
-  - (si vous êtes sur mac, remplacer par "venv/bin/pip-sync")
+- Dans le champ "Name", donner un nom comme par exemple "update"
+- Dans le champ "Script path:", il faut sélectionner le fichier "update.sh"
 - Cliquer OK
 
-![](readme/25.png)
+![](readme/27.png)
 
-- Sélectionner "libraries"
-- Cliquer sur le triangle vert
-- Toutes les librairies vont s'installer
-
-#### Méthode manuelle (non recommandée) <a id="librairies_manual"></a>
-
-![](readme/14.png)
-
-En lançant l'application en cliquant sur le triangle vert "Run 'main'", des erreurs seront affichées car des librairies manquent. Dans le message en rouge, il est indiqué qu'il manque le module 'pandas'.
-
-![](readme/15.png)
-
-Une solution pour installer les librairies est d'aller dans l'onglet "Python Packages".
-Dans le champ "Search for more packages", écrire "pandas"
-Sélectionner "pandas" et cliquer sur le bouton "Install".
-
-Il faut réaliser l'opération jusqu'à ce que toutes les librairies soient installées.
-
-![](readme/16.png)
-
-L'autre solution est de naviguer dans les fichiers (le dossier "functions" en particulier). Une fois que le projet est indexé (ce qui peut prendre un peu de temps) par PyCharm, les librairies non installées sont surlignée en rouge. En les survolant, il est proposé de les installer ("install package matplotlib" par exemple).
+Pour ajouter les librairies, les infos sont ci-dessous: [Récupérer les dernières mises à jour](#miseajour)
 
 ## Utilisation <a id="utilisation"></a>
 
@@ -174,36 +145,21 @@ Il suffit de cliquer sur le triangle vert.
 
 ![](readme/17.png)
 
-### Récupérer les dernières mises à jour <a id="miseajour"></a>
+### Récupérer les dernières mises à jour (fichiers et librairies) <a id="miseajour"></a>
 
-Cliquer sur la "Flèche bleue Update Project..." et cliquer OK.
+Il faut au préalable avoir ajouté [les librariries](#librairies)
 
-![](readme/18.png)
-
-### Une libraire est manquante <a id="librairie"></a>
+Cela récupère les derniers fichiers modifiés ou ajoutés. 
+Il permet aussi d'ajouter et mettre à jour les libraries.
 
 ![](readme/19.png)
 
-Lors de l'utilisation de l'application, une erreur avec le message: 
-"ModuleNotFoundError: No module named 'nom_module' apparaît.
+Par exemple, lors de l'utilisation de l'application, une erreur avec le message: 
+"ModuleNotFoundError: No module named 'nom_module' apparaît. 
+Cela signifie qu'une libraririe est manquante.
 
-#### Méthode automatique (recommandée) <a id="librairie_auto"></a>
+![](readme/26.png)
 
-Il faut au préalable avoir ajouté [les librariries de manière automatique](#librairies_auto)
-
-![](readme/25.png)
-
-- Sélectionner "libraries"
+- Sélectionner "update"
 - Cliquer sur le triangle vert
-- La ou les libraririe(s) sera/ont installées
-
-Vous pouvez aussi réaliser cette opération pour mettre à jour les librairies. 
-
-#### Méthode manuelle (non recommandée) <a id="librairie_manual"></a>
-
-![](readme/20.png)
-
-- Il faut cliquer sur l'onglet "Python Packages"
-- Dans le champ de recherche, écrire le nom de la librairie manquante
-- Sélectionner la librairie
-- Cliquer sur le bouton Install
+- Les fichiers et les librairies seront mis à jour
