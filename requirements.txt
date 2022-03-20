@@ -5,49 +5,29 @@
 #    pip-compile
 #
 altgraph==0.17.2
-    # via
-    #   -r requirements.in
-    #   macholib
+    # via macholib
 certifi==2021.10.8
-    # via
-    #   -r requirements.in
-    #   requests
+    # via requests
 charset-normalizer==2.0.12
     # via requests
 click==8.0.4
-    # via
-    #   -r requirements.in
-    #   pip-tools
+    # via pip-tools
 cycler==0.11.0
-    # via
-    #   -r requirements.in
-    #   matplotlib
+    # via matplotlib
 distlib==0.3.4
-    # via
-    #   -r requirements.in
-    #   virtualenv
+    # via virtualenv
 et-xmlfile==1.1.0
-    # via
-    #   -r requirements.in
-    #   openpyxl
+    # via openpyxl
 filelock==3.6.0
-    # via
-    #   -r requirements.in
-    #   virtualenv
+    # via virtualenv
 fonttools==4.31.1
-    # via
-    #   -r requirements.in
-    #   matplotlib
+    # via matplotlib
 idna==3.3
     # via requests
 joblib==1.1.0
-    # via
-    #   -r requirements.in
-    #   scikit-learn
+    # via scikit-learn
 kiwisolver==1.4.0
-    # via
-    #   -r requirements.in
-    #   matplotlib
+    # via matplotlib
 littleutils==0.2.2
     # via outdated
 macholib==1.16
@@ -78,7 +58,6 @@ outdated==0.2.1
     # via pingouin
 packaging==21.3
     # via
-    #   -r requirements.in
     #   matplotlib
     #   statsmodels
     #   xarray
@@ -96,41 +75,30 @@ pandas-flavor==0.2.0
     # via pingouin
 patsy==0.5.2
     # via
-    #   -r requirements.in
     #   researchpy
     #   statsmodels
 pep517==0.12.0
-    # via
-    #   -r requirements.in
-    #   pip-tools
+    # via pip-tools
 pillow==9.0.1
-    # via
-    #   -r requirements.in
-    #   matplotlib
+    # via matplotlib
 pingouin==0.5.1
     # via -r requirements.in
 pip-tools==6.5.1
     # via -r requirements.in
 platformdirs==2.5.1
-    # via
-    #   -r requirements.in
-    #   virtualenv
+    # via virtualenv
 prince==0.7.1
     # via -r requirements.in
 pyparsing==3.0.7
     # via
-    #   -r requirements.in
     #   matplotlib
     #   packaging
 python-dateutil==2.8.2
     # via
-    #   -r requirements.in
     #   matplotlib
     #   pandas
-pytz==2021.3
-    # via
-    #   -r requirements.in
-    #   pandas
+pytz==2022.1
+    # via pandas
 requests==2.27.1
     # via outdated
 researchpy==0.3.2
@@ -155,25 +123,19 @@ seaborn==0.11.2
     #   pingouin
 six==1.16.0
     # via
-    #   -r requirements.in
     #   patsy
     #   python-dateutil
     #   virtualenv
 statsmodels==0.13.2
     # via
-    #   -r requirements.in
     #   pingouin
     #   researchpy
 tabulate==0.8.9
     # via pingouin
 threadpoolctl==3.1.0
-    # via
-    #   -r requirements.in
-    #   scikit-learn
+    # via scikit-learn
 tomli==2.0.1
-    # via
-    #   -r requirements.in
-    #   pep517
+    # via pep517
 urllib3==1.26.9
     # via requests
 virtualenv==20.13.4
