@@ -4,8 +4,6 @@
 #
 #    pip-compile
 #
-altgraph==0.17.2
-    # via macholib
 certifi==2021.10.8
     # via requests
 charset-normalizer==2.0.12
@@ -30,8 +28,6 @@ kiwisolver==1.4.0
     # via matplotlib
 littleutils==0.2.2
     # via outdated
-macholib==1.16
-    # via -r requirements.in
 matplotlib==3.5.1
     # via
     #   -r requirements.in
