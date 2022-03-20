@@ -30,13 +30,11 @@ littleutils==0.2.2
     # via outdated
 matplotlib==3.5.1
     # via
-    #   -r requirements.in
     #   pingouin
     #   prince
     #   seaborn
 numpy==1.22.3
     # via
-    #   -r requirements.in
     #   matplotlib
     #   pandas
     #   patsy
@@ -59,7 +57,6 @@ packaging==21.3
     #   xarray
 pandas==1.4.1
     # via
-    #   -r requirements.in
     #   pandas-flavor
     #   pingouin
     #   prince
@@ -101,12 +98,10 @@ researchpy==0.3.2
     # via -r requirements.in
 scikit-learn==1.0.2
     # via
-    #   -r requirements.in
     #   pingouin
     #   prince
 scipy==1.8.0
     # via
-    #   -r requirements.in
     #   pingouin
     #   prince
     #   researchpy
@@ -114,9 +109,7 @@ scipy==1.8.0
     #   seaborn
     #   statsmodels
 seaborn==0.11.2
-    # via
-    #   -r requirements.in
-    #   pingouin
+    # via pingouin
 six==1.16.0
     # via
     #   patsy
