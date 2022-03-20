@@ -11,7 +11,14 @@ Matrice Cramer
 """
 
 
-def cramer_matrix(data: pd.DataFrame) -> None:
+def cramer_matrix(data: pd.DataFrame, with_cf: bool, location: str) -> None:
+    # Filtrer lieu
+    if location != "Tous les lieux":
+        data = data.loc[data["Lieu"] == location]
+
+    # Si sans cf
+    if not with_cf:
+        data = data.loc[data["cf"] != "cf."]
 
     # dossier d'export
     directory = "export/cramer"

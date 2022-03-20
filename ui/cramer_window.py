@@ -30,7 +30,7 @@ def cramer_window():
     cf_check.pack()
 
     def validation():
-        cramer_matrix(data)
+        cramer_matrix(data, with_cf.get(), location.get())
         window.destroy()
 
     # Bouton de validation
