@@ -36,10 +36,14 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
     plt.savefig(directory + "/boite_moustaches.png", bbox_inches='tight')
     plt.show(block=False)
 
+    writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter')
+    data.to_excel(writer, sheet_name='Données')
+
     # Analyse des données
     print("Analyse des données")
     print(rp.summary_cont(data[variable2].groupby(data[variable1])))
-
+    data_excel = pd.DataFrame(rp.summary_cont(data[variable2].groupby(data[variable1])))
+    data_excel.to_excel(writer, sheet_name='Analyse des données')
     mods = data[variable1].unique()
 
     args = []
@@ -55,6 +59,7 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
         print("\n\nTest de distribution de Jarque-Bera pour la modalité " + mods[i])
         statistic_jarque_bera, p_value_jarque_bera = stats.jarque_bera(arg)
         print("\nP-value de Jarque-Bera est " + str(p_value_jarque_bera))
+
         i = i + 1
 
         if p_value_jarque_bera < 0.05:
@@ -67,6 +72,8 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
     # Test de Levene
     print("\n\nTest de Levene (homogénéité des variances)")
     statistic_levene, p_value_levene = stats.levene(*args, center="mean")
+    data_excel = pd.DataFrame({"Statistiques": [statistic_levene], "P-value": [p_value_levene]})
+    data_excel.to_excel(writer, sheet_name='Test Levene', index=False)
     print("\nP-value de Levene est " + str(p_value_levene))
 
     if p_value_levene < 0.05:
@@ -79,6 +86,8 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
     # Anova one-way
     print("\n\nTest ANOVA one-way")
     statistic_anova, p_value_anova = stats.f_oneway(*args)
+    data_excel = pd.DataFrame({"Statistiques": [statistic_anova], "P-value": [p_value_anova]})
+    data_excel.to_excel(writer, sheet_name='Test ANOVA', index=False)
     print("\nP-value de l'ANOVA est " + str(p_value_anova))
 
     if p_value_anova < 0.05:
@@ -94,11 +103,15 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
 
         print("\n\nTest de Kruskal-Wallis")
         statistic_kruskal, p_value_kruskal = stats.kruskal(*args)
+        data_excel = pd.DataFrame({"Statistiques": [statistic_kruskal], "P-value": [p_value_kruskal]})
+        data_excel.to_excel(writer, sheet_name='Test Kruskal-Wallis', index=False)
         print("\nP-value de Kruskal-Wallis est " + str(p_value_kruskal))
 
         if p_value_kruskal < 0.05:
             print("\nAu moins un échantillon domine stochastiquement un autre échantillon.")
         else:
             print("\nIl n'y a pas de différences entre les échantillons.")
+
+    writer.save()
 
 
