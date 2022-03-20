@@ -160,4 +160,5 @@ Cela signifie qu'une libraririe est manquante.
 
 - Sélectionner "update"
 - Cliquer sur le triangle vert
+- Au premier lancement, il sera peut-être demandé quelle application utiliser. Choisir "Git Bash".
 - Les fichiers et les librairies seront mis à jour
