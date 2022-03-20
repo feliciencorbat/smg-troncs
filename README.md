@@ -127,13 +127,11 @@ Cliquer "OK"
 - Cliquer sur le bouton +
 - Cliquer sur "Shell Script"
 
-![](readme/24.png)
+![](readme/27.png)
 
 - Dans le champ "Name", donner un nom comme par exemple "update"
 - Dans le champ "Script path:", il faut sélectionner le fichier "update.sh"
 - Cliquer OK
-
-![](readme/27.png)
 
 Pour ajouter les librairies, les infos sont ci-dessous: [Récupérer les dernières mises à jour](#miseajour)
 
