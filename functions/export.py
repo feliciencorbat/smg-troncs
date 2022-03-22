@@ -104,6 +104,7 @@ def export(filename: str, with_gbif: bool) -> None:
     """
     conditions = [
         (species['Fréq'] == 'R'),
+        (species['Fréq'] == 'AR'),
         (species['LR'] == 'EX'),
         (species['LR'] == 'EW'),
         (species['LR'] == 'RE'),
@@ -115,6 +116,7 @@ def export(filename: str, with_gbif: bool) -> None:
     ]
     choices = [
         'Menacé',
+        'Menacé',
         'Eteint',
         'Eteint',
         'Eteint',
@@ -122,7 +124,7 @@ def export(filename: str, with_gbif: bool) -> None:
         'Menacé',
         'Menacé',
         'Non menacé',
-        'Non menacé'
+        'Menacé'
     ]
     species["Menace"] = np.select(condlist=conditions, choicelist=choices, default='Menace inconnue')
 
@@ -208,21 +210,31 @@ def export(filename: str, with_gbif: bool) -> None:
     Gestion des troncs
     """
     # Enlever les parenthèses des troncs et supprimer certaines colonnes
+    trunks["Identifiant"] = trunks["Identifiant"].astype(str)
     trunks["Identifiant"] = trunks["Identifiant"].str.replace(r"\(.*?\)", "", regex=True)
+    trunks["Identifiant"] = trunks["Identifiant"].str.replace("*", "", regex=False)
     trunks["Identifiant"] = trunks["Identifiant"].str.strip()
 
-    # Ajouter une colonne âge du tronc moyen
-    trunks["Coupé entre"] = trunks["Coupé entre"].str.replace("?", "", regex=False)
-    trunks["Coupé entre"] = trunks["Coupé entre"].str.replace("-", "", regex=False)
-    trunks["Coupé entre"] = trunks["Coupé entre"].str.replace("hiver", "", regex=False)
-    trunks["Coupé entre"] = trunks["Coupé entre"].str.replace("Hiver", "", regex=False)
-    trunks["Coupé entre"] = trunks["Coupé entre"].str.replace(" ", "", regex=False)
-    trunks["Coupé début"] = pd.to_datetime(((trunks["Coupé entre"].str[:4]) + "0101").astype(int), format='%Y%m%d')
-    trunks["Coupé fin"] = pd.to_datetime(((trunks["Coupé entre"].str[-4:]) + "1231").astype(int), format='%Y%m%d')
-    trunks["Coupé moyen"] = trunks["Coupé début"] + ((trunks["Coupé fin"] - trunks["Coupé début"]) / 2)
+    # Gérer la coupe des arbres
+    cut_trunks = trunks[["Identifiant", "Coupé entre"]].copy()
+    cut_trunks["Coupé entre"] = cut_trunks["Coupé entre"].astype(str)
+    cut_trunks["Coupé entre"] = cut_trunks["Coupé entre"].str.replace("?", "", regex=False)
+    cut_trunks["Coupé entre"] = cut_trunks["Coupé entre"].str.replace("-", "", regex=False)
+    cut_trunks["Coupé entre"] = cut_trunks["Coupé entre"].str.replace("hiver", "", regex=False)
+    cut_trunks["Coupé entre"] = cut_trunks["Coupé entre"].str.replace("Hiver", "", regex=False)
+    cut_trunks["Coupé entre"] = cut_trunks["Coupé entre"].str.replace(" ", "", regex=False)
+    cut_trunks["Coupé entre"] = cut_trunks["Coupé entre"].replace('', np.nan)
+    cut_trunks = cut_trunks.dropna()
+    cut_trunks["Coupé début"] = pd.to_datetime(((cut_trunks["Coupé entre"].str[:4]) + "0101").astype(int), format='%Y%m%d')
+    cut_trunks["Coupé fin"] = pd.to_datetime(((cut_trunks["Coupé entre"].str[-4:]) + "1231").astype(int), format='%Y%m%d')
+    cut_trunks["Coupé moyen"] = cut_trunks["Coupé début"] + ((cut_trunks["Coupé fin"] - cut_trunks["Coupé début"]) / 2)
+    cut_trunks = cut_trunks[["Identifiant", "Coupé moyen"]]
+    trunks = trunks.join(cut_trunks.set_index('Identifiant'), on="Identifiant")
 
     # Joindre le dataframe trunks au dataframe data
     data["Substrat"] = data["Substrat"].str.replace("tronc ", "", regex=False)
+    data["Substrat"] = data["Substrat"].str.replace(r"\(.*?\)", "", regex=True)
+    data["Substrat"] = data["Substrat"].str.strip()
     data = data.join(trunks.set_index('Identifiant'), on="Substrat", rsuffix='_right')
 
     # Ajouter une colonne âge du tronc
