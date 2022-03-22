@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 
+from functions.export_functions.adjust_columns import adjust_columns
 from functions.export_functions.clean_trunks_columns import clean_trunks_columns
 from functions.export_functions.new_cf_column import new_cf_column
 from functions.export_functions.new_cut_trunks_dataframe import new_cut_trunks_dataframe
@@ -12,6 +13,7 @@ from functions.export_functions.new_species_dataframe import new_species_datafra
 from functions.export_functions.new_threat_column import new_threat_column
 from functions.export_functions.species_errors import species_errors
 from functions.export_functions.synonyms_errors import synonyms_errors
+from functions.export_functions.trunks_errors import trunks_errors
 
 """
 Fonction de création d'une liste de données pour les statistiques
@@ -72,39 +74,15 @@ def export(filename: str, with_gbif: bool) -> None:
     # Ajouter une colonne âge du tronc
     data["Age du tronc"] = (data["Date"] - data["Date de coupe"]) / 365.25
 
-    # Erreurs: Espèce du tronc absente
-    species_trunk_errors = data[data['Espèce du substrat_right'].isnull()]
-    species_trunk_errors = species_trunk_errors[['Espèce']]
-    species_trunk_errors["Type d'erreur"] = "Tronc absent dans la feuille Troncs"
-    species_trunk_errors["Ligne"] = species_trunk_errors.index + 2
-    errors = pd.concat([errors, species_trunk_errors])
+    # Erreurs des troncs
+    tru_errors = trunks_errors(data)
+    errors = pd.concat([errors, tru_errors])
 
-    # Erreurs: Incohérence dans l'espèce du tronc
-    species_trunk_errors = data[(data['Espèce du substrat'] != data['Espèce du substrat_right'])
-                                & data['Espèce du substrat_right'].notnull()]
-    species_trunk_errors = species_trunk_errors[['Espèce']]
-    species_trunk_errors["Type d'erreur"] = "Incohérence dans l'espèce du tronc"
-    species_trunk_errors["Ligne"] = species_trunk_errors.index + 2
-    errors = pd.concat([errors, species_trunk_errors])
-
-    # Colonne date de type datetime en type date
-    data["Date"] = pd.to_datetime(data['Date']).dt.date
-
-    # Bien typer et garder uniquement les colonnes nécessaires
-    if with_gbif:
-        data = data[
-            ["Date", "Saison", "Mois", "Espèce", "Espèce actuelle", "Phylum", "Ordre", "cf", "LR", "Menace", "Substrat",
-             "Espèce du substrat",
-             "D. moyen", "Longueur", "Pourriture", "Lieu", "Groupe troncs", "Age du tronc"]]
-    else:
-        data = data[
-            ["Date", "Saison", "Mois", "Espèce", "cf", "LR", "Menace", "Substrat", "Espèce du substrat", "D. moyen",
-             "Longueur", "Pourriture", "Lieu", "Groupe troncs", "Age du tronc"]]
-
-    errors = errors[["Ligne", "Espèce", "Type d'erreur"]]
+    # Réarranger les colonnes (ordre, noms, ...)
+    data, errors = adjust_columns(data, errors, with_gbif)
 
     # Liste des espèces par tronc
-    trunks_species = data[["Substrat", "Espèce"]].groupby("Substrat")["Espèce"].apply(lambda x: list(np.unique(x)))
+    trunks_species = data[["Tronc", "Espèce"]].groupby("Tronc")["Espèce"].apply(lambda x: list(np.unique(x)))
 
     # Enregistrer le fichier excel
     writer = pd.ExcelWriter(export_directory + '/liste_modifiee.xlsx', engine='xlsxwriter',

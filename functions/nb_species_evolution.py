@@ -33,13 +33,13 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     lr_species_cumulative = cumulative_species(lr_data, data)
 
     all_species_cumulative.to_excel(writer, sheet_name='Espèces cumulées', index=False)
-    lr_species_cumulative.to_excel(writer, sheet_name='Espèces cumulées LR', index=False)
+    lr_species_cumulative.to_excel(writer, sheet_name='Espèces cumulées menacées', index=False)
 
     # Création du graphique cumulation d'espèces
     plt.figure()
     plt.plot(all_species_cumulative["Date"], all_species_cumulative["Nb total espèces"], label="Toutes les espèces")
-    for tree in data["Espèce du substrat"].dropna().unique():
-        tree_species = data.loc[(data["Espèce du substrat"] == tree)]
+    for tree in data["Espèce du tronc"].dropna().unique():
+        tree_species = data.loc[(data["Espèce du tronc"] == tree)]
         tree_species_cumulative = cumulative_species(tree_species, data)
         plt.plot(tree_species_cumulative["Date"], tree_species_cumulative["Nb total espèces"],
                  label="Les espèces sur " + str(tree))
@@ -55,13 +55,13 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     # Création du graphique cumulation d'espèces liste rouge par arbres
     plt.figure()
     plt.plot(lr_species_cumulative["Date"], lr_species_cumulative["Nb total espèces"],
-             label="Les espèces de la liste rouge")
-    for tree in data["Espèce du substrat"].dropna().unique():
-        tree_lr_species = data.loc[(data["Espèce du substrat"] == tree) & (data["Menace"] == "Menacé")]
+             label="Les espèces menacées")
+    for tree in data["Espèce du tronc"].dropna().unique():
+        tree_lr_species = data.loc[(data["Espèce du tronc"] == tree) & (data["Menace"] == "Menacé")]
         tree_lr_species_cumulative = cumulative_species(tree_lr_species, data)
         plt.plot(tree_lr_species_cumulative["Date"], tree_lr_species_cumulative["Nb total espèces"],
-                 label="Les espèces de la liste rouge sur " + str(tree))
-        tree_lr_species_cumulative.to_excel(writer, sheet_name="Espèces LR sur " +
+                 label="Les espèces menacées sur " + str(tree))
+        tree_lr_species_cumulative.to_excel(writer, sheet_name="Sp. menacées sur " +
                                                                tree.replace("?", "inconnu"), index=False)
     plt.ylabel("Nombre d'espèces")
     plt.title("Evolution du nombre d'espèces de la liste rouge")
@@ -74,10 +74,10 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     plt.figure()
     if len(lr_species_cumulative) > 0:
         plt.plot(lr_species_cumulative["Date"], lr_species_cumulative["Nb total espèces"],
-                 label="Les espèces de la liste rouge")
-    for lr in data["LR"].dropna().unique():
+                 label="Les espèces menacées")
+    for lr in data["Liste rouge"].dropna().unique():
         if lr != "LC":
-            lr_group_species = data.loc[data["LR"] == lr]
+            lr_group_species = data.loc[data["Liste rouge"] == lr]
             lr_group_species_cumulative = cumulative_species(lr_group_species, data)
             plt.plot(lr_group_species_cumulative["Date"], lr_group_species_cumulative["Nb total espèces"],
                      label="Les espèces de la liste rouge " + str(lr))
@@ -106,10 +106,10 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
     plt.show(block=False)
 
     # Nombre d'espèces par mois
-    number_species_by_month = data[['Nom', 'Date']].sort_values(by=["Date"])
+    number_species_by_month = data[['Espèce', 'Date']].sort_values(by=["Date"])
     number_species_by_month = number_species_by_month.groupby(pd.Grouper(key='Date', freq='1M')).nunique()
     plt.figure()
-    plt.bar(number_species_by_month.index, number_species_by_month["Nom"], ec='blue')
+    plt.bar(number_species_by_month.index, number_species_by_month["Espèce"], ec='blue')
     plt.title("Nombre d'espèces par mois")
     plt.ylabel("Nombre d'espèces")
     plt.savefig(directory + "/nbre_especes_par_mois.png", bbox_inches='tight')
@@ -121,8 +121,8 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
 
 # Fonction de cumulation des espèces
 def cumulative_species(dataframe: pd.DataFrame, data: pd.DataFrame) -> pd.DataFrame:
-    dataframe = dataframe[['Nom', 'Date']].sort_values(by=["Date"])
-    prov_cumulative_species = dataframe.groupby(pd.Grouper(key='Date', freq='1M'))["Nom"].apply(
+    dataframe = dataframe[['Espèce', 'Date']].sort_values(by=["Date"])
+    prov_cumulative_species = dataframe.groupby(pd.Grouper(key='Date', freq='1M'))["Espèce"].apply(
         lambda x: list(np.unique(x)))
     cumulative_species_data = pd.DataFrame(columns=['Date', 'Nouvelles espèces', 'Total espèces'])
     i = int(0)

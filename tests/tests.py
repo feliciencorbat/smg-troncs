@@ -20,17 +20,17 @@ class Tests(unittest.TestCase):
         data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Statistiques")
 
         print("Test de la fonction de distribution")
-        distribution_bar(data, "Nom", "Titre du graphe", 20, True, "Tous les lieux")
+        distribution_bar(data, "Espèce", "Titre du graphe", 20, True, "Tous les lieux")
 
         print("Test matrice Cramer")
         cramer_matrix(data, True, "Tous les lieux")
 
         print("Test de la fonction chi 2")
-        chi2_test(data, "Espèce du substrat", "Menace", "Titre du graphe", False,
+        chi2_test(data, "Espèce du tronc", "Menace", "Titre du graphe", False,
                   True, "Tous les lieux")
 
         print("Test de la fonction ANOVA")
-        anova_test(data, "Menace", "Age tronc", "Titre du graphe", True, "Tous les lieux")
+        anova_test(data, "Menace", "Age du tronc", "Titre du graphe", True, "Tous les lieux")
 
         print("Test de la fonction évolution espèces")
         nb_species_evolution(data, True, "Tous les lieux")
@@ -41,17 +41,17 @@ class Tests(unittest.TestCase):
         data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Statistiques")
 
         print("Test de la fonction de distribution")
-        distribution_bar(data, "Nom", "Titre du graphe", 20, True, "Tous les lieux")
+        distribution_bar(data, "Espèce", "Titre du graphe", 20, True, "Tous les lieux")
 
         print("Test matrice Cramer")
         cramer_matrix(data, True, "Tous les lieux")
 
         print("Test de la fonction chi 2")
-        chi2_test(data, "Espèce du substrat", "Menace", "Titre du graphe", False,
+        chi2_test(data, "Espèce du tronc", "Menace", "Titre du graphe", False,
                   True, "Tous les lieux")
 
         print("Test de la fonction ANOVA")
-        anova_test(data, "Menace", "Age tronc", "Titre du graphe", True, "Tous les lieux")
+        anova_test(data, "Menace", "Age du tronc", "Titre du graphe", True, "Tous les lieux")
 
         print("Test de la fonction évolution espèces")
         nb_species_evolution(data, True, "Tous les lieux")

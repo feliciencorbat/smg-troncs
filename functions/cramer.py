@@ -27,7 +27,7 @@ def cramer_matrix(data: pd.DataFrame, with_cf: bool, location: str) -> None:
 
     print("\nMatrice V de Cramer (variables qualitatives)\n")
 
-    data = data[["Saison", "Mois", "Nom", "LR", "Menace", "Substrat", "Espèce du substrat", "Groupe troncs"]]
+    data = data[["Saison", "Mois", "Espèce", "Liste rouge", "Menace", "Tronc", "Espèce du tronc", "Groupe troncs"]]
     data = data.dropna()
 
     matrix = pd.DataFrame(index=data.columns, columns=data.columns)
