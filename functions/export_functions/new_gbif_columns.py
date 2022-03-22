@@ -5,7 +5,7 @@ import pandas as pd
 
 
 def new_gbif_columns(species: pd.DataFrame):
-    errors = pd.DataFrame
+    errors = pd.DataFrame([], )
     species["Espèce actuelle"] = None
     species["Phylum"] = None
     species["Ordre"] = None
@@ -20,6 +20,7 @@ def new_gbif_columns(species: pd.DataFrame):
             if gbif_match["rank"] == "SPECIES" or gbif_match["rank"] == "VARIETY" \
                     or gbif_match["rank"] == "SUBSPECIES" or gbif_match["rank"] == "FORM":
 
+                # Gestion des espècces dont la synonymie GBIF est incorrecte
                 if row.Espèce == "Tubaria hiemalis":
                     species.at[row.Index, "Espèce actuelle"] = "Tubaria hiemalis"
                     species.at[row.Index, "Phylum"] = "Basidiomycota"
@@ -30,6 +31,15 @@ def new_gbif_columns(species: pd.DataFrame):
                     species.at[row.Index, "Ordre"] = "Agaricales"
                 else:
                     species.at[row.Index, "Espèce actuelle"] = gbif_match["canonicalName"]
+
+                    # Tester si l'orthographe est bonne
+                    if row.Espèce != gbif_match["canonicalName"]:
+                        print("Erreur d'orthographe ? : " + row.Espèce)
+                        error_row = pd.DataFrame({'Ligne': [""], 'Espèce': [row.Espèce],
+                                                  "Type d'erreur": ["Peut-être plutôt: " +
+                                                                    gbif_match["canonicalName"]]})
+                        errors = pd.concat([errors, error_row], ignore_index=True, axis=0)
+
                     if "phylum" in gbif_match:
                         species.at[row.Index, "Phylum"] = gbif_match["phylum"]
 

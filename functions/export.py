@@ -53,6 +53,7 @@ def export(filename: str, with_gbif: bool) -> None:
     # Création colonnes GBIF dans la dataframe species
     if with_gbif:
         species, gbif_errors = new_gbif_columns(species)
+        errors = pd.concat([errors, gbif_errors])
         syn_errors = synonyms_errors(species)
         errors = pd.concat([errors, syn_errors])
 
