@@ -23,7 +23,7 @@ class Tests(unittest.TestCase):
         distribution_bar(data, "Nom", "Titre du graphe", 20, True, "Tous les lieux")
 
         print("Test matrice Cramer")
-        cramer_matrix(data)
+        cramer_matrix(data, True, "Tous les lieux")
 
         print("Test de la fonction chi 2")
         chi2_test(data, "Espèce du substrat", "Menace", "Titre du graphe", False,
@@ -44,7 +44,7 @@ class Tests(unittest.TestCase):
         distribution_bar(data, "Nom", "Titre du graphe", 20, True, "Tous les lieux")
 
         print("Test matrice Cramer")
-        cramer_matrix(data)
+        cramer_matrix(data, True, "Tous les lieux")
 
         print("Test de la fonction chi 2")
         chi2_test(data, "Espèce du substrat", "Menace", "Titre du graphe", False,
