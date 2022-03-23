@@ -10,6 +10,9 @@ def new_gbif_columns(species: pd.DataFrame):
     species["Phylum"] = None
     species["Ordre"] = None
     for row in species.itertuples():
+
+        species_name = row.Espèce
+
         try:
             name_url = urllib.parse.quote(row.Espèce)
             response = urllib.request.urlopen(
@@ -17,27 +20,44 @@ def new_gbif_columns(species: pd.DataFrame):
 
             json_data = response.read().decode("utf-8", "replace")
             gbif_match = json.loads(json_data)
-            if gbif_match["rank"] == "SPECIES" or gbif_match["rank"] == "VARIETY" \
-                    or gbif_match["rank"] == "SUBSPECIES" or gbif_match["rank"] == "FORM":
 
-                # Gestion des espècces dont la synonymie GBIF est incorrecte
-                if row.Espèce == "Tubaria hiemalis":
+            canonical_name = gbif_match["canonicalName"]
+            rank = gbif_match["rank"]
+
+            if rank == "SPECIES" or rank == "VARIETY" or rank == "SUBSPECIES" or rank == "FORM":
+
+                # Corriger canonical name pour les variétés, formes et sous-espèces
+                if rank == "VARIETY" or rank == "SUBSPECIES" or rank == "FORM":
+
+                    split_canonical_name = canonical_name.split(" ")
+                    if rank == "VARIETY":
+                        term = "var."
+                    elif rank == "FORM":
+                        term = "fo."
+                    else:
+                        term = "subsp."
+
+                    canonical_name = split_canonical_name[0] + " " + split_canonical_name[1] + " " + term \
+                                     + " " + split_canonical_name[2]
+
+                # Gestion des espèces dont la synonymie GBIF est incorrecte
+                if species_name == "Tubaria hiemalis":
                     species.at[row.Index, "Espèce actuelle"] = "Tubaria hiemalis"
                     species.at[row.Index, "Phylum"] = "Basidiomycota"
                     species.at[row.Index, "Ordre"] = "Agaricales"
-                elif row.Espèce == "Galerina autumnalis":
+                elif species_name == "Galerina autumnalis":
                     species.at[row.Index, "Espèce actuelle"] = "Galerina autumnalis"
                     species.at[row.Index, "Phylum"] = "Basidiomycota"
                     species.at[row.Index, "Ordre"] = "Agaricales"
                 else:
-                    species.at[row.Index, "Espèce actuelle"] = gbif_match["canonicalName"]
+                    species.at[row.Index, "Espèce actuelle"] = canonical_name
 
                     # Tester si l'orthographe est bonne
-                    if row.Espèce != gbif_match["canonicalName"]:
-                        print("Erreur d'orthographe ? : " + row.Espèce)
-                        error_row = pd.DataFrame({'Ligne': [""], 'Espèce': [row.Espèce],
+                    if species_name != canonical_name:
+                        print("Erreur d'orthographe ? : " + species_name)
+                        error_row = pd.DataFrame({'Ligne': [""], 'Espèce': [species_name],
                                                   "Type d'erreur": ["Peut-être plutôt: " +
-                                                                    gbif_match["canonicalName"]]})
+                                                                    canonical_name]})
                         errors = pd.concat([errors, error_row], ignore_index=True, axis=0)
 
                     if "phylum" in gbif_match:
@@ -69,13 +89,13 @@ def new_gbif_columns(species: pd.DataFrame):
                             print("Erreur de communication avec GBIF")
 
             else:
-                print(row.Espèce + " non récupérée par GBIF")
-                error_row = pd.DataFrame({'Ligne': [row.Index + 2], 'Espèce': [row.Espèce],
+                print(species_name + " non récupérée par GBIF")
+                error_row = pd.DataFrame({'Ligne': [row.Index + 2], 'Espèce': [species_name],
                                           "Type d'erreur": ["L'espèce n'a pas été trouvée par GBIF"]})
                 errors = pd.concat([errors, error_row], ignore_index=True, axis=0)
         except:
             print("Erreur de communication avec GBIF")
         finally:
-            print(row.Espèce)
+            print(species_name)
 
     return species, errors
