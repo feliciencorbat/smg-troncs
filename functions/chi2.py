@@ -11,7 +11,6 @@ Fonction Chi-2 entre 2 variables qualitatives et création heatmap
 
 def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, species_agg: bool,
               with_cf: bool, location: str) -> None:
-
     # Filtrer lieu
     if location != "Tous les lieux":
         data = data.loc[data["Lieu"] == location]
@@ -62,7 +61,7 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
     absolute = differences / differences.abs()
 
     # création du tableau des contributions à la dépendance (0 = faible, 1 ou -1 = forte)
-    dependence_contribution = (((contingency - expected) ** 2 * absolute / expected) / chi2) * 100
+    dependence_contribution = (((contingency - expected) ** 2 * absolute / expected) / chi2)
 
     print("\nTableau des contribution à la dépendance\n")
     print(dependence_contribution)
@@ -75,16 +74,29 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
     if p_value < 0.05:
         print("L'hypothèse H0 qui indique qu'il n'y a pas de dépendance entre la variable " + variable1 +
               " et la variable " + variable2 + " est rejetée car p-value est inférieure à 0.5. "
-              "\nIl y a donc une dépendance entre ces 2 variables.")
+                                               "\nIl y a donc une dépendance entre ces 2 variables.")
     else:
         print("L'hypothèse H0 qui indique qu'il n'y a pas de dépendance entre la variable " + variable1 +
               " et la variable " + variable2 + " est acceptée car p-value est supérieure à 0.5. "
-              "\nIl n'y a donc pas de dépendance entre ces 2 variables.")
+                                               "\nIl n'y a donc pas de dépendance entre ces 2 variables.")
 
     if expected.min().min() < 5:
         print("\nAttention, il y a dans le tableau des effectifs attendus une ou des valeurs inférieures à 5."
               "\nCela peut rendre le test chi-2 caduque.")
 
+    # Liste des contributions à la dépendance triées
+    sorted_dependance_contribution = pd.DataFrame([], )
+    for rowIndex, row in dependence_contribution.iterrows():
+        for columnIndex, value in row.items():
+            row = pd.DataFrame({variable1: [rowIndex],
+                                variable2: [columnIndex],
+                                'Degré de dépendance': [value],
+                                'Degré de dépendance absolu': [abs(value)]
+                                })
+            sorted_dependance_contribution = pd.concat([sorted_dependance_contribution, row], ignore_index=True, axis=0)
+
+    sorted_dependance_contribution = sorted_dependance_contribution.sort_values(by=['Degré de dépendance absolu'],
+                                                                                ascending=False)
     # Enregistrer le fichier excel
     writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter')
     pd.DataFrame(data={'P_value': [p_value], 'Chi2': [chi2], 'Degré liberté': [deg_freedom]}) \
@@ -93,12 +105,13 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
     expected.to_excel(writer, sheet_name='Effectifs attendus')
     differences.to_excel(writer, sheet_name='Différences')
     dependence_contribution.to_excel(writer, sheet_name='Contribution dépendance')
+    sorted_dependance_contribution.to_excel(writer, sheet_name='Contribution dépendance triée', index=False)
     writer.save()
 
     # création du graphe des contributions à la dépendance
     sns.heatmap(dependence_contribution,
-                annot=contingency, fmt='d', vmin=-100, vmax=100, cmap="PiYG",
-                cbar_kws={'label': 'Pourcentage contribution à la dépendance'})
+                annot=contingency, fmt='d', vmin=-1, vmax=1, cmap="PiYG",
+                cbar_kws={'label': 'Contribution à la dépendance'})
     plt.title(title, fontsize=16)
     plt.savefig(directory + "/dependance_contribution_heatmap.png", bbox_inches='tight')
     plt.show(block=False)
