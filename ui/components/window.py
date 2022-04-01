@@ -3,7 +3,6 @@ import pandas as pd
 
 
 def window_title(title: str, with_data: bool = True):
-
     # Fenêtre
     window = Toplevel()
 
@@ -16,7 +15,11 @@ def window_title(title: str, with_data: bool = True):
     label_title.pack()
 
     if with_data:
-        data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Statistiques")
-        return window, data
+        try:
+            data = pd.read_excel("export/liste_modifiee.xlsx", sheet_name="Statistiques")
+            return window, data
+        except:
+            print("Problème pour importer le fichier liste_modifiee.xlsx. Ce fichier est-il bien présent ?")
+            exit()
     else:
         return window

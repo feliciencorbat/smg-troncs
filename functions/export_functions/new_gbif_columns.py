@@ -67,5 +67,6 @@ def get_gbif_species(url: str, query: str) -> Species:
                        gbif_match["key"] if "key" in gbif_match else gbif_match["usageKey"],
                        gbif_match["acceptedUsageKey"] if "acceptedUsageKey" in gbif_match else None)
 
-    except urllib.error.HTTPError as e:
-        print("Erreur de communication avec GBIF: erreur " + str(e.code))
+    except (urllib.error.URLError, urllib.error.HTTPError) as e:
+        print("Problème de connexion à GBIF... Etes-vous connecté à internet ?")
+        exit()
