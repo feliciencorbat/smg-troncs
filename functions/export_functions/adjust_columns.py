@@ -1,7 +1,9 @@
+from typing import Tuple
+
 import pandas as pd
 
 
-def adjust_columns(data: pd.DataFrame, errors: pd.DataFrame, with_gbif: bool):
+def adjust_columns(data: pd.DataFrame, errors: pd.DataFrame, with_gbif: bool) -> Tuple[pd.DataFrame, pd.DataFrame]:
     # Colonne date de type datetime en type date
     data["Date"] = pd.to_datetime(data['Date']).dt.date
 

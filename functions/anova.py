@@ -113,5 +113,3 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
             print("\nIl n'y a pas de différences entre les échantillons.")
 
     writer.save()
-
-

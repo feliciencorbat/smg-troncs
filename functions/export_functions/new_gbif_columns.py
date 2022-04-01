@@ -1,6 +1,7 @@
 import urllib.request
 import urllib.error
 import json
+from typing import Tuple
 
 import pandas as pd
 
@@ -8,7 +9,7 @@ from classes.species import Species
 from static_variables import StaticVariables
 
 
-def new_gbif_columns(species: pd.DataFrame):
+def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     errors = pd.DataFrame([], )
 
     # Création des nouvelles colonnes du dataframe species

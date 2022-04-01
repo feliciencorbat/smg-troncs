@@ -1,7 +1,9 @@
+from typing import Tuple
+
 import pandas as pd
 
 
-def clean_trunks_columns(trunks: pd.DataFrame, data: pd.DataFrame):
+def clean_trunks_columns(trunks: pd.DataFrame, data: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
 
     # Enlever les parenthèses, *, ... des identifiants des troncs
     trunks["Identifiant"] = trunks["Identifiant"].astype(str)
