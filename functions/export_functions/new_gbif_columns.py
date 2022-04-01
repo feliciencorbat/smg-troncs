@@ -12,11 +12,6 @@ from constants import Constants
 def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     errors = pd.DataFrame([], )
 
-    # Création des nouvelles colonnes du dataframe species
-    species["Espèce actuelle"] = None
-    species["Phylum"] = None
-    species["Ordre"] = None
-
     for row in species.itertuples():
         species_name = row.Espèce
         print(species_name)
@@ -28,16 +23,8 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
 
             json_data = response.read().decode("utf-8", "replace")
             gbif_match = json.loads(json_data)
-            if "phylum" in gbif_match:
-                phylum = gbif_match["phylum"]
-            else:
-                phylum = ""
-            if "order" in gbif_match:
-                order = gbif_match["order"]
-            else:
-                order = ""
-
-            gbif_species = Species(gbif_match["canonicalName"], phylum, order, gbif_match["rank"])
+            gbif_species = Species(gbif_match["canonicalName"], gbif_match["phylum"] if "phylum" in gbif_match else "",
+                                   gbif_match["order"] if "order" in gbif_match else "", gbif_match["rank"])
 
             # Tester si l'orthographe est bonne sauf pour quelques espèces
             if species_name not in Constants.default_species_writing:
@@ -58,15 +45,9 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
 
                     json_data = response.read().decode("utf-8", "replace")
                     gbif_match = json.loads(json_data)
-                    if "phylum" in gbif_match:
-                        phylum = gbif_match["phylum"]
-                    else:
-                        phylum = ""
-                    if "order" in gbif_match:
-                        order = gbif_match["order"]
-                    else:
-                        order = ""
-                    gbif_species = Species(gbif_match["canonicalName"], phylum, order, gbif_match["rank"])
+                    gbif_species = Species(gbif_match["canonicalName"],
+                                           gbif_match["phylum"] if "phylum" in gbif_match else "",
+                                           gbif_match["order"] if "order" in gbif_match else "", gbif_match["rank"])
                     print("Espèce actuelle selon GBIF: " + gbif_species.species)
 
                 except urllib.error.HTTPError as e:
