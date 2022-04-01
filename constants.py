@@ -1,7 +1,7 @@
 from classes.species import Species
 
 
-class StaticVariables:
+class Constants:
     default_species_writing = ["Grandinia nespori", "Lenzites betulina", "Panellus stypticus",
                                "Phlebia cremeo-alutacea", "Pluteus podospileus fo. podospileus"]
 

@@ -6,7 +6,7 @@ from typing import Tuple
 import pandas as pd
 
 from classes.species import Species
-from static_variables import StaticVariables
+from constants import Constants
 
 
 def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -40,7 +40,7 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
             gbif_species = Species(gbif_match["canonicalName"], phylum, order, gbif_match["rank"])
 
             # Tester si l'orthographe est bonne sauf pour quelques espèces
-            if species_name not in StaticVariables.default_species_writing:
+            if species_name not in Constants.default_species_writing:
                 if species_name != gbif_species.species:
                     print("Orthographe douteuse, peut-être plutôt: " + gbif_species.species)
                     error_row = pd.DataFrame({'Ligne': [""], 'Espèce': [species_name],
@@ -76,8 +76,8 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
                     or gbif_species.rank == "FORM":
 
                 # Gestion des espèces dont la synonymie GBIF est incorrecte
-                if species_name in StaticVariables.gbif_synonyms_errors:
-                    right_species = StaticVariables.gbif_synonyms_errors.get(species_name)
+                if species_name in Constants.gbif_synonyms_errors:
+                    right_species = Constants.gbif_synonyms_errors.get(species_name)
                     species.at[row.Index, "Espèce actuelle"] = right_species.species
                     species.at[row.Index, "Phylum"] = right_species.phylum
                     species.at[row.Index, "Ordre"] = right_species.order
