@@ -1,9 +1,13 @@
 class Species:
-    def __init__(self, species: str, phylum: str, order: str, rank: str):
+    def __init__(self, species: str, phylum: str, order: str, rank: str, status: str, key: int,
+                 accepted_key: int | None):
         self._species = species
         self.phylum = phylum
         self.order = order
         self.rank = rank
+        self.status = status
+        self.key = key
+        self.accepted_key = accepted_key
 
     @property
     def species(self) -> str:

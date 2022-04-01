@@ -5,7 +5,10 @@ class Constants:
     default_species_writing = ["Grandinia nespori", "Lenzites betulina", "Panellus stypticus",
                                "Phlebia cremeo-alutacea", "Pluteus podospileus fo. podospileus"]
 
-    gbif_synonyms_errors = {"Tubaria hiemalis": Species("Tubaria hiemalis", "Basidiomycota", "Agaricales", "SPECIES"),
+    gbif_synonyms_errors = {"Tubaria hiemalis":
+                                Species("Tubaria hiemalis", "Basidiomycota", "Agaricales", "SPECIES", "ACCEPTED",
+                                        5240897, None),
                             "Galerina autumnalis":
-                                Species("Galerina autumnalis", "Basidiomycota", "Agaricales", "SPECIES")
+                                Species("Galerina autumnalis", "Basidiomycota", "Agaricales", "SPECIES", "ACCEPTED",
+                                        2533854, None)
                             }
