@@ -6,7 +6,7 @@ class Species:
         self.rank = rank
 
     @property
-    def species(self):
+    def species(self) -> str:
         # Corriger canonical name pour les variétés, formes et sous-espèces
         if self.rank == "VARIETY" or self.rank == "SUBSPECIES" or self.rank == "FORM":
 
