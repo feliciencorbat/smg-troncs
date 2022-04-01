@@ -27,17 +27,13 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
                                                             gbif_species.species]})
                 errors = pd.concat([errors, error_row], ignore_index=True, axis=0)
 
-        # Si l'espèce n'est pas l'espèce acceptée, changer l'espèce GBIF
-        if gbif_species.status != "ACCEPTED":
+        # Si l'espèce n'est pas acceptée et n'est pas dans la liste des erreurs de synonymes, changer l'espèce
+        if (gbif_species.status != "ACCEPTED") & (gbif_species.species not in Constants.gbif_synonyms_errors):
             gbif_species = get_gbif_species("https://api.gbif.org/v1/species/", str(gbif_species.accepted_key))
             print("Espèce actuelle selon GBIF: " + gbif_species.species)
 
         if gbif_species.rank == "SPECIES" or gbif_species.rank == "VARIETY" or gbif_species.rank == "SUBSPECIES" \
                 or gbif_species.rank == "FORM":
-
-            # Gestion des espèces dont la synonymie GBIF est incorrecte
-            if species_name in Constants.gbif_synonyms_errors:
-                gbif_species = Constants.gbif_synonyms_errors.get(species_name)
 
             species.at[row.Index, "Espèce actuelle"] = gbif_species.species
             species.at[row.Index, "Phylum"] = gbif_species.phylum
@@ -68,5 +64,6 @@ def get_gbif_species(url: str, query: str) -> Species:
                        gbif_match["acceptedUsageKey"] if "acceptedUsageKey" in gbif_match else None)
 
     except (urllib.error.URLError, urllib.error.HTTPError) as e:
+        print(e)
         print("Problème de connexion à GBIF... Etes-vous connecté à internet ?")
         exit()
