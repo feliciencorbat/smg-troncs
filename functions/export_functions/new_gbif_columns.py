@@ -77,14 +77,11 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
 
                 # Gestion des espèces dont la synonymie GBIF est incorrecte
                 if species_name in Constants.gbif_synonyms_errors:
-                    right_species = Constants.gbif_synonyms_errors.get(species_name)
-                    species.at[row.Index, "Espèce actuelle"] = right_species.species
-                    species.at[row.Index, "Phylum"] = right_species.phylum
-                    species.at[row.Index, "Ordre"] = right_species.order
-                else:
-                    species.at[row.Index, "Espèce actuelle"] = gbif_species.species
-                    species.at[row.Index, "Phylum"] = gbif_species.phylum
-                    species.at[row.Index, "Ordre"] = gbif_species.order
+                    gbif_species = Constants.gbif_synonyms_errors.get(species_name)
+
+                species.at[row.Index, "Espèce actuelle"] = gbif_species.species
+                species.at[row.Index, "Phylum"] = gbif_species.phylum
+                species.at[row.Index, "Ordre"] = gbif_species.order
 
             else:
                 print(species_name + " non récupérée par GBIF")
