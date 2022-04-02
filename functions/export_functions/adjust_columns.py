@@ -3,7 +3,8 @@ from typing import Tuple
 import pandas as pd
 
 
-def adjust_columns(data: pd.DataFrame, errors: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+def adjust_columns(data: pd.DataFrame, species: pd.DataFrame, errors: pd.DataFrame) -> \
+        Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     # Colonne date de type datetime en type date
     data["Date"] = pd.to_datetime(data['Date']).dt.date
 
@@ -17,6 +18,10 @@ def adjust_columns(data: pd.DataFrame, errors: pd.DataFrame) -> Tuple[pd.DataFra
          "Tronc", "Espèce du tronc", "Diamètre moyen", "Longueur", "Degré de pourriture", "Lieu", "Groupe troncs",
          "Date de coupe", "Age du tronc"]]
 
+    species = species[
+        ["Espèce", "SwissFungi Lien", "Espèce actuelle", "SwissFungi Obs", "LR", "SwissFungi LR", "Fréq", "Menace"
+         ]]
+
     errors = errors[["Ligne", "Espèce", "Type d'erreur"]]
 
-    return data, errors
+    return data, species, errors

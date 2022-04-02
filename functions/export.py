@@ -12,6 +12,7 @@ from functions.export_functions.new_gbif_columns import new_gbif_columns
 from functions.export_functions.new_species_column import new_species_column
 from functions.export_functions.new_species_dataframe import new_species_dataframe
 from functions.export_functions.new_swiss_fungi_id_column import new_swiss_fungi_id_column
+from functions.export_functions.new_swiss_fungi_link_column import new_swiss_fungi_link_column
 from functions.export_functions.new_swiss_fungi_lr_column import new_swiss_fungi_lr_column
 from functions.export_functions.new_threat_column import new_threat_column
 from functions.export_functions.species_errors import species_errors
@@ -60,9 +61,14 @@ def export(filename: str) -> None:
     errors = pd.concat([errors, syn_errors])
 
     # Création colonne SwissFungi Id et SwissFungi Obs dans la dataframe species
+    print("Recherche des SwissFungi id...")
     species = new_swiss_fungi_id_column(species)
 
+    # Création colonne SwissFungi Lien dans la dataframe species
+    species = new_swiss_fungi_link_column(species)
+
     # Création colonne SwissFungi LR dans la dataframe species
+    print("Recherche des SwissFungi LR...")
     species = new_swiss_fungi_lr_column(species)
 
     # Erreurs entre LR et SwissFungi LR
@@ -92,7 +98,7 @@ def export(filename: str) -> None:
     errors = pd.concat([errors, tru_errors])
 
     # Réarranger les colonnes (ordre, noms, ...)
-    data, errors = adjust_columns(data, errors)
+    data, species, errors = adjust_columns(data, species, errors)
 
     # Liste des espèces par tronc
     trunks_species = data[["Tronc", "Espèce"]].groupby("Tronc")["Espèce"].apply(lambda x: list(np.unique(x)))
@@ -105,3 +111,5 @@ def export(filename: str) -> None:
     trunks_species.to_excel(writer, sheet_name='Espèces par tronc')
     errors.to_excel(writer, sheet_name='Erreurs', index=False)
     writer.save()
+
+    print("Exportation terminée")

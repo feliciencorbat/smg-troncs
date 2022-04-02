@@ -77,7 +77,7 @@ def get_swiss_fungi_id(http: urllib3.PoolManager, url, query1, query2) -> Tuple[
         nb_swiss_fungi_obs = gbif_match["count"]
         if nb_swiss_fungi_obs > 0:
             return gbif_match["results"][0]["taxonID"].replace("infospecies.ch:swissfungi:", ""), nb_swiss_fungi_obs
-        else:
+        elif query1 != query2:
             api_url = "https://api.gbif.org/"
             response = http.request('GET', api_url + url + query2)
             gbif_match = json.loads(response.data.decode('utf-8'))
@@ -86,6 +86,8 @@ def get_swiss_fungi_id(http: urllib3.PoolManager, url, query1, query2) -> Tuple[
                 return gbif_match["results"][0]["taxonID"].replace("infospecies.ch:swissfungi:", ""), nb_swiss_fungi_obs
             else:
                 return None, None
+        else:
+            return None, None
     except urllib3.exceptions.HTTPError as e:
         print(e)
         print('Problème de connexion. Etes-vous connecté à internet ?')
