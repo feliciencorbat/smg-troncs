@@ -16,7 +16,7 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
         def __init__(self, request_queue):
             Thread.__init__(self)
             self.queue = request_queue
-            self.species = pd.DataFrame([], columns=["Espèce", "Espèce actuelle", "Phylum", "Ordre", "GBIF1", "GBIF2"])
+            self.species = pd.DataFrame([], )
             self.errors = pd.DataFrame([], )
 
         def run(self):

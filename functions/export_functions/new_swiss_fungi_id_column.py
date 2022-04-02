@@ -15,7 +15,7 @@ def new_swiss_fungi_id_column(species: pd.DataFrame):
         def __init__(self, request_queue):
             Thread.__init__(self)
             self.queue = request_queue
-            self.swissfungi = pd.DataFrame([], columns=["GBIF1", "SwissFungi", "SwissFungi Obs"])
+            self.swissfungi = pd.DataFrame([], )
 
         def run(self):
             while True:
