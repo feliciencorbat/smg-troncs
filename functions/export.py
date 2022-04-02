@@ -4,12 +4,15 @@ import pandas as pd
 
 from functions.export_functions.adjust_columns import adjust_columns
 from functions.export_functions.clean_trunks_columns import clean_trunks_columns
+from functions.export_functions.lr_errors import lr_errors
 from functions.export_functions.new_cf_column import new_cf_column
 from functions.export_functions.new_cut_trunks_dataframe import new_cut_trunks_dataframe
 from functions.export_functions.new_date_columns import new_date_columns
 from functions.export_functions.new_gbif_columns import new_gbif_columns
 from functions.export_functions.new_species_column import new_species_column
 from functions.export_functions.new_species_dataframe import new_species_dataframe
+from functions.export_functions.new_swiss_fungi_id_column import new_swiss_fungi_id_column
+from functions.export_functions.new_swiss_fungi_lr_column import new_swiss_fungi_lr_column
 from functions.export_functions.new_threat_column import new_threat_column
 from functions.export_functions.species_errors import species_errors
 from functions.export_functions.synonyms_errors import synonyms_errors
@@ -55,6 +58,16 @@ def export(filename: str) -> None:
     errors = pd.concat([errors, gbif_errors])
     syn_errors = synonyms_errors(species)
     errors = pd.concat([errors, syn_errors])
+
+    # Création colonne SwissFungi Id et SwissFungi Obs dans la dataframe species
+    species = new_swiss_fungi_id_column(species)
+
+    # Création colonne SwissFungi LR dans la dataframe species
+    species = new_swiss_fungi_lr_column(species)
+
+    # Erreurs entre LR et SwissFungi LR
+    errors_lr = lr_errors(species)
+    errors = pd.concat([errors, errors_lr])
 
     # Joindre le dataframe species au dataframe data
     data = data.join(species.set_index('Espèce'), on="Espèce", rsuffix='_right')

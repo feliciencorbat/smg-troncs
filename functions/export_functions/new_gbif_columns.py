@@ -16,7 +16,7 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
         def __init__(self, request_queue):
             Thread.__init__(self)
             self.queue = request_queue
-            self.species = pd.DataFrame([], columns=["Espèce", "Espèce actuelle", "Phylum", "Ordre"])
+            self.species = pd.DataFrame([], columns=["Espèce", "Espèce actuelle", "Phylum", "Ordre", "GBIF1", "GBIF2"])
             self.errors = pd.DataFrame([], )
 
         def run(self):
@@ -28,6 +28,7 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
                 species_name = species_row.Espèce
                 # Récupérer l'espèce GBIF
                 gbif_species = get_gbif_species(http, "v1/species/match?kingdom=Fungi&name=", species_name)
+                old_gbif_id = gbif_species.key
 
                 # Vérifier l'orthographe des noms d'espèces
                 writing_errors_rows = writing_errors(species_name, gbif_species)
@@ -41,7 +42,8 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
                 if gbif_species.rank == "SPECIES" or gbif_species.rank == "VARIETY" or \
                         gbif_species.rank == "SUBSPECIES" or gbif_species.rank == "FORM":
                     result = pd.DataFrame({"Espèce": [species_name], "Espèce actuelle": [gbif_species.species],
-                                           "Phylum": [gbif_species.phylum], "Ordre": [gbif_species.order]})
+                                           "Phylum": [gbif_species.phylum], "Ordre": [gbif_species.order],
+                                           "GBIF1": [old_gbif_id], "GBIF2": [gbif_species.key]})
                     self.species = pd.concat([self.species, result])
                 else:
                     print("!!! " + species_name + " non récupérée par GBIF")
@@ -84,7 +86,7 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
     return species, errors
 
 
-def get_gbif_species(http: urllib3.PoolManager, url, query) -> Species:
+def get_gbif_species(http: urllib3.PoolManager, url: str, query: str) -> Species:
     try:
         api_url = "https://api.gbif.org/"
         response = http.request('GET', api_url + url + query)
