@@ -11,7 +11,7 @@ def synonyms_errors(species: pd.DataFrame) -> pd.DataFrame:
 
     syn_errors = size[size >= 2].index
     for syn_error in syn_errors:
-        print(syn_error + " a une synonymie")
+        print("!!! " + syn_error + " a une synonymie")
         error_row = pd.DataFrame({'Espèce': [syn_error],
                                   "Type d'erreur": ["Il y a une synonymie détectée par GBIF"]})
         errors = pd.concat([errors, error_row])

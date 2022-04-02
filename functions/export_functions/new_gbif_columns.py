@@ -1,6 +1,4 @@
-import urllib
 import urllib3
-from urllib.parse import urlparse
 import json
 from typing import Tuple
 from threading import Thread
@@ -28,11 +26,9 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
                     break
 
                 species_name = species_row.Espèce
-                print(species_name)
-                query = urllib.parse.quote(species_name)
-                response = http.request('GET', "https://api.gbif.org/v1/species/match?kingdom=Fungi&name=" + query)
-                gbif_match = json.loads(response.data.decode('utf-8'))
-                gbif_species = get_gbif_species(gbif_match)
+                # Récupérer l'espèce GBIF
+                gbif_species = get_gbif_species(http, "https://api.gbif.org/v1/species/match?kingdom=Fungi&name=",
+                                                species_name)
 
                 # Vérifier l'orthographe des noms d'espèces
                 writing_errors_rows = writing_errors(species_name, gbif_species)
@@ -40,9 +36,9 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
 
                 # Si l'espèce n'est pas acceptée et n'est pas dans la liste des erreurs de synonymes, changer l'espèce
                 if (gbif_species.status != "ACCEPTED") & (gbif_species.species not in Constants.gbif_synonyms_errors):
-                    response = http.request('GET', "https://api.gbif.org/v1/species/" + str(gbif_species.accepted_key))
-                    gbif_match = json.loads(response.data.decode('utf-8'))
-                    gbif_species = get_gbif_species(gbif_match)
+                    gbif_species = get_gbif_species(http, "https://api.gbif.org/v1/species/",
+                                                    str(gbif_species.accepted_key))
+                    print("Nom GBIF pour " + species_name + ": " + gbif_species.species)
 
                 if gbif_species.rank == "SPECIES" or gbif_species.rank == "VARIETY" or \
                         gbif_species.rank == "SUBSPECIES" or gbif_species.rank == "FORM":
@@ -50,7 +46,7 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
                                            "Phylum": [gbif_species.phylum], "Ordre": [gbif_species.order]})
                     self.species = pd.concat([self.species, result])
                 else:
-                    print(species_name + " non récupérée par GBIF")
+                    print("!!! " + species_name + " non récupérée par GBIF")
                     error_row = pd.DataFrame({'Ligne': [row.Index + 2], 'Espèce': [species_name],
                                               "Type d'erreur": ["L'espèce n'a pas été trouvée par GBIF"]})
                     self.errors = pd.concat([self.errors, error_row])
@@ -90,7 +86,9 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
     return species, errors
 
 
-def get_gbif_species(gbif_match) -> Species:
+def get_gbif_species(http: urllib3.PoolManager, url, query) -> Species:
+    response = http.request('GET', url + query)
+    gbif_match = json.loads(response.data.decode('utf-8'))
     return Species(gbif_match["canonicalName"],
                    gbif_match["phylum"] if "phylum" in gbif_match else None,
                    gbif_match["order"] if "order" in gbif_match else None,
@@ -100,12 +98,12 @@ def get_gbif_species(gbif_match) -> Species:
                    gbif_match["acceptedUsageKey"] if "acceptedUsageKey" in gbif_match else None)
 
 
-def writing_errors(species_name, gbif_species) -> pd.DataFrame:
+def writing_errors(species_name: str, gbif_species: Species) -> pd.DataFrame:
     errors = pd.DataFrame([], )
     # Tester si l'orthographe est bonne sauf pour quelques espèces
     if species_name not in Constants.default_species_writing:
         if species_name != gbif_species.species:
-            print("Orthographe douteuse, peut-être plutôt: " + gbif_species.species)
+            print("!!! Orthographe douteuse pour " + species_name + ", peut-être plutôt: " + gbif_species.species)
             error_row = pd.DataFrame({'Ligne': [""], 'Espèce': [species_name],
                                       "Type d'erreur": [
                                           "Orthographe douteuse, peut-être plutôt: " + gbif_species.species]})
