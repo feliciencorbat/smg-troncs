@@ -3,6 +3,7 @@ pingouin>=0.5.1
 pip-tools>=6.5.1
 prince>=0.7.1
 researchpy>=0.3.2
+urllib3>=1.26.9
 virtualenv>=20.13.4
 virtualenv-clone>=0.5.7
 xlrd>=2.0.1

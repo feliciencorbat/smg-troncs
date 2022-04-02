@@ -21,36 +21,21 @@ def excel_window():
             title='Choisir le fichier excel à transformer',
         ))
 
-        open_file_button["state"] = "disabled"
+        export(filename.get())
 
-        # Ajouter colonnes GBIF
-        gbif_checked = BooleanVar()
-        gbif = Checkbutton(window, text="Ajouter les colonnes GBIF avec le nom actuel, le phylum et l'ordre.\n"
-                                        "Cela nécessite internet et prend quelques minutes.\n"
-                                        "Cela permet également de vérifier la synonymie.",
-                           variable=gbif_checked, onvalue=True, offvalue=False)
-        gbif.pack(pady=15)
-
-        def validation():
-            export(filename.get(), gbif_checked.get())
-
-            window.destroy()
-
-        # Bouton validation
-        validation_button = Button(window, text="Valider", command=validation)
-        validation_button.pack()
-
-        # Label bouton de sélection du fichier
-        label_validation = Label(window,
-                                 text="Le fichier liste_modifiee.xlsx est créé dans le dossier export."
-                                      "\n Ce dossier se trouve au même emplacement que le projet python."
-                                      "\n En plus, le fichier contient les feuilles avec les erreurs, la liste " 
-                                      "\ndes espèces et la liste des espèces par tronc.")
-        label_validation.pack(pady=15)
+        window.destroy()
 
     open_file_button = Button(
         window, state="normal", text='Choisir le fichier excel', command=select_file
     )
     open_file_button.pack()
+
+    # Label bouton de sélection du fichier
+    label_validation = Label(window,
+                             text="Le fichier liste_modifiee.xlsx est créé dans le dossier export."
+                                  "\n Ce dossier se trouve au même emplacement que le projet python."
+                                  "\n En plus, le fichier contient les feuilles avec les erreurs, la liste "
+                                  "\ndes espèces et la liste des espèces par tronc.")
+    label_validation.pack(pady=15)
 
     window.mainloop()

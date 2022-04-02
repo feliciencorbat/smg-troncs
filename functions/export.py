@@ -20,7 +20,7 @@ Fonction de création d'une liste de données pour les statistiques
 """
 
 
-def export(filename: str, with_gbif: bool) -> None:
+def export(filename: str) -> None:
     # dossier d'export
     export_directory = "export"
     if not os.path.exists(export_directory):
@@ -51,11 +51,10 @@ def export(filename: str, with_gbif: bool) -> None:
     species = new_threat_column(species)
 
     # Création colonnes GBIF dans la dataframe species
-    if with_gbif:
-        species, gbif_errors = new_gbif_columns(species)
-        errors = pd.concat([errors, gbif_errors])
-        syn_errors = synonyms_errors(species)
-        errors = pd.concat([errors, syn_errors])
+    species, gbif_errors = new_gbif_columns(species)
+    errors = pd.concat([errors, gbif_errors])
+    syn_errors = synonyms_errors(species)
+    errors = pd.concat([errors, syn_errors])
 
     # Joindre le dataframe species au dataframe data
     data = data.join(species.set_index('Espèce'), on="Espèce", rsuffix='_right')
@@ -80,7 +79,7 @@ def export(filename: str, with_gbif: bool) -> None:
     errors = pd.concat([errors, tru_errors])
 
     # Réarranger les colonnes (ordre, noms, ...)
-    data, errors = adjust_columns(data, errors, with_gbif)
+    data, errors = adjust_columns(data, errors)
 
     # Liste des espèces par tronc
     trunks_species = data[["Tronc", "Espèce"]].groupby("Tronc")["Espèce"].apply(lambda x: list(np.unique(x)))

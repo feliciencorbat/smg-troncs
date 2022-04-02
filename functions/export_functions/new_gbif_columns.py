@@ -1,69 +1,114 @@
-import urllib.request
-import urllib.error
+import urllib
+import urllib3
+from urllib.parse import urlparse
 import json
 from typing import Tuple
-
+from threading import Thread
+import queue
 import pandas as pd
-
 from classes.species import Species
 from constants import Constants
 
 
 def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    errors = pd.DataFrame([], )
+    http = urllib3.PoolManager()
+    nb_workers = 16
+
+    class Worker(Thread):
+        def __init__(self, request_queue):
+            Thread.__init__(self)
+            self.queue = request_queue
+            self.species = pd.DataFrame([], )
+            self.errors = pd.DataFrame([], )
+
+        def run(self):
+            while True:
+                species_row = self.queue.get()
+                if species_row == "":
+                    break
+
+                species_name = species_row.Espèce
+                print(species_name)
+                query = urllib.parse.quote(species_name)
+                response = http.request('GET', "https://api.gbif.org/v1/species/match?kingdom=Fungi&name=" + query)
+                gbif_match = json.loads(response.data.decode('utf-8'))
+                gbif_species = get_gbif_species(gbif_match)
+
+                # Vérifier l'orthographe des noms d'espèces
+                writing_errors_rows = writing_errors(species_name, gbif_species)
+                self.errors = pd.concat([self.errors, writing_errors_rows])
+
+                # Si l'espèce n'est pas acceptée et n'est pas dans la liste des erreurs de synonymes, changer l'espèce
+                if (gbif_species.status != "ACCEPTED") & (gbif_species.species not in Constants.gbif_synonyms_errors):
+                    response = http.request('GET', "https://api.gbif.org/v1/species/" + str(gbif_species.accepted_key))
+                    gbif_match = json.loads(response.data.decode('utf-8'))
+                    gbif_species = get_gbif_species(gbif_match)
+
+                if gbif_species.rank == "SPECIES" or gbif_species.rank == "VARIETY" or \
+                        gbif_species.rank == "SUBSPECIES" or gbif_species.rank == "FORM":
+                    result = pd.DataFrame({"Espèce": [species_name], "Espèce actuelle": [gbif_species.species],
+                                           "Phylum": [gbif_species.phylum], "Ordre": [gbif_species.order]})
+                    self.species = pd.concat([self.species, result])
+                else:
+                    print(species_name + " non récupérée par GBIF")
+                    error_row = pd.DataFrame({'Ligne': [row.Index + 2], 'Espèce': [species_name],
+                                              "Type d'erreur": ["L'espèce n'a pas été trouvée par GBIF"]})
+                    self.errors = pd.concat([self.errors, error_row])
+
+                self.queue.task_done()
+
+    # Création de la queue
+    q = queue.Queue()
 
     for row in species.itertuples():
-        species_name = row.Espèce
-        print(species_name)
+        # Ajouter les lignes à la queue
+        q.put(row)
 
-        gbif_species = get_gbif_species("https://api.gbif.org/v1/species/match?kingdom=Fungi&name=", species_name)
+    # Les workers fonctionnent jusqu'à ce qu'ils aient un texte vide
+    for _ in range(nb_workers):
+        q.put("")
 
-        # Tester si l'orthographe est bonne sauf pour quelques espèces
-        if species_name not in Constants.default_species_writing:
-            if species_name != gbif_species.species:
-                print("Orthographe douteuse, peut-être plutôt: " + gbif_species.species)
-                error_row = pd.DataFrame({'Ligne': [""], 'Espèce': [species_name],
-                                          "Type d'erreur": ["Orthographe douteuse, peut-être plutôt: " +
-                                                            gbif_species.species]})
-                errors = pd.concat([errors, error_row], ignore_index=True, axis=0)
+    # Créer les workers
+    workers = []
+    for _ in range(nb_workers):
+        worker = Worker(q)
+        worker.start()
+        workers.append(worker)
+    # Joindre les workers
+    for worker in workers:
+        worker.join()
 
-        # Si l'espèce n'est pas acceptée et n'est pas dans la liste des erreurs de synonymes, changer l'espèce
-        if (gbif_species.status != "ACCEPTED") & (gbif_species.species not in Constants.gbif_synonyms_errors):
-            gbif_species = get_gbif_species("https://api.gbif.org/v1/species/", str(gbif_species.accepted_key))
-            print("Espèce actuelle selon GBIF: " + gbif_species.species)
+    # Combiner les résultats de tous les workers
+    gbif_secies_df = pd.DataFrame([], )
+    errors = pd.DataFrame([], )
+    for worker in workers:
+        gbif_secies_df = pd.concat([gbif_secies_df, worker.species])
+        errors = pd.concat([errors, worker.errors])
 
-        if gbif_species.rank == "SPECIES" or gbif_species.rank == "VARIETY" or gbif_species.rank == "SUBSPECIES" \
-                or gbif_species.rank == "FORM":
-
-            species.at[row.Index, "Espèce actuelle"] = gbif_species.species
-            species.at[row.Index, "Phylum"] = gbif_species.phylum
-            species.at[row.Index, "Ordre"] = gbif_species.order
-
-        else:
-            print(species_name + " non récupérée par GBIF")
-            error_row = pd.DataFrame({'Ligne': [row.Index + 2], 'Espèce': [species_name],
-                                      "Type d'erreur": ["L'espèce n'a pas été trouvée par GBIF"]})
-            errors = pd.concat([errors, error_row], ignore_index=True, axis=0)
+    species = species.join(gbif_secies_df.set_index('Espèce'), on="Espèce")
 
     return species, errors
 
 
-def get_gbif_species(url: str, query: str) -> Species:
-    try:
-        query = urllib.parse.quote(query)
-        response = urllib.request.urlopen(url + query)
+def get_gbif_species(gbif_match) -> Species:
+    return Species(gbif_match["canonicalName"],
+                   gbif_match["phylum"] if "phylum" in gbif_match else None,
+                   gbif_match["order"] if "order" in gbif_match else None,
+                   gbif_match["rank"],
+                   gbif_match["taxonomicStatus"] if "taxonomicStatus" in gbif_match else gbif_match["status"],
+                   gbif_match["key"] if "key" in gbif_match else gbif_match["usageKey"],
+                   gbif_match["acceptedUsageKey"] if "acceptedUsageKey" in gbif_match else None)
 
-        json_data = response.read().decode("utf-8", "replace")
-        gbif_match = json.loads(json_data)
-        return Species(gbif_match["canonicalName"],
-                       gbif_match["phylum"] if "phylum" in gbif_match else None,
-                       gbif_match["order"] if "order" in gbif_match else None,
-                       gbif_match["rank"],
-                       gbif_match["taxonomicStatus"] if "taxonomicStatus" in gbif_match else gbif_match["status"],
-                       gbif_match["key"] if "key" in gbif_match else gbif_match["usageKey"],
-                       gbif_match["acceptedUsageKey"] if "acceptedUsageKey" in gbif_match else None)
 
-    except (urllib.error.URLError, urllib.error.HTTPError) as e:
-        print(e)
-        print("Problème de connexion à GBIF... Etes-vous connecté à internet ?")
-        exit()
+def writing_errors(species_name, gbif_species) -> pd.DataFrame:
+    errors = pd.DataFrame([], )
+    # Tester si l'orthographe est bonne sauf pour quelques espèces
+    if species_name not in Constants.default_species_writing:
+        if species_name != gbif_species.species:
+            print("Orthographe douteuse, peut-être plutôt: " + gbif_species.species)
+            error_row = pd.DataFrame({'Ligne': [""], 'Espèce': [species_name],
+                                      "Type d'erreur": [
+                                          "Orthographe douteuse, peut-être plutôt: " + gbif_species.species]})
+            errors = pd.concat([errors, error_row], ignore_index=True, axis=0)
+
+    return errors

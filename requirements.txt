@@ -8,7 +8,7 @@ certifi==2021.10.8
     # via requests
 charset-normalizer==2.0.12
     # via requests
-click==8.0.4
+click==8.1.2
     # via pip-tools
 cycler==0.11.0
     # via matplotlib
@@ -18,13 +18,13 @@ et-xmlfile==1.1.0
     # via openpyxl
 filelock==3.6.0
     # via virtualenv
-fonttools==4.31.1
+fonttools==4.31.2
     # via matplotlib
 idna==3.3
     # via requests
 joblib==1.1.0
     # via scikit-learn
-kiwisolver==1.4.0
+kiwisolver==1.4.2
     # via matplotlib
 littleutils==0.2.2
     # via outdated
@@ -55,7 +55,7 @@ packaging==21.3
     #   matplotlib
     #   statsmodels
     #   xarray
-pandas==1.4.1
+pandas==1.4.2
     # via
     #   pandas-flavor
     #   pingouin
@@ -72,7 +72,7 @@ patsy==0.5.2
     #   statsmodels
 pep517==0.12.0
     # via pip-tools
-pillow==9.0.1
+pillow==9.1.0
     # via matplotlib
 pingouin==0.5.1
     # via -r requirements.in
@@ -126,8 +126,10 @@ threadpoolctl==3.1.0
 tomli==2.0.1
     # via pep517
 urllib3==1.26.9
-    # via requests
-virtualenv==20.13.4
+    # via
+    #   -r requirements.in
+    #   requests
+virtualenv==20.14.0
     # via -r requirements.in
 virtualenv-clone==0.5.7
     # via -r requirements.in
