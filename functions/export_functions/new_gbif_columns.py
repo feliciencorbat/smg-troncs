@@ -16,7 +16,7 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
         def __init__(self, request_queue):
             Thread.__init__(self)
             self.queue = request_queue
-            self.species = pd.DataFrame([], )
+            self.species = pd.DataFrame([], columns=["Espèce", "Espèce actuelle", "Phylum", "Ordre"])
             self.errors = pd.DataFrame([], )
 
         def run(self):
@@ -27,8 +27,7 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
 
                 species_name = species_row.Espèce
                 # Récupérer l'espèce GBIF
-                gbif_species = get_gbif_species(http, "https://api.gbif.org/v1/species/match?kingdom=Fungi&name=",
-                                                species_name)
+                gbif_species = get_gbif_species(http, "v1/species/match?kingdom=Fungi&name=", species_name)
 
                 # Vérifier l'orthographe des noms d'espèces
                 writing_errors_rows = writing_errors(species_name, gbif_species)
@@ -36,8 +35,7 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
 
                 # Si l'espèce n'est pas acceptée et n'est pas dans la liste des erreurs de synonymes, changer l'espèce
                 if (gbif_species.status != "ACCEPTED") & (gbif_species.species not in Constants.gbif_synonyms_errors):
-                    gbif_species = get_gbif_species(http, "https://api.gbif.org/v1/species/",
-                                                    str(gbif_species.accepted_key))
+                    gbif_species = get_gbif_species(http, "v1/species/", str(gbif_species.accepted_key))
                     print("Nom GBIF pour " + species_name + ": " + gbif_species.species)
 
                 if gbif_species.rank == "SPECIES" or gbif_species.rank == "VARIETY" or \
@@ -87,15 +85,21 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
 
 
 def get_gbif_species(http: urllib3.PoolManager, url, query) -> Species:
-    response = http.request('GET', url + query)
-    gbif_match = json.loads(response.data.decode('utf-8'))
-    return Species(gbif_match["canonicalName"],
-                   gbif_match["phylum"] if "phylum" in gbif_match else None,
-                   gbif_match["order"] if "order" in gbif_match else None,
-                   gbif_match["rank"],
-                   gbif_match["taxonomicStatus"] if "taxonomicStatus" in gbif_match else gbif_match["status"],
-                   gbif_match["key"] if "key" in gbif_match else gbif_match["usageKey"],
-                   gbif_match["acceptedUsageKey"] if "acceptedUsageKey" in gbif_match else None)
+    try:
+        api_url = "https://api.gbif.org/"
+        response = http.request('GET', api_url + url + query)
+        gbif_match = json.loads(response.data.decode('utf-8'))
+        return Species(gbif_match["canonicalName"],
+                       gbif_match["phylum"] if "phylum" in gbif_match else None,
+                       gbif_match["order"] if "order" in gbif_match else None,
+                       gbif_match["rank"],
+                       gbif_match["taxonomicStatus"] if "taxonomicStatus" in gbif_match else gbif_match["status"],
+                       gbif_match["key"] if "key" in gbif_match else gbif_match["usageKey"],
+                       gbif_match["acceptedUsageKey"] if "acceptedUsageKey" in gbif_match else None)
+    except urllib3.exceptions.HTTPError as e:
+        print(e)
+        print('Problème de connexion. Etes-vous connecté à internet ?')
+        exit()
 
 
 def writing_errors(species_name: str, gbif_species: Species) -> pd.DataFrame:
