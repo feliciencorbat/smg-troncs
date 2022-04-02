@@ -101,15 +101,39 @@ def export(filename: str) -> None:
     data, species, errors = adjust_columns(data, species, errors)
 
     # Liste des espèces par tronc
-    trunks_species = data[["Tronc", "Espèce"]].groupby("Tronc")["Espèce"].apply(lambda x: list(np.unique(x)))
+    trunks_species_serie = data[["Tronc", "Espèce"]].groupby("Tronc")["Espèce"].apply(
+        lambda x: list(np.unique(x))).to_frame()
+    trunks_species = pd.DataFrame({'Tronc': trunks_species_serie.index, 'Espèces': trunks_species_serie["Espèce"]})
 
     # Enregistrer le fichier excel
     writer = pd.ExcelWriter(export_directory + '/liste_modifiee.xlsx', engine='xlsxwriter',
                             datetime_format='dd.mm.yyyyy', date_format='dd.mm.yyyyy')
+
     data.to_excel(writer, sheet_name='Statistiques', index=False)
+    for column in data:
+        column_length = max(data[column].astype(str).map(len).max(), len(column))
+        col_idx = data.columns.get_loc(column)
+        writer.sheets['Statistiques'].set_column(col_idx, col_idx, column_length)
+
     species.to_excel(writer, sheet_name='Espèces', index=False)
-    trunks_species.to_excel(writer, sheet_name='Espèces par tronc')
+    for column in species:
+        column_length = max(species[column].astype(str).map(len).max(), len(column))
+        col_idx = species.columns.get_loc(column)
+        writer.sheets['Espèces'].set_column(col_idx, col_idx, column_length)
+        col_idx = species.columns.get_loc('SwissFungi Lien')
+        writer.sheets['Espèces'].set_column(col_idx, col_idx, 15)
+
+    trunks_species.to_excel(writer, sheet_name='Espèces par tronc', index=False)
+    for column in trunks_species:
+        column_length = max(trunks_species[column].astype(str).map(len).max(), len(column))
+        col_idx = trunks_species.columns.get_loc(column)
+        writer.sheets['Espèces par tronc'].set_column(col_idx, col_idx, column_length)
+
     errors.to_excel(writer, sheet_name='Erreurs', index=False)
+    for column in errors:
+        column_length = max(errors[column].astype(str).map(len).max(), len(column))
+        col_idx = errors.columns.get_loc(column)
+        writer.sheets['Erreurs'].set_column(col_idx, col_idx, column_length)
     writer.save()
 
     print("Exportation terminée")
