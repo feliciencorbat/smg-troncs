@@ -5,10 +5,12 @@ from threading import Thread
 import pandas as pd
 import urllib3
 
+from constants import Constants
+
 
 def new_swiss_fungi_id_column(species: pd.DataFrame):
     http = urllib3.PoolManager()
-    nb_workers = 16
+    nb_workers = Constants.nb_workers
 
     class Worker(Thread):
         def __init__(self, request_queue):

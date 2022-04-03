@@ -10,7 +10,7 @@ from constants import Constants
 
 def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     http = urllib3.PoolManager()
-    nb_workers = 16
+    nb_workers = Constants.nb_workers
 
     class Worker(Thread):
         def __init__(self, request_queue):
