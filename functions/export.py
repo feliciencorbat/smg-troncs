@@ -11,6 +11,7 @@ from functions.export_functions.new_date_columns import new_date_columns
 from functions.export_functions.new_gbif_columns import new_gbif_columns
 from functions.export_functions.new_species_column import new_species_column
 from functions.export_functions.new_species_dataframe import new_species_dataframe
+from functions.export_functions.new_swiss_fungi_count_column import new_swiss_fungi_count_column
 from functions.export_functions.new_swiss_fungi_id_column import new_swiss_fungi_id_column
 from functions.export_functions.new_swiss_fungi_link_column import new_swiss_fungi_link_column
 from functions.export_functions.new_swiss_fungi_lr_column import new_swiss_fungi_lr_column
@@ -66,6 +67,10 @@ def export(filename: str) -> None:
 
     # Création colonne SwissFungi Lien dans la dataframe species
     species = new_swiss_fungi_link_column(species)
+
+    # Création colonne SwissFungi LR dans la dataframe species
+    print("Recherche des SwissFungi Observations...")
+    species = new_swiss_fungi_count_column(species)
 
     # Création colonne SwissFungi LR dans la dataframe species
     print("Recherche des SwissFungi LR...")

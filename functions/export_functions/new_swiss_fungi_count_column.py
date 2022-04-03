@@ -6,7 +6,7 @@ import pandas as pd
 import urllib3
 
 
-def new_swiss_fungi_id_column(species: pd.DataFrame):
+def new_swiss_fungi_count_column(species: pd.DataFrame):
     http = urllib3.PoolManager()
     nb_workers = 16
 
@@ -22,17 +22,16 @@ def new_swiss_fungi_id_column(species: pd.DataFrame):
                 if species_row == "":
                     break
 
-                species = species_row.Espèce
-                current_species = species_row[5]
-                gbif1_id = species_row.GBIF1
+                swissfungi_id = species_row.SwissFungi
 
-                # Récupérer l'espèce SwissFungi
-                swiss_fungi_id = get_swiss_fungi_id(http, "species/byName/", str(species), str(current_species))
+                # Récupérer le nombre d'observations
+                if swissfungi_id is not None:
+                    swiss_fungi_count = get_swiss_fungi_count(http, "species/observations/count/", str(swissfungi_id))
 
-                result = pd.DataFrame(
-                    {"GBIF1": [gbif1_id], "SwissFungi": [swiss_fungi_id]})
+                    result = pd.DataFrame(
+                        {"SwissFungi": [swissfungi_id], "SwissFungi Observations": [swiss_fungi_count]})
 
-                self.swissfungi = pd.concat([self.swissfungi, result])
+                    self.swissfungi = pd.concat([self.swissfungi, result])
                 self.queue.task_done()
 
     # Création de la queue
@@ -61,26 +60,17 @@ def new_swiss_fungi_id_column(species: pd.DataFrame):
     for worker in workers:
         swiss_fungi_df = pd.concat([swiss_fungi_df, worker.swissfungi])
 
-    species = species.join(swiss_fungi_df.set_index('GBIF1'), on="GBIF1")
+    species = species.join(swiss_fungi_df.set_index('SwissFungi'), on="SwissFungi")
 
     return species
 
 
-def get_swiss_fungi_id(http: urllib3.PoolManager, url, query1, query2) -> str | None:
+def get_swiss_fungi_count(http: urllib3.PoolManager, url, query) -> str | None:
     try:
         api_url = "https://www.wsl.ch/map_fungi/rest/"
-        response = http.request('GET', api_url + url + query1)
-        swissfungi_match = json.loads(response.data.decode('utf-8'))
-        if len(swissfungi_match) > 0:
-            return swissfungi_match[0]["taxonId"]
-
-        if query1 != query2:
-            response = http.request('GET', api_url + url + query2)
-            swissfungi_match = json.loads(response.data.decode('utf-8'))
-            if len(swissfungi_match) > 0:
-                return swissfungi_match[0]["taxonId"]
-
-        return None
+        response = http.request('GET', api_url + url + query)
+        swissfungi_count = json.loads(response.data.decode('utf-8'))
+        return swissfungi_count
 
     except urllib3.exceptions.HTTPError as e:
         print(e)
