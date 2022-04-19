@@ -18,6 +18,7 @@ from functions.export_functions.new_swiss_fungi_lr_column import new_swiss_fungi
 from functions.export_functions.new_threat_column import new_threat_column
 from functions.export_functions.species_errors import species_errors
 from functions.export_functions.synonyms_errors import synonyms_errors
+from functions.export_functions.test_nb_obs import test_nb_obs
 from functions.export_functions.trunks_errors import trunks_errors
 
 """
@@ -35,6 +36,9 @@ def export(filename: str) -> None:
     data = pd.read_excel(filename, sheet_name="Observations")
     trunks = pd.read_excel(filename, sheet_name="Troncs")
     errors = pd.DataFrame([], )
+
+    # Nombre d'observations au départ
+    nb_obs = data.shape[0]
 
     # Ajouter colonnes mois et saison
     data = new_date_columns(data)
@@ -109,6 +113,10 @@ def export(filename: str) -> None:
     trunks_species_serie = data[["Tronc", "Espèce"]].groupby("Tronc")["Espèce"].apply(
         lambda x: list(np.unique(x))).to_frame()
     trunks_species = pd.DataFrame({'Tronc': trunks_species_serie.index, 'Espèces': trunks_species_serie["Espèce"]})
+
+    # Tester si le nombre d'observations est toujours le même
+    nb_obs_errors = test_nb_obs(data, nb_obs)
+    errors = pd.concat([errors, nb_obs_errors])
 
     # Enregistrer le fichier excel
     writer = pd.ExcelWriter(export_directory + '/liste_modifiee.xlsx', engine='xlsxwriter',
