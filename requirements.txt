@@ -18,7 +18,7 @@ et-xmlfile==1.1.0
     # via openpyxl
 filelock==3.6.0
     # via virtualenv
-fonttools==4.31.2
+fonttools==4.32.0
     # via matplotlib
 idna==3.3
     # via requests
@@ -26,6 +26,8 @@ joblib==1.1.0
     # via scikit-learn
 kiwisolver==1.4.2
     # via matplotlib
+lazy-loader==0.1rc2
+    # via pandas-flavor
 littleutils==0.2.2
     # via outdated
 matplotlib==3.5.1
@@ -64,7 +66,7 @@ pandas==1.4.2
     #   seaborn
     #   statsmodels
     #   xarray
-pandas-flavor==0.2.0
+pandas-flavor==0.3.0
     # via pingouin
 patsy==0.5.2
     # via
@@ -76,13 +78,13 @@ pillow==9.1.0
     # via matplotlib
 pingouin==0.5.1
     # via -r requirements.in
-pip-tools==6.5.1
+pip-tools==6.6.0
     # via -r requirements.in
-platformdirs==2.5.1
+platformdirs==2.5.2
     # via virtualenv
 prince==0.7.1
     # via -r requirements.in
-pyparsing==3.0.7
+pyparsing==3.0.8
     # via
     #   matplotlib
     #   packaging
@@ -129,7 +131,7 @@ urllib3==1.26.9
     # via
     #   -r requirements.in
     #   requests
-virtualenv==20.14.0
+virtualenv==20.14.1
     # via -r requirements.in
 virtualenv-clone==0.5.7
     # via -r requirements.in
