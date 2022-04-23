@@ -4,6 +4,8 @@
 #
 #    pip-compile
 #
+asgiref==3.5.0
+    # via django
 certifi==2021.10.8
     # via requests
 charset-normalizer==2.0.12
@@ -14,11 +16,13 @@ cycler==0.11.0
     # via matplotlib
 distlib==0.3.4
     # via virtualenv
+django==4.0.4
+    # via -r requirements.in
 et-xmlfile==1.1.0
     # via openpyxl
 filelock==3.6.0
     # via virtualenv
-fonttools==4.32.0
+fonttools==4.33.2
     # via matplotlib
 idna==3.3
     # via requests
@@ -117,6 +121,8 @@ six==1.16.0
     #   patsy
     #   python-dateutil
     #   virtualenv
+sqlparse==0.4.2
+    # via django
 statsmodels==0.13.2
     # via
     #   pingouin
