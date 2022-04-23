@@ -1,3 +1,4 @@
+crispy-bootstrap5>=0.6
 Django>=4.0.0
 openpyxl>=3.0.9
 pingouin>=0.5.1

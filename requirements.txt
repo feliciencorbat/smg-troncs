@@ -12,12 +12,18 @@ charset-normalizer==2.0.12
     # via requests
 click==8.1.2
     # via pip-tools
+crispy-bootstrap5==0.6
+    # via -r requirements.in
 cycler==0.11.0
     # via matplotlib
 distlib==0.3.4
     # via virtualenv
 django==4.0.4
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   crispy-bootstrap5
+django-crispy-forms==1.14.0
+    # via crispy-bootstrap5
 et-xmlfile==1.1.0
     # via openpyxl
 filelock==3.6.0
