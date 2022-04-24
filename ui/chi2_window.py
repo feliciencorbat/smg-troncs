@@ -1,6 +1,6 @@
 from tkinter import *
 import numpy as np
-from stats.functions.chi2 import chi2_test
+from stats.functions.chi2_function import chi2_test
 from ui.components.window import window_title
 
 

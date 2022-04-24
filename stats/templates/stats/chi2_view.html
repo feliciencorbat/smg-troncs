@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Chi-2</h3>
+        {% load static %}
+        <div>
+                <img src="{% static 'chi2/dependance_contribution_heatmap.png' %}" alt="Heatmap">
+        </div>
+        <div>
+                <img src="{% static 'chi2/contingence_bar.png' %}" alt="Graphe en barres">
+        </div>
+        <div>
+                <a href="{% static 'chi2/chi2.xlsx' %}">Télécharger le fichier de données</a>
+        </div>
+</div>
+{% endblock content %}

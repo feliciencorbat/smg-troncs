@@ -9,8 +9,8 @@ Fonction Chi-2 entre 2 variables qualitatives et création heatmap
 """
 
 
-def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, species_agg: bool,
-              with_cf: bool, location: str) -> None:
+def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str, species_agg: bool,
+                  with_cf: bool, location: str) -> None:
     # Filtrer lieu
     if location != "Tous les lieux":
         data = data.loc[data["Lieu"] == location]
@@ -29,7 +29,7 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
     print("\nTest Chi-2 pour les variables " + contingency.index.name + " et " + contingency.columns.name + "\n")
 
     # dossier d'export
-    directory = "export/chi2 " + contingency.index.name + " " + contingency.columns.name
+    directory = "stats/static/chi2"
     if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -98,7 +98,7 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
     sorted_dependance_contribution = sorted_dependance_contribution.sort_values(by=['Degré de dépendance absolu'],
                                                                                 ascending=False)
     # Enregistrer le fichier excel
-    writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter')
+    writer = pd.ExcelWriter(directory + '/chi2.xlsx', engine='xlsxwriter')
     pd.DataFrame(data={'P_value': [p_value], 'Chi2': [chi2], 'Degré liberté': [deg_freedom]}) \
         .to_excel(writer, sheet_name='P_value, Chi2, Deg', index=False)
     contingency.to_excel(writer, sheet_name='Tab contingence')
@@ -109,6 +109,7 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
     writer.save()
 
     # création du graphe des contributions à la dépendance
+    plt.figure()
     sns.heatmap(dependence_contribution,
                 annot=contingency, fmt='d', vmin=-1, vmax=1, cmap="PiYG",
                 cbar_kws={'label': 'Contribution à la dépendance'})
@@ -117,6 +118,7 @@ def chi2_test(data: pd.DataFrame, variable1: str, variable2: str, title: str, sp
     plt.show(block=False)
 
     # création du graphe à barres
+    plt.figure()
     contingency.plot(kind="bar")
     if species_agg:
         plt.ylabel("Nombre d'espèces")

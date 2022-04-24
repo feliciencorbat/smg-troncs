@@ -4,7 +4,7 @@ import unittest
 import pandas as pd
 
 from stats.functions.anova import anova_test
-from stats.functions.chi2 import chi2_test
+from stats.functions.chi2_function import chi2_test
 from stats.functions.cramer_function import cramer_matrix
 from stats.functions.distribution_function import distribution_bar
 from stats.functions.export_function import export
