@@ -27,7 +27,7 @@ class Tests(unittest.TestCase):
 
         print("Test de la fonction chi 2")
         chi2_function(data, "Espèce du tronc", "Menace", "Titre du graphe", False,
-                  True, "Tous les lieux")
+                      True, "Tous les lieux")
 
         print("Test de la fonction ANOVA")
         anova_function(data, "Menace", "Age du tronc", "Titre du graphe", True, "Tous les lieux")
@@ -35,8 +35,9 @@ class Tests(unittest.TestCase):
         print("Test de la fonction évolution espèces")
         nb_species_evolution_function(data, True, "Tous les lieux")
 
-        print("Effacer dossier export")
-        shutil.rmtree("export")
+        print("Effacer dossier files et stats")
+        shutil.rmtree("files")
+        shutil.rmtree("stats")
 
 
 if __name__ == '__main__':

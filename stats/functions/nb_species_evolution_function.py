@@ -1,8 +1,9 @@
 import os
-
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 """
 Evolution du nombre d'espèces avec le temps
@@ -50,7 +51,6 @@ def nb_species_evolution_function(data: pd.DataFrame, with_cf: bool, location: s
     plt.ylim(ymin=0)
     plt.legend(loc="upper left")
     plt.savefig(directory + "/especes_cumulees_par_mois.png", bbox_inches='tight')
-    plt.show(block=False)
 
     # Création du graphique cumulation d'espèces liste rouge par arbres
     plt.figure()
@@ -68,7 +68,6 @@ def nb_species_evolution_function(data: pd.DataFrame, with_cf: bool, location: s
     plt.ylim(ymin=0)
     plt.legend(loc="upper left")
     plt.savefig(directory + "/especes_cumulees_par_mois_lr.png", bbox_inches='tight')
-    plt.show(block=False)
 
     # Création du graphique cumulation d'espèces EX, EW, RE, CR, EN, VU total
     plt.figure()
@@ -87,7 +86,6 @@ def nb_species_evolution_function(data: pd.DataFrame, with_cf: bool, location: s
     plt.ylim(ymin=0)
     plt.legend(loc="upper left")
     plt.savefig(directory + "/especes_cumulees_par_mois_lr_detaillee.png", bbox_inches='tight')
-    plt.show(block=False)
 
     # Création du graphique cumulation d'espèces selon groupe de troncs
     plt.figure()
@@ -103,7 +101,6 @@ def nb_species_evolution_function(data: pd.DataFrame, with_cf: bool, location: s
     plt.ylim(ymin=0)
     plt.legend(loc="upper left")
     plt.savefig(directory + "/especes_cumulees_par_mois_groupe_troncs.png", bbox_inches='tight')
-    plt.show(block=False)
 
     # Nombre d'espèces par mois
     number_species_by_month = data[['Espèce', 'Date']].sort_values(by=["Date"])
@@ -113,7 +110,6 @@ def nb_species_evolution_function(data: pd.DataFrame, with_cf: bool, location: s
     plt.title("Nombre d'espèces par mois")
     plt.ylabel("Nombre d'espèces")
     plt.savefig(directory + "/nbre_especes_par_mois.png", bbox_inches='tight')
-    plt.show(block=False)
 
     number_species_by_month.to_excel(writer, sheet_name='Nb espèces par mois')
     writer.save()
