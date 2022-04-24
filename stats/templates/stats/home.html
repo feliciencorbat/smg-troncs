@@ -62,5 +62,40 @@
             </div>
         </div>
     </div>
+    <div class="row mt-2">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Statistiques</h5>
+                    <p class="card-text">
+                        <strong>Nombre d'observations</strong>: {{ nb_obs }}<br/>
+                        <strong>Nombre d'espèces</strong>: {{ nb_species }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Erreurs</h5>
+                        {% if errors|length >= 1 %}
+                            {% for error in errors %}
+                                <p class="card-text">
+                                {% if error.0 != None %}
+                                    <strong>Ligne</strong>: {{ error.0 }}<br/>
+                                {% endif %}
+                                    <strong>Espèce</strong>: <i>{{ error.1 }}</i><br/>
+                                    <strong>Type d'erreur</strong>: {{ error.2 }}
+                                </p>
+                            {% endfor %}
+                        {% else %}
+                            <p class="card-text">
+                                Pas d'erreurs détectées...
+                            </p>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}

@@ -2,6 +2,7 @@ from datetime import datetime
 import mimetypes
 import os
 
+import numpy as np
 import pandas as pd
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -20,16 +21,22 @@ from stats.functions.nb_species_evolution_function import nb_species_evolution_f
 
 @login_required
 def home(request):
-    return render(request, 'stats/home.html')
+    errors = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Erreurs")
+    errors = errors.replace({np.nan: None})
+    errors = errors.to_numpy()
+    stats = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    nb_obs = stats.shape[0]
+    species = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces")
+    nb_species = species.shape[0]
+    return render(request, 'stats/home.html', {"nb_obs": nb_obs, "nb_species": nb_species, "errors": errors})
 
 
 @login_required
 def export(request):
     if request.method == 'POST':
         file = request.FILES['original_file']
-        path = default_storage.save("files/import/liste_originale" + str(datetime.date(datetime.now())) + ".xls",
-                                    ContentFile(file.read()))
-        os.path.join(settings.MEDIA_ROOT, path)
+        default_storage.save("files/import/liste_originale" + str(datetime.date(datetime.now())) + ".xls",
+                             ContentFile(file.read()))
         export_function(file)
         return redirect('home')
     return render(request, 'stats/export.html')
