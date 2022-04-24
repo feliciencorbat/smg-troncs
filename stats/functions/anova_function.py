@@ -1,7 +1,5 @@
 import os
 import pandas as pd
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
