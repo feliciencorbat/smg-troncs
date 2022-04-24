@@ -49,6 +49,7 @@ def cramer_function(data: pd.DataFrame, with_cf: bool, location: str) -> None:
     matrix.to_excel(writer, sheet_name='Matrice V de Cramer')
     writer.save()
 
+    plt.figure()
     sns.heatmap(matrix, annot=matrix, vmin=0, vmax=1,
                 cbar_kws={'label': 'Dépendance entre les variables qualitatives (0: faible, 1: élevée)'})
     plt.title("Matrice V de Cramer (variables qualitatives)", fontsize=16)
