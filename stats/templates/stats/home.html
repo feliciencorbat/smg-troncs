@@ -6,6 +6,26 @@
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-body">
+                    <h5 class="card-title">Observations</h5>
+                    <p class="card-text"></p>
+                    <a class="btn btn-primary" href="{% url 'observations' %}">Observations</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Espèces</h5>
+                    <p class="card-text"></p>
+                    <a class="btn btn-primary" href="{% url 'species' %}">Espèces</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
                     <h5 class="card-title">Mettre à jour les données</h5>
                     <p class="card-text">Permet de charger les nouvelles données à partir du fichier excel original.</p>
                     <a class="btn btn-primary" href="{% url 'download_liste_modifiee' %}">Télécharger liste modifiée</a>
