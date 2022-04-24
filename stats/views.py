@@ -30,6 +30,14 @@ def home(request):
 
 
 @login_required
+def observations(request):
+    observations_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    observations_list = observations_list.replace({np.nan: None})
+    observations_list = observations_list.to_numpy()
+    return render(request, 'stats/observations.html', {"observations_list": observations_list})
+
+
+@login_required
 def species(request):
     species_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces")
     species_list = species_list.replace({np.nan: None})
