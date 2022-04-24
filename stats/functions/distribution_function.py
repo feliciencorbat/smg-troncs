@@ -39,10 +39,10 @@ def distribution_function(data: pd.DataFrame, variable: str, title: str, limit: 
     plt.ylabel("Nombre d'observations")
     plt.xticks(rotation=90)
     plt.title(title)
-    plt.savefig(directory + "/bars.png", bbox_inches='tight')
+    plt.savefig(directory + "/bars.svg", bbox_inches='tight')
 
     # Graphe camembert
     plt.figure()
     plt.pie(data, labels=data.index)
     plt.title(title)
-    plt.savefig(directory + "/pie.png", bbox_inches='tight')
+    plt.savefig(directory + "/pie.svg", bbox_inches='tight')

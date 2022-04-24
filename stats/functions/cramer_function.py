@@ -52,7 +52,7 @@ def cramer_function(data: pd.DataFrame, with_cf: bool, location: str) -> None:
     sns.heatmap(matrix, annot=matrix, vmin=0, vmax=1,
                 cbar_kws={'label': 'Dépendance entre les variables qualitatives (0: faible, 1: élevée)'})
     plt.title("Matrice V de Cramer (variables qualitatives)", fontsize=16)
-    plt.savefig(directory + "/cramer.png", bbox_inches='tight')
+    plt.savefig(directory + "/cramer.svg", bbox_inches='tight')
 
 
 def cramer(data: pd.DataFrame, variable1: str, variable2: str) -> float:

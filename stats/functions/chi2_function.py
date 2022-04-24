@@ -114,8 +114,7 @@ def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str
                 annot=contingency, fmt='d', vmin=-1, vmax=1, cmap="PiYG",
                 cbar_kws={'label': 'Contribution à la dépendance'})
     plt.title(title, fontsize=16)
-    plt.savefig(directory + "/dependance_contribution_heatmap.png", bbox_inches='tight')
-    plt.show(block=False)
+    plt.savefig(directory + "/dependance_contribution_heatmap.svg", bbox_inches='tight')
 
     # création du graphe à barres
     plt.figure()
@@ -125,5 +124,4 @@ def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str
     else:
         plt.ylabel("Nombre d'observations")
     plt.title(title)
-    plt.savefig(directory + "/contingence_bar.png", bbox_inches='tight')
-    plt.show(block=False)
+    plt.savefig(directory + "/contingence_bar.svg", bbox_inches='tight')

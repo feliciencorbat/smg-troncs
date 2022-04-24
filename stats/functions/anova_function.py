@@ -34,8 +34,7 @@ def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: st
     plt.figure()
     sns.boxplot(x=variable1, y=variable2, data=data)
     plt.title(title)
-    plt.savefig(directory + "/boite_moustaches.png", bbox_inches='tight')
-    plt.show(block=False)
+    plt.savefig(directory + "/boite_moustaches.svg", bbox_inches='tight')
 
     writer = pd.ExcelWriter(directory + '/anova.xlsx', engine='xlsxwriter')
     data.to_excel(writer, sheet_name='Données')

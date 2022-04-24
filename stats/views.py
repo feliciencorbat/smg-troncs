@@ -4,13 +4,11 @@ import os
 
 import numpy as np
 import pandas as pd
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-
 from stats.functions.anova_function import anova_function
 from stats.functions.chi2_function import chi2_function
 from stats.functions.cramer_function import cramer_function
