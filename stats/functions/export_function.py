@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import pandas as pd
 
@@ -113,7 +115,10 @@ def export_function(file) -> None:
     errors = pd.concat([errors, nb_obs_errors])
 
     # Enregistrer le fichier excel
-    writer = pd.ExcelWriter('static/export/liste_modifiee.xlsx', engine='xlsxwriter',
+    directory = "files/export"
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    writer = pd.ExcelWriter(directory + '/liste_modifiee.xlsx', engine='xlsxwriter',
                             datetime_format='dd.mm.yyyyy', date_format='dd.mm.yyyyy')
 
     data.to_excel(writer, sheet_name='Statistiques', index=False)

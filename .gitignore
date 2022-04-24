@@ -6,3 +6,4 @@
 /tests/export/
 /files/export/liste_modifiee.xlsx
 /stats/static/
+db.sqlite3
