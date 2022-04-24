@@ -21,6 +21,7 @@ urlpatterns = [
     path('', authentication.views.login_page, name='login'),
     path('logout/', authentication.views.logout_user, name='logout'),
     path('home/', stats.views.home, name='home'),
+    path('species/', stats.views.species, name='species'),
     path('export/', stats.views.export, name='export'),
     path('distribution/', stats.views.distribution, name='distribution'),
     path('cramer/', stats.views.cramer, name='cramer'),

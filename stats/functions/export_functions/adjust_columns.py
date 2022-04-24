@@ -23,8 +23,8 @@ def adjust_columns(data: pd.DataFrame, species: pd.DataFrame, errors: pd.DataFra
 
     # Garder uniquement les colonnes nécessaires
     species = species[
-        ["Espèce", "SwissFungi Lien", "Espèce actuelle", "SwissFungi Observations", "Liste rouge", "SwissFungi LR", "Fréquence",
-         "Menace"]]
+        ["Espèce", "SwissFungi Lien", "Espèce actuelle", "SwissFungi Observations", "Liste rouge", "SwissFungi LR",
+         "Fréquence", "Menace", "SwissFungi"]]
 
     errors = errors[["Ligne", "Espèce", "Type d'erreur"]]
 

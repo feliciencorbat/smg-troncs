@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Espèces</h3>
+        <table class="table table-striped">
+                <thead>
+                <tr>
+                        <th scope="col">Espèce</th>
+                        <th scope="col">Espèce actuelle</th>
+                        <th scope="col">Liste rouge</th>
+                        <th scope="col">Fréquence</th>
+                        <th scope="col">Menace</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for species in species_list %}
+                <tr>
+                        {% if species.8 != None %}
+                                <td><a href="https://www.wsl.ch/map_fungi/search?taxon={{ species.8|floatformat:0 }}">{{ species.0 }}</a></td>
+                        {% else %}
+                                <td>{{ species.0 }}</td>
+                        {% endif %}
+
+                        {% if species.0 != species.2 %}
+                                <td>{{ species.2 }}</td>
+                        {% else %}
+                                <td></td>
+                        {% endif %}
+
+                        <td>{{ species.4 }}</td>
+
+                        {% if species.6 != None %}
+                                <td>{{ species.6 }}</td>
+                        {% else %}
+                                <td></td>
+                        {% endif %}
+
+                        <td>{{ species.7 }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+</table>
+</div>
+{% endblock content %}

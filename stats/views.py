@@ -30,6 +30,14 @@ def home(request):
 
 
 @login_required
+def species(request):
+    species_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces")
+    species_list = species_list.replace({np.nan: None})
+    species_list = species_list.to_numpy()
+    return render(request, 'stats/species.html', {"species_list": species_list})
+
+
+@login_required
 def export(request):
     if request.method == 'POST':
         file = request.FILES['original_file']
