@@ -2,6 +2,7 @@ import pandas as pd
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
+from stats.functions.anova_function import anova_function
 from stats.functions.chi2_function import chi2_function
 from stats.functions.cramer_function import cramer_function
 from stats.functions.distribution_function import distribution_function
@@ -91,3 +92,27 @@ def chi2(request):
         locations = data["Lieu"].dropna().unique()
         variables = data.columns.values
         return render(request, 'stats/chi2.html', {"locations": locations, "variables": variables})
+
+
+@login_required
+def anova(request):
+    data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    if request.method == 'POST':
+        post_request = request.POST
+        location = post_request.get("location")
+        variable1 = post_request.get("variable1")
+        variable2 = post_request.get("variable2")
+        title = post_request.get("title")
+
+        cf = post_request.get("cf")
+        if cf is None:
+            cf = False
+        else:
+            cf = True
+
+        anova_function(data, variable1, variable2, title, cf, location)
+        return render(request, 'stats/anova_view.html')
+    else:
+        locations = data["Lieu"].dropna().unique()
+        variables = data.columns.values
+        return render(request, 'stats/anova.html', {"locations": locations, "variables": variables})

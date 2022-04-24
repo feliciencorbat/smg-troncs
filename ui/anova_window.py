@@ -1,6 +1,6 @@
 from tkinter import *
 import numpy as np
-from stats.functions.anova import anova_test
+from stats.functions.anova_function import anova_test
 from ui.components.window import window_title
 
 

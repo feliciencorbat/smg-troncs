@@ -10,8 +10,8 @@ Fonction ANOVA entre variable qualitative et quantitative
 """
 
 
-def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
-               with_cf: bool, location: str) -> None:
+def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: str,
+                   with_cf: bool, location: str) -> None:
     # Filtrer lieu
     if location != "Tous les lieux":
         data = data.loc[data["Lieu"] == location]
@@ -26,17 +26,18 @@ def anova_test(data: pd.DataFrame, variable1: str, variable2: str, title: str,
     data = data.dropna()
 
     # dossier d'export
-    directory = "export/anova " + variable1 + " " + variable2
+    directory = "stats/static/anova"
     if not os.path.exists(directory):
         os.makedirs(directory)
 
     # graphe boîte à moustaches
+    plt.figure()
     sns.boxplot(x=variable1, y=variable2, data=data)
     plt.title(title)
     plt.savefig(directory + "/boite_moustaches.png", bbox_inches='tight')
     plt.show(block=False)
 
-    writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter')
+    writer = pd.ExcelWriter(directory + '/anova.xlsx', engine='xlsxwriter')
     data.to_excel(writer, sheet_name='Données')
 
     # Analyse des données

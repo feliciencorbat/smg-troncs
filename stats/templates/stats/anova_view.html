@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Anova</h3>
+        {% load static %}
+        <div>
+                <img src="{% static 'anova/boite_moustaches.png' %}" alt="Heatmap">
+        </div>
+        <div>
+                <a href="{% static 'anova/anova.xlsx' %}">Télécharger le fichier de données</a>
+        </div>
+</div>
+{% endblock content %}
