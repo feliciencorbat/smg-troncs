@@ -9,9 +9,9 @@ Evolution du nombre d'espèces avec le temps
 """
 
 
-def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> None:
+def nb_species_evolution_function(data: pd.DataFrame, with_cf: bool, location: str) -> None:
     # dossier d'export
-    directory = "export/Evolution especes"
+    directory = "stats/static/nb_species_evolution"
     if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -24,7 +24,7 @@ def nb_species_evolution(data: pd.DataFrame, with_cf: bool, location: str) -> No
         data = data.loc[data["cf"] != "cf."]
 
     # Enregistrer le fichier excel
-    writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter',
+    writer = pd.ExcelWriter(directory + '/nb_species_evolution.xlsx', engine='xlsxwriter',
                             datetime_format='dd.mm.yyyyy', date_format='dd.mm.yyyyy')
 
     # Données cumulation d'espèces

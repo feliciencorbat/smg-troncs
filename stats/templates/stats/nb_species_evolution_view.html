@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Evolution du nombre d'espèces</h3>
+        {% load static %}
+        <div>
+                <img src="{% static 'nb_species_evolution/nbre_especes_par_mois.png' %}">
+        </div>
+        <div>
+                <img src="{% static 'nb_species_evolution/especes_cumulees_par_mois.png' %}">
+        </div>
+        <div>
+                <img src="{% static 'nb_species_evolution/especes_cumulees_par_mois_groupe_troncs.png' %}">
+        </div>
+        <div>
+                <img src="{% static 'nb_species_evolution/especes_cumulees_par_mois_lr.png' %}">
+        </div>
+        <div>
+                <img src="{% static 'nb_species_evolution/especes_cumulees_par_mois_lr_detaillee.png' %}">
+        </div>
+        <div>
+                <a href="{% static 'nb_species_evolution/nb_species_evolution.xlsx' %}">Télécharger le fichier de données</a>
+        </div>
+</div>
+{% endblock content %}

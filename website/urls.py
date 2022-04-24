@@ -29,4 +29,5 @@ urlpatterns = [
     path('cramer/', stats.views.cramer, name='cramer'),
     path('chi2/', stats.views.chi2, name='chi2'),
     path('anova/', stats.views.anova, name='anova'),
+    path('nb_species_evolution/', stats.views.nb_species_evolution, name='nb_species_evolution'),
 ]

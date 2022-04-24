@@ -7,6 +7,7 @@ from stats.functions.chi2_function import chi2_function
 from stats.functions.cramer_function import cramer_function
 from stats.functions.distribution_function import distribution_function
 from stats.functions.export_function import export_function
+from stats.functions.nb_species_evolution_function import nb_species_evolution_function
 
 
 @login_required
@@ -116,3 +117,23 @@ def anova(request):
         locations = data["Lieu"].dropna().unique()
         variables = data.columns.values
         return render(request, 'stats/anova.html', {"locations": locations, "variables": variables})
+
+
+@login_required
+def nb_species_evolution(request):
+    data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    if request.method == 'POST':
+        post_request = request.POST
+        location = post_request.get("location")
+
+        cf = post_request.get("cf")
+        if cf is None:
+            cf = False
+        else:
+            cf = True
+
+        nb_species_evolution_function(data, cf, location)
+        return render(request, 'stats/nb_species_evolution_view.html')
+    else:
+        locations = data["Lieu"].dropna().unique()
+        return render(request, 'stats/nb_species_evolution.html', {"locations": locations})
