@@ -1,40 +1,34 @@
-import os
 import numpy as np
 import pandas as pd
 
-from functions.export_functions.adjust_columns import adjust_columns
-from functions.export_functions.clean_trunks_columns import clean_trunks_columns
-from functions.export_functions.lr_errors import lr_errors
-from functions.export_functions.new_cf_column import new_cf_column
-from functions.export_functions.new_cut_trunks_dataframe import new_cut_trunks_dataframe
-from functions.export_functions.new_date_columns import new_date_columns
-from functions.export_functions.new_gbif_columns import new_gbif_columns
-from functions.export_functions.new_species_column import new_species_column
-from functions.export_functions.new_species_dataframe import new_species_dataframe
-from functions.export_functions.new_swiss_fungi_count_column import new_swiss_fungi_count_column
-from functions.export_functions.new_swiss_fungi_id_column import new_swiss_fungi_id_column
-from functions.export_functions.new_swiss_fungi_link_column import new_swiss_fungi_link_column
-from functions.export_functions.new_swiss_fungi_lr_column import new_swiss_fungi_lr_column
-from functions.export_functions.new_threat_column import new_threat_column
-from functions.export_functions.species_errors import species_errors
-from functions.export_functions.synonyms_errors import synonyms_errors
-from functions.export_functions.test_nb_obs import test_nb_obs
-from functions.export_functions.trunks_errors import trunks_errors
+from stats.functions.export_functions.adjust_columns import adjust_columns
+from stats.functions.export_functions.clean_trunks_columns import clean_trunks_columns
+from stats.functions.export_functions.lr_errors import lr_errors
+from stats.functions.export_functions.new_cf_column import new_cf_column
+from stats.functions.export_functions.new_cut_trunks_dataframe import new_cut_trunks_dataframe
+from stats.functions.export_functions.new_date_columns import new_date_columns
+from stats.functions.export_functions.new_gbif_columns import new_gbif_columns
+from stats.functions.export_functions.new_species_column import new_species_column
+from stats.functions.export_functions.new_species_dataframe import new_species_dataframe
+from stats.functions.export_functions.new_swiss_fungi_count_column import new_swiss_fungi_count_column
+from stats.functions.export_functions.new_swiss_fungi_id_column import new_swiss_fungi_id_column
+from stats.functions.export_functions.new_swiss_fungi_link_column import new_swiss_fungi_link_column
+from stats.functions.export_functions.new_swiss_fungi_lr_column import new_swiss_fungi_lr_column
+from stats.functions.export_functions.new_threat_column import new_threat_column
+from stats.functions.export_functions.species_errors import species_errors
+from stats.functions.export_functions.synonyms_errors import synonyms_errors
+from stats.functions.export_functions.test_nb_obs import test_nb_obs
+from stats.functions.export_functions.trunks_errors import trunks_errors
 
 """
 Fonction de création d'une liste de données pour les statistiques
 """
 
 
-def export(filename: str) -> None:
-    # dossier d'export
-    export_directory = "export"
-    if not os.path.exists(export_directory):
-        os.makedirs(export_directory)
-
+def export_function(file) -> None:
     # Création 3 dataframes données, troncs et erreurs
-    data = pd.read_excel(filename, sheet_name="Observations")
-    trunks = pd.read_excel(filename, sheet_name="Troncs")
+    data = pd.read_excel(file, sheet_name="Observations")
+    trunks = pd.read_excel(file, sheet_name="Troncs")
     errors = pd.DataFrame([], )
 
     # Nombre d'observations au départ
@@ -119,7 +113,7 @@ def export(filename: str) -> None:
     errors = pd.concat([errors, nb_obs_errors])
 
     # Enregistrer le fichier excel
-    writer = pd.ExcelWriter(export_directory + '/liste_modifiee.xlsx', engine='xlsxwriter',
+    writer = pd.ExcelWriter('static/export/liste_modifiee.xlsx', engine='xlsxwriter',
                             datetime_format='dd.mm.yyyyy', date_format='dd.mm.yyyyy')
 
     data.to_excel(writer, sheet_name='Statistiques', index=False)

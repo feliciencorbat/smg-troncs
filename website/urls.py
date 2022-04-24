@@ -24,4 +24,6 @@ urlpatterns = [
     path('', authentication.views.login_page, name='login'),
     path('logout/', authentication.views.logout_user, name='logout'),
     path('home/', stats.views.home, name='home'),
+    path('export/', stats.views.export, name='export'),
+    path('distribution/', stats.views.distribution, name='distribution'),
 ]

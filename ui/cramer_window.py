@@ -1,6 +1,6 @@
 from tkinter import *
 import numpy as np
-from functions.cramer import cramer_matrix
+from stats.functions.cramer import cramer_matrix
 from ui.components.window import window_title
 
 

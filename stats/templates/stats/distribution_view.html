@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Distribution</h3>
+        {% load static %}
+        <div>
+                <img src="{% static 'distribution/bars.png' %}" alt="Graphe en tuyaux d'orgue">
+        </div>
+        <div>
+                <img src="{% static 'distribution/pie.png' %}" alt="Graphe en camembert">
+        </div>
+        <div>
+                <a href="{% static 'distribution/distribution.xlsx' %}">Télécharger le fichier de données</a>
+        </div>
+</div>
+{% endblock content %}

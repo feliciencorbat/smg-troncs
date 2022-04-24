@@ -1,6 +1,6 @@
 from tkinter import *
 import numpy as np
-from functions.nb_species_evolution import nb_species_evolution
+from stats.functions.nb_species_evolution import nb_species_evolution
 from ui.components.window import window_title
 
 

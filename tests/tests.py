@@ -3,12 +3,12 @@ import unittest
 
 import pandas as pd
 
-from functions.anova import anova_test
-from functions.chi2 import chi2_test
-from functions.cramer import cramer_matrix
-from functions.distribution import distribution_bar
-from functions.export import export
-from functions.nb_species_evolution import nb_species_evolution
+from stats.functions.anova import anova_test
+from stats.functions.chi2 import chi2_test
+from stats.functions.cramer import cramer_matrix
+from stats.functions.distribution_function import distribution_bar
+from stats.functions.export_function import export
+from stats.functions.nb_species_evolution import nb_species_evolution
 
 
 class Tests(unittest.TestCase):

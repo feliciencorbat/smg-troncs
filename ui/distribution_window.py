@@ -1,7 +1,7 @@
 from tkinter import *
 import numpy as np
 
-from functions.distribution import distribution_bar
+from stats.functions.distribution_function import distribution_bar
 from ui.components.window import window_title
 
 

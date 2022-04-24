@@ -4,7 +4,7 @@ from typing import Tuple
 from threading import Thread
 import queue
 import pandas as pd
-from classes.species import Species
+from stats.classes.species import Species
 from constants import Constants
 
 

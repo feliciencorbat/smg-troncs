@@ -1,13 +1,17 @@
 import os
 import pandas as pd
-from matplotlib import pyplot as plt
+import matplotlib
+
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 """
 Fonction de distribution d'une variable et création d'un graphe en tuyaux d'orgue
 """
 
 
-def distribution_bar(data: pd.DataFrame, variable: str, title: str, limit: int, with_cf: bool, location: str) -> None:
+def distribution_function(data: pd.DataFrame, variable: str, title: str, limit: int, with_cf: bool,
+                          location: str) -> None:
     print("\nDistribution de la variable " + variable + "\n")
 
     # Filtrer lieu
@@ -24,13 +28,13 @@ def distribution_bar(data: pd.DataFrame, variable: str, title: str, limit: int, 
     else:
         data = data[variable].value_counts(normalize=False)[:limit]
 
-    # dossier d'export
-    directory = "export/distribution " + variable
+    # dossier files/distribution
+    directory = "stats/static/distribution"
     if not os.path.exists(directory):
         os.makedirs(directory)
 
     # export excel
-    data.to_excel(directory + "/" + variable + "_" + str(limit) + ".xlsx")
+    data.to_excel(directory + "/distribution.xlsx")
 
     # Graphe tuyaux d'orgue
     plt.figure()
@@ -38,12 +42,10 @@ def distribution_bar(data: pd.DataFrame, variable: str, title: str, limit: int, 
     plt.ylabel("Nombre d'observations")
     plt.xticks(rotation=90)
     plt.title(title)
-    plt.savefig(directory + "/" + variable + "_barres_" + str(limit) + ".png", bbox_inches='tight')
-    plt.show(block=False)
+    plt.savefig(directory + "/bars.png", bbox_inches='tight')
 
     # Graphe camembert
     plt.figure()
     plt.pie(data, labels=data.index)
     plt.title(title)
-    plt.savefig(directory + "/" + variable + "_camembert_" + str(limit) + ".png", bbox_inches='tight')
-    plt.show(block=False)
+    plt.savefig(directory + "/pie.png", bbox_inches='tight')

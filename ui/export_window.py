@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import filedialog
-from functions.export import export
+from stats.functions.export_function import export
 from ui.components.window import window_title
 
 

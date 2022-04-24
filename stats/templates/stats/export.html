@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Mettre à jour les données</h3>
+        <form method="post" enctype="multipart/form-data">
+            <div class="mt-5">
+                <input type="file" name="original_file" />
+            </div>
+            {% csrf_token %}
+            <div class="mt-5">
+                <input type="submit" class="btn btn-primary" name="submit" value="Envoyer le fichier original" />
+            </div>
+        </form>
+</div>
+{% endblock content %}
