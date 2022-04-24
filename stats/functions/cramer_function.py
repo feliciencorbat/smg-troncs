@@ -11,7 +11,7 @@ Matrice Cramer
 """
 
 
-def cramer_matrix(data: pd.DataFrame, with_cf: bool, location: str) -> None:
+def cramer_function(data: pd.DataFrame, with_cf: bool, location: str) -> None:
     # Filtrer lieu
     if location != "Tous les lieux":
         data = data.loc[data["Lieu"] == location]
@@ -21,7 +21,7 @@ def cramer_matrix(data: pd.DataFrame, with_cf: bool, location: str) -> None:
         data = data.loc[data["cf"] != "cf."]
 
     # dossier d'export
-    directory = "export/cramer"
+    directory = "stats/static/cramer"
     if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -45,15 +45,14 @@ def cramer_matrix(data: pd.DataFrame, with_cf: bool, location: str) -> None:
     matrix = matrix.astype(float)
     print(matrix)
 
-    writer = pd.ExcelWriter(directory + '/donnees.xlsx', engine='xlsxwriter')
+    writer = pd.ExcelWriter(directory + '/cramer.xlsx', engine='xlsxwriter')
     matrix.to_excel(writer, sheet_name='Matrice V de Cramer')
     writer.save()
 
     sns.heatmap(matrix, annot=matrix, vmin=0, vmax=1,
                 cbar_kws={'label': 'Dépendance entre les variables qualitatives (0: faible, 1: élevée)'})
     plt.title("Matrice V de Cramer (variables qualitatives)", fontsize=16)
-    plt.savefig(directory + "/matrice_cramer.png", bbox_inches='tight')
-    plt.show(block=False)
+    plt.savefig(directory + "/cramer.png", bbox_inches='tight')
 
 
 def cramer(data: pd.DataFrame, variable1: str, variable2: str) -> float:

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Cramer</h3>
+        {% load static %}
+        <div>
+                <img src="{% static 'cramer/cramer.png' %}" alt="Graphe en tuyaux d'orgue">
+        </div>
+        <div>
+                <a href="{% static 'cramer/cramer.xlsx' %}">Télécharger le fichier de données</a>
+        </div>
+</div>
+{% endblock content %}

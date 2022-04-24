@@ -26,4 +26,5 @@ urlpatterns = [
     path('home/', stats.views.home, name='home'),
     path('export/', stats.views.export, name='export'),
     path('distribution/', stats.views.distribution, name='distribution'),
+    path('cramer/', stats.views.cramer, name='cramer'),
 ]
