@@ -1,5 +1,13 @@
+from datetime import datetime
+import mimetypes
+import os
+
 import pandas as pd
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from stats.functions.anova_function import anova_function
@@ -19,6 +27,9 @@ def home(request):
 def export(request):
     if request.method == 'POST':
         file = request.FILES['original_file']
+        path = default_storage.save("files/import/liste_originale" + str(datetime.date(datetime.now())) + ".xls",
+                                    ContentFile(file.read()))
+        os.path.join(settings.MEDIA_ROOT, path)
         export_function(file)
         return redirect('home')
     return render(request, 'stats/export.html')
@@ -137,3 +148,14 @@ def nb_species_evolution(request):
     else:
         locations = data["Lieu"].dropna().unique()
         return render(request, 'stats/nb_species_evolution.html', {"locations": locations})
+
+
+@login_required
+def download_liste_modifiee(request):
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    filepath = base_dir + '/files/export/liste_modifiee.xlsx'
+    path = open(filepath, 'rb')
+    mime_type, _ = mimetypes.guess_type(filepath)
+    response = HttpResponse(path, content_type=mime_type)
+    response['Content-Disposition'] = "attachment; filename=liste_modifiee.xlsx"
+    return response

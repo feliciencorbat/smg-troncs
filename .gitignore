@@ -1,9 +1,8 @@
 /venv/
-/venv2/
 /.idea/
-/export/
 /tests/liste_originale.xls
-/tests/export/
-/files/export/liste_modifiee.xlsx
+/tests/files/
+/tests/stats/
 /stats/static/
 db.sqlite3
+/files/

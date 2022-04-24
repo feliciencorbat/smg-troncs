@@ -30,4 +30,5 @@ urlpatterns = [
     path('chi2/', stats.views.chi2, name='chi2'),
     path('anova/', stats.views.anova, name='anova'),
     path('nb_species_evolution/', stats.views.nb_species_evolution, name='nb_species_evolution'),
+    path('download_liste_modifiee/', stats.views.download_liste_modifiee, name='download_liste_modifiee'),
 ]
