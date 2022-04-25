@@ -18,9 +18,9 @@ from django.urls import path
 import stats.views
 
 urlpatterns = [
-    path('', authentication.views.login_page, name='login'),
+    path('login', authentication.views.login_page, name='login'),
     path('logout/', authentication.views.logout_user, name='logout'),
-    path('home/', stats.views.home, name='home'),
+    path('', stats.views.home, name='home'),
     path('observations/', stats.views.observations, name='observations'),
     path('species/', stats.views.species, name='species'),
     path('export/', stats.views.export, name='export'),
