@@ -4,6 +4,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 WORKDIR /apps/troncs
 COPY requirements.in /apps/troncs/
+RUN pip install pip-tools
 RUN pip-compile --upgrade
 RUN pip install -r requirements.txt
 COPY . /apps/troncs/
