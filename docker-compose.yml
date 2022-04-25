@@ -2,7 +2,7 @@ version: '2'
 services:
   troncs:
     build: .
-    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; gunicorn --bind 0.0.0.0:8000 config.wsgi'
+    command: python manage.py runserver 0.0.0.0:8000
     container_name: troncs
     volumes:
       - .:/apps/troncs
