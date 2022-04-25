@@ -1,5 +1,6 @@
+version: '2'
 services:
-  web:
+  troncs:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     container_name: troncs
@@ -10,15 +11,18 @@ services:
       - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.traefik.entrypoints=http
-      - traefik.http.routers.traefik.rule=Host("troncs.champis.net")
-      - traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https
-      - traefik.http.routers.traefik.middlewares=traefik-https-redirect
-      - traefik.http.routers.traefik-secure.entrypoints=https
-      - traefik.http.routers.traefik-secure.rule=Host("troncs.champis.net")
-      - traefik.http.routers.traefik-secure.tls=true
-      - traefik.http.routers.traefik-secure.tls.certresolver=http
+      - traefik.http.routers.troncs.entrypoints=http
+      - traefik.http.routers.troncs.rule=Host("troncs.champis.net")
+      - traefik.http.middlewares.troncs-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.troncs.middlewares=troncs-https-redirect
+      - traefik.http.routers.troncs-secure.entrypoints=https
+      - traefik.http.routers.troncs-secure.rule=Host("troncs.champis.net")
+      - traefik.http.routers.troncs-secure.tls=true
+      - traefik.http.routers.troncs-secure.tls.certresolver=http
+      - traefik.http.routers.troncs-secure.service=troncs
+      - traefik.http.services.troncs.loadbalancer.server.port=9000
       - traefik.docker.network=proxy
+
 networks:
   proxy:
     external: true
