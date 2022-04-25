@@ -22,7 +22,6 @@ services:
       - traefik.http.routers.troncs-secure.tls=true
       - traefik.http.routers.troncs-secure.tls.certresolver=http
       - traefik.http.routers.troncs-secure.service=troncs
-      - traefik.http.services.troncs.loadbalancer.server.port=9000
       - traefik.docker.network=proxy
 
 networks:
