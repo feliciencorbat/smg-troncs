@@ -30,6 +30,8 @@ filelock==3.6.0
     # via virtualenv
 fonttools==4.33.2
     # via matplotlib
+gunicorn==20.1.0
+    # via -r requirements.in
 idna==3.3
     # via requests
 joblib==1.1.0
