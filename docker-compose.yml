@@ -4,6 +4,9 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/apps/troncs
+    restart: unless-stopped
+    networks:
+      - proxy
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik.entrypoints=http
