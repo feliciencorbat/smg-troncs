@@ -24,6 +24,8 @@ django==4.0.4
     #   crispy-bootstrap5
 django-crispy-forms==1.14.0
     # via crispy-bootstrap5
+django-environ==0.8.1
+    # via -r requirements.in
 et-xmlfile==1.1.0
     # via openpyxl
 filelock==3.6.0
