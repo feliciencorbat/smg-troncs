@@ -2,68 +2,7 @@
 {% block content %}
 <div class="container">
     <h3 class="mt-5">Accueil</h3>
-    <div class="row mt-2">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Mettre à jour les données</h5>
-                    <p class="card-text">Permet de charger les nouvelles données à partir du fichier excel original.</p>
-                    <a class="btn btn-primary" href="{% url 'download_liste_modifiee' %}">Télécharger liste modifiée</a>
-                    <a class="btn btn-primary" href="{% url 'export' %}">Mettre à jour</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Distribution</h5>
-                    <p class="card-text">Permet d'afficher un graphe de distribution pour une variable qualitative.</p>
-                    <a class="btn btn-primary" href="{% url 'distribution' %}">Distribution</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Cramer</h5>
-                    <p class="card-text"></p>
-                    <a class="btn btn-primary" href="{% url 'cramer' %}">Cramer</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Chi2</h5>
-                    <p class="card-text"></p>
-                    <a class="btn btn-primary" href="{% url 'chi2' %}">Chi2</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Anova</h5>
-                    <p class="card-text"></p>
-                    <a class="btn btn-primary" href="{% url 'anova' %}">Anova</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Evolution espèces</h5>
-                    <p class="card-text"></p>
-                    <a class="btn btn-primary" href="{% url 'nb_species_evolution' %}">Evolution espèces</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mt-2">
+    <div class="row mt-3">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
