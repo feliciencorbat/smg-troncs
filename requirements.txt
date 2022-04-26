@@ -30,7 +30,7 @@ et-xmlfile==1.1.0
     # via openpyxl
 filelock==3.6.0
     # via virtualenv
-fonttools==4.33.2
+fonttools==4.33.3
     # via matplotlib
 gunicorn==20.1.0
     # via -r requirements.in
