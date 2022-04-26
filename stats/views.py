@@ -198,17 +198,6 @@ def nb_species_evolution(request):
 
 
 @login_required
-def download_liste_modifiee(request):
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    filepath = base_dir + '/files/export/liste_modifiee.xlsx'
-    path = open(filepath, 'rb')
-    mime_type, _ = mimetypes.guess_type(filepath)
-    response = HttpResponse(path, content_type=mime_type)
-    response['Content-Disposition'] = "attachment; filename=liste_modifiee.xlsx"
-    return response
-
-
-@login_required
 def file(request, folder, filename, extension):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     filepath = base_dir + '/files/' + folder + "/" + filename + "." + extension
