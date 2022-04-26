@@ -3,7 +3,6 @@
 /tests/liste_originale.xls
 /tests/files/
 /tests/stats/
-/stats/static/
 db.sqlite3
 /files/
 /website/.env
