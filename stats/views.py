@@ -19,14 +19,14 @@ from stats.functions.nb_species_evolution_function import nb_species_evolution_f
 
 @login_required
 def home(request):
-    errors = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Erreurs")
-    errors = errors.replace({np.nan: None})
-    errors = errors.to_numpy()
+    home_errors = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Erreurs")
+    home_errors = home_errors.replace({np.nan: None})
+    home_errors = home_errors.to_numpy()
     stats = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
     nb_obs = stats.shape[0]
-    species = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces")
-    nb_species = species.shape[0]
-    return render(request, 'stats/home.html', {"nb_obs": nb_obs, "nb_species": nb_species, "errors": errors})
+    home_species = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces")
+    nb_species = home_species.shape[0]
+    return render(request, 'stats/home.html', {"nb_obs": nb_obs, "nb_species": nb_species, "errors": home_errors})
 
 
 @login_required
@@ -74,10 +74,10 @@ def errors(request):
 @login_required
 def export(request):
     if request.method == 'POST':
-        file = request.FILES['original_file']
-        default_storage.save("files/import/liste_originale" + str(datetime.date(datetime.now())) + ".xls",
-                             ContentFile(file.read()))
-        export_function(file)
+        original_file = request.FILES['original_file']
+        default_storage.save("files/import/liste_originale_" + str(datetime.date(datetime.now())) + ".xls",
+                             ContentFile(original_file.read()))
+        export_function(original_file)
         return redirect('home')
     return render(request, 'stats/export.html')
 
