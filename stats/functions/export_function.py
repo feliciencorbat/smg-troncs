@@ -109,6 +109,14 @@ def export_function(file) -> None:
     trunks_species_serie = data[["Tronc", "Espèce"]].groupby("Tronc")["Espèce"].apply(
         lambda x: list(np.unique(x))).to_frame()
     trunks_species = pd.DataFrame({'Tronc': trunks_species_serie.index, 'Espèces': trunks_species_serie["Espèce"]})
+    trunks_species.index.name = None
+    trunks_species["Tronc_int"] = trunks_species["Tronc"]
+    trunks_species["Tronc_int"] = trunks_species["Tronc_int"].str.replace("G", "", regex=False)
+    trunks_species["Tronc_int"] = trunks_species["Tronc_int"].str.replace("D", "", regex=False)
+    trunks_species["Tronc_int"] = trunks_species["Tronc_int"].str.replace("_2", "", regex=False)
+    trunks_species["Tronc_int"] = pd.to_numeric(trunks_species["Tronc_int"], errors='coerce')
+    trunks_species = trunks_species.sort_values('Tronc_int')
+    trunks_species = trunks_species[["Tronc", "Espèces"]]
 
     # Tester si le nombre d'observations est toujours le même
     nb_obs_errors = test_nb_obs(data, nb_obs)
