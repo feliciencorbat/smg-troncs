@@ -64,6 +64,14 @@ def trunk_species(request):
 
 
 @login_required
+def errors(request):
+    errors_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Erreurs")
+    errors_list = errors_list.replace({np.nan: None})
+    errors_list = errors_list.to_numpy()
+    return render(request, 'stats/errors.html', {"errors_list": errors_list})
+
+
+@login_required
 def export(request):
     if request.method == 'POST':
         file = request.FILES['original_file']

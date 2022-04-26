@@ -25,6 +25,7 @@ urlpatterns = [
     path('species/', stats.views.species, name='species'),
     path('trunks/', stats.views.trunks, name='trunks'),
     path('trunk_species/', stats.views.trunk_species, name='trunk_species'),
+    path('errors/', stats.views.errors, name='errors'),
     path('export/', stats.views.export, name='export'),
     path('distribution/', stats.views.distribution, name='distribution'),
     path('cramer/', stats.views.cramer, name='cramer'),
