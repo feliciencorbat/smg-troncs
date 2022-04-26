@@ -26,7 +26,7 @@ def distribution_function(data: pd.DataFrame, variable: str, title: str, limit: 
         data = data[variable].value_counts(normalize=False)[:limit]
 
     # dossier files/distribution
-    directory = "stats/static/distribution"
+    directory = "files/distribution"
     if not os.path.exists(directory):
         os.makedirs(directory)
 

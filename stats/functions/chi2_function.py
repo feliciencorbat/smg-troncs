@@ -29,7 +29,7 @@ def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str
     print("\nTest Chi-2 pour les variables " + contingency.index.name + " et " + contingency.columns.name + "\n")
 
     # dossier d'export
-    directory = "stats/static/chi2"
+    directory = "files/chi2"
     if not os.path.exists(directory):
         os.makedirs(directory)
 

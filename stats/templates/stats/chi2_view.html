@@ -4,13 +4,13 @@
         <h3>Chi-2</h3>
         {% load static %}
         <div>
-                <img src="{% static 'chi2/dependance_contribution_heatmap.svg' %}" alt="Heatmap">
+                <img src="{% url 'file' folder='chi2' filename='dependance_contribution_heatmap' extension='svg' %}" alt="Heatmap">
         </div>
         <div>
-                <img src="{% static 'chi2/contingence_bar.svg' %}" alt="Graphe en barres">
+                <img src="{% url 'file' folder='chi2' filename='contingence_bar' extension='svg' %}" alt="Graphe en barres">
         </div>
         <div>
-                <a href="{% static 'chi2/chi2.xlsx' %}">Télécharger le fichier de données</a>
+                <a href="{% url 'file' folder='chi2' filename='chi2' extension='xlsx' %}">Télécharger le fichier de données</a>
         </div>
 </div>
 {% endblock content %}

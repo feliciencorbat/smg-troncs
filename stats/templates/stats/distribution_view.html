@@ -4,13 +4,13 @@
         <h3>Distribution</h3>
         {% load static %}
         <div>
-                <img src="{% static 'distribution/bars.svg' %}" alt="Graphe en tuyaux d'orgue">
+                <img src="{% url 'file' folder='distribution' filename='bars' extension='svg' %}" alt="Graphe en tuyaux d'orgue">
         </div>
         <div>
-                <img src="{% static 'distribution/pie.svg' %}" alt="Graphe en camembert">
+                <img src="{% url 'file' folder='distribution' filename='pie' extension='svg' %}" alt="Graphe en camembert">
         </div>
         <div>
-                <a href="{% static 'distribution/distribution.xlsx' %}">Télécharger le fichier de données</a>
+                <a href="{% url 'file' folder='distribution' filename='distribution' extension='xlsx' %}">Télécharger le fichier de données</a>
         </div>
 </div>
 {% endblock content %}

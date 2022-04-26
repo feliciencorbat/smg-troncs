@@ -4,22 +4,22 @@
         <h3>Evolution du nombre d'espèces</h3>
         {% load static %}
         <div>
-                <img src="{% static 'nb_species_evolution/nbre_especes_par_mois.svg' %}">
+                <img src="{% url 'file' folder='nb_species_evolution' filename='nbre_especes_par_mois' extension='svg' %}">
         </div>
         <div>
-                <img src="{% static 'nb_species_evolution/especes_cumulees_par_mois.svg' %}">
+                <img src="{% url 'file' folder='nb_species_evolution' filename='especes_cumulees_par_mois' extension='svg' %}">
         </div>
         <div>
-                <img src="{% static 'nb_species_evolution/especes_cumulees_par_mois_groupe_troncs.svg' %}">
+                <img src="{% url 'file' folder='nb_species_evolution' filename='especes_cumulees_par_mois_groupe_troncs' extension='svg' %}">
         </div>
         <div>
-                <img src="{% static 'nb_species_evolution/especes_cumulees_par_mois_lr.svg' %}">
+                <img src="{% url 'file' folder='nb_species_evolution' filename='especes_cumulees_par_mois_lr' extension='svg' %}">
         </div>
         <div>
-                <img src="{% static 'nb_species_evolution/especes_cumulees_par_mois_lr_detaillee.svg' %}">
+                <img src="{% url 'file' folder='nb_species_evolution' filename='especes_cumulees_par_mois_lr_detaillee' extension='svg' %}">
         </div>
         <div>
-                <a href="{% static 'nb_species_evolution/nb_species_evolution.xlsx' %}">Télécharger le fichier de données</a>
+                <a href="{% url 'file' folder='nb_species_evolution' filename='nb_species_evolution' extension='xlsx' %}">Télécharger le fichier de données</a>
         </div>
 </div>
 {% endblock content %}

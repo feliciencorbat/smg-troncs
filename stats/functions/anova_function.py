@@ -26,7 +26,7 @@ def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: st
     data = data.dropna()
 
     # dossier d'export
-    directory = "stats/static/anova"
+    directory = "files/anova"
     if not os.path.exists(directory):
         os.makedirs(directory)
 

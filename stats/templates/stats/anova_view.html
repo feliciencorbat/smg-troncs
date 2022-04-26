@@ -2,12 +2,11 @@
 {% block content %}
 <div class="container mt-5">
         <h3>Anova</h3>
-        {% load static %}
         <div>
-                <img src="{% static 'anova/boite_moustaches.svg' %}" alt="Graphe boîte à moustaches">
+                <img src="{% url 'file' folder='anova' filename='boite_moustaches' extension='svg' %}" alt="Graphe boîte à moustaches">
         </div>
         <div>
-                <a href="{% static 'anova/anova.xlsx' %}">Télécharger le fichier de données</a>
+                <a href="{% url 'file' folder='anova' filename='anova' extension='xlsx' %}">Télécharger le fichier de données</a>
         </div>
 </div>
 {% endblock content %}

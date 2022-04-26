@@ -20,7 +20,7 @@ def cramer_function(data: pd.DataFrame, with_cf: bool, location: str) -> None:
         data = data.loc[data["cf"] != "cf."]
 
     # dossier d'export
-    directory = "stats/static/cramer"
+    directory = "files/cramer"
     if not os.path.exists(directory):
         os.makedirs(directory)
 

@@ -13,7 +13,7 @@ Evolution du nombre d'espèces avec le temps
 
 def nb_species_evolution_function(data: pd.DataFrame, with_cf: bool, location: str) -> None:
     # dossier d'export
-    directory = "stats/static/nb_species_evolution"
+    directory = "files/nb_species_evolution"
     if not os.path.exists(directory):
         os.makedirs(directory)
 
