@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Archives des fichiers originaux</h3>
+        <table class="table table-striped">
+                <thead>
+                <tr>
+                        <th scope="col">Nom</th>
+                        <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for file in files_list %}
+                <tr>
+                        <td>{{ file.0 }}</td>
+                        <td><a href="{% url 'file' folder='import' filename=file.0 extension=file.1 %}">Télécharger</a></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+</div>
+{% endblock content %}
