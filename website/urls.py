@@ -23,6 +23,7 @@ urlpatterns = [
     path('', stats.views.home, name='home'),
     path('observations/', stats.views.observations, name='observations'),
     path('species/', stats.views.species, name='species'),
+    path('trunk_species/', stats.views.trunk_species, name='trunk_species'),
     path('export/', stats.views.export, name='export'),
     path('distribution/', stats.views.distribution, name='distribution'),
     path('cramer/', stats.views.cramer, name='cramer'),

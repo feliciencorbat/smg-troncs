@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Espèces par tronc</h3>
+        <table class="table table-striped">
+                <thead>
+                <tr>
+                        <th scope="col">Tronc</th>
+                        <th scope="col">Espèces</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for trunk_species in trunk_species_list %}
+                <tr>
+                        <td>{{ trunk_species.0 }}</td>
+                        <td>{{ trunk_species.1 }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+</div>
+{% endblock content %}

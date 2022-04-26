@@ -46,6 +46,14 @@ def species(request):
 
 
 @login_required
+def trunk_species(request):
+    trunk_species_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces par tronc")
+    trunk_species_list = trunk_species_list.replace({np.nan: None})
+    trunk_species_list = trunk_species_list.to_numpy()
+    return render(request, 'stats/trunk_species.html', {"trunk_species_list": trunk_species_list})
+
+
+@login_required
 def export(request):
     if request.method == 'POST':
         file = request.FILES['original_file']
