@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Troncs</h3>
+        <table class="table table-striped">
+                <thead>
+                <tr>
+                        <th scope="col">Identifiant</th>
+                        <th scope="col">Espèce</th>
+                        <th scope="col">Lieu</th>
+                        <th scope="col">Groupe troncs</th>
+                        <th scope="col">Date de coupe</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for trunk in trunks_list %}
+                <tr>
+                        <td>{{ trunk.0 }}</td>
+                        <td>{{ trunk.1 }}</td>
+                        <td>{{ trunk.8 }}</td>
+
+                        {% if trunk.9 != None %}
+                        <td>{{ trunk.9 }}</td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+
+                        {% if trunk.10 != None %}
+                        <td>{{ trunk.10|date:'d F Y' }}</td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+</div>
+{% endblock content %}

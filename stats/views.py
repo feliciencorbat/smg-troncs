@@ -46,6 +46,14 @@ def species(request):
 
 
 @login_required
+def trunks(request):
+    trunks_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Troncs")
+    trunks_list = trunks_list.replace({np.nan: None})
+    trunks_list = trunks_list.to_numpy()
+    return render(request, 'stats/trunks.html', {"trunks_list": trunks_list})
+
+
+@login_required
 def trunk_species(request):
     trunk_species_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces par tronc")
     trunk_species_list["Espèces"] = trunk_species_list["Espèces"].str.replace("'", "", regex=False)

@@ -143,6 +143,12 @@ def export_function(file) -> None:
         col_idx = species.columns.get_loc('SwissFungi Lien')
         writer.sheets['Espèces'].set_column(col_idx, col_idx, 15)
 
+    trunks.to_excel(writer, sheet_name='Troncs', index=False)
+    for column in trunks:
+        column_length = max(trunks[column].astype(str).map(len).max(), len(column))
+        col_idx = trunks.columns.get_loc(column)
+        writer.sheets['Troncs'].set_column(col_idx, col_idx, column_length)
+
     trunks_species.to_excel(writer, sheet_name='Espèces par tronc', index=False)
     for column in trunks_species:
         column_length = max(trunks_species[column].astype(str).map(len).max(), len(column))
