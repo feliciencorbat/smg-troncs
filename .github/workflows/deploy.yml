@@ -15,4 +15,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        script: cd ${{ secrets.PROJECT_PATH }} && git pull origin master && docker-compose -f docker-compose.prod.yml up -d --build
+        script: cd ${{ secrets.PROJECT_PATH }} && sudo git pull origin master && sudo docker-compose -f docker-compose.prod.yml up -d --build
