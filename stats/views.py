@@ -48,28 +48,6 @@ def observations(request):
     except:
         return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
 
-
-@login_required
-def last_observations(request):
-    try:
-        observations_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
-        last_date = max(observations_list["Date"])
-        observations_list = observations_list[observations_list['Date'] == last_date]
-        observations_list = observations_list[["Tronc", "Espèce", "Espèce du tronc"]].groupby(["Tronc", "Espèce du tronc"])["Espèce"].apply(
-            lambda x: list(np.unique(x)))
-        observations_list = pd.DataFrame({'Tronc': observations_list.index.get_level_values(0), 'Espèce du tronc': observations_list.index.get_level_values(1), 'Espèces': observations_list})
-        observations_list["Tronc_int"] = observations_list["Tronc"]
-        observations_list["Tronc_int"] = observations_list["Tronc_int"].str.replace("G", "", regex=False)
-        observations_list["Tronc_int"] = observations_list["Tronc_int"].str.replace("D", "", regex=False)
-        observations_list["Tronc_int"] = observations_list["Tronc_int"].str.replace("_2", "", regex=False)
-        observations_list["Tronc_int"] = pd.to_numeric(observations_list["Tronc_int"], errors='coerce')
-        observations_list = observations_list.sort_values('Tronc_int')
-        observations_list = observations_list.to_numpy()
-        return render(request, 'stats/last_observations.html', {"date": last_date, "observations_list": observations_list})
-    except:
-        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
-
-
 @login_required
 def species(request):
     try:
@@ -93,12 +71,18 @@ def trunks(request):
 
 
 @login_required
-def trunk_species(request):
+def trunk_species(request, date):
     try:
         observations_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+
+        if date == "last":
+            last_date = max(observations_list["Date"])
+            observations_list = observations_list[observations_list['Date'] == last_date]
+        elif date != "all":
+            observations_list = observations_list[observations_list['Date'] == date]
+
         observations_list = observations_list[["Tronc", "Espèce", "Espèce du tronc"]].groupby(["Tronc", "Espèce du tronc"])["Espèce"].apply(
             lambda x: list(np.unique(x)))
-        print(observations_list)
         observations_list = pd.DataFrame({'Tronc': observations_list.index.get_level_values(0),
                                           'Espèce du tronc': observations_list.index.get_level_values(1),
                                           'Espèces': observations_list})
