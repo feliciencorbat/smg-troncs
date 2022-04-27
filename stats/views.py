@@ -75,11 +75,17 @@ def trunk_species(request, date):
     try:
         observations_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
 
+        title = "Dernières observations du "
         if date == "last":
             last_date = max(observations_list["Date"])
             observations_list = observations_list[observations_list['Date'] == last_date]
+
         elif date != "all":
+            last_date = ""
             observations_list = observations_list[observations_list['Date'] == date]
+        else:
+            last_date = ""
+            title = "Espèces par tronc"
 
         observations_list = observations_list[["Tronc", "Espèce", "Espèce du tronc"]].groupby(["Tronc", "Espèce du tronc"])["Espèce"].apply(
             lambda x: list(np.unique(x)))
@@ -93,7 +99,7 @@ def trunk_species(request, date):
         observations_list["Tronc_int"] = pd.to_numeric(observations_list["Tronc_int"], errors='coerce')
         observations_list = observations_list.sort_values('Tronc_int')
         observations_list = observations_list.to_numpy()
-        return render(request, 'stats/trunk_species.html', {"observations_list": observations_list})
+        return render(request, 'stats/trunk_species.html', {"title": title, "date": last_date, "observations_list": observations_list})
     except:
         return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
 
