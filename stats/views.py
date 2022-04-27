@@ -50,6 +50,29 @@ def observations(request):
 
 
 @login_required
+def last_observations(request):
+    try:
+        observations_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+        last_date = max(observations_list["Date"])
+        observations_list = observations_list[observations_list['Date'] == last_date]
+        observations_list = observations_list[["Tronc", "Espèce"]].groupby("Tronc")["Espèce"].apply(
+            lambda x: list(np.unique(x))).to_frame()
+        observations_list = pd.DataFrame({'Tronc': observations_list.index, 'Espèces': observations_list["Espèce"]})
+        observations_list.index.name = None
+        observations_list["Tronc_int"] = observations_list["Tronc"]
+        observations_list["Tronc_int"] = observations_list["Tronc_int"].str.replace("G", "", regex=False)
+        observations_list["Tronc_int"] = observations_list["Tronc_int"].str.replace("D", "", regex=False)
+        observations_list["Tronc_int"] = observations_list["Tronc_int"].str.replace("_2", "", regex=False)
+        observations_list["Tronc_int"] = pd.to_numeric(observations_list["Tronc_int"], errors='coerce')
+        observations_list = observations_list.sort_values('Tronc_int')
+        observations_list = observations_list[["Espèces", "Tronc"]]
+        observations_list = observations_list.to_numpy()
+        return render(request, 'stats/last_observations.html', {"date": last_date, "observations_list": observations_list})
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
+
+
+@login_required
 def species(request):
     try:
         species_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces")
@@ -75,9 +98,6 @@ def trunks(request):
 def trunk_species(request):
     try:
         trunk_species_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces par tronc")
-        trunk_species_list["Espèces"] = trunk_species_list["Espèces"].str.replace("'", "", regex=False)
-        trunk_species_list["Espèces"] = trunk_species_list["Espèces"].str.replace("[", "", regex=False)
-        trunk_species_list["Espèces"] = trunk_species_list["Espèces"].str.replace("]", "", regex=False)
         trunk_species_list = trunk_species_list.to_numpy()
         return render(request, 'stats/trunk_species.html', {"trunk_species_list": trunk_species_list})
     except:

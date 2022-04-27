@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Observations du {{ date|date:'d F Y' }}</h3>
+        <table class="table table-striped">
+                <thead>
+                <tr>
+                        <th scope="col">Tronc</th>
+                        <th scope="col">Espèces</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for observation in observations_list %}
+                <tr>
+                        <td>{{ observation.1 }}</td>
+                        <td><i>{{ observation.0 }}</i></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+</table>
+</div>
+{% endblock content %}
