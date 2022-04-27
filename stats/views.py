@@ -75,14 +75,10 @@ def trunk_species(request, date):
     try:
         observations_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
 
-        title = "Dernières observations du "
         if date == "last":
             last_date = max(observations_list["Date"])
             observations_list = observations_list[observations_list['Date'] == last_date]
-
-        elif date != "all":
-            last_date = ""
-            observations_list = observations_list[observations_list['Date'] == date]
+            title = "Dernières observations du "
         else:
             last_date = ""
             title = "Espèces par tronc"
