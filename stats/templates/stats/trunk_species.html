@@ -10,10 +10,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for trunk_species in trunk_species_list %}
+                {% for observation in observations_list %}
                 <tr>
-                        <td>{{ trunk_species.0 }}</td>
-                        <td>{{ trunk_species.1 }}</td>
+                        <td>{{ observation.0 }}</td>
+                        <td>{{ observation.1 }}</td>
+                        <td><i>
+                             {% for species in observation.2 %}
+                                {{ species }}<br/>
+                             {% endfor %}
+                        </i></td>
                 </tr>
                 {% endfor %}
                 </tbody>
