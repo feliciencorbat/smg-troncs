@@ -19,56 +19,74 @@ from stats.functions.nb_species_evolution_function import nb_species_evolution_f
 
 @login_required
 def home(request):
-    home_errors = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Erreurs")
-    home_errors = home_errors.replace({np.nan: None})
-    home_errors = home_errors.to_numpy()
-    stats = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
-    nb_obs = stats.shape[0]
-    home_species = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces")
-    nb_species = home_species.shape[0]
-    return render(request, 'stats/home.html', {"nb_obs": nb_obs, "nb_species": nb_species, "errors": home_errors})
+    try:
+        home_errors = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Erreurs")
+        home_errors = home_errors.replace({np.nan: None})
+        home_errors = home_errors.to_numpy()
+        stats = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+        nb_obs = stats.shape[0]
+        home_species = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces")
+        nb_species = home_species.shape[0]
+        return render(request, 'stats/home.html', {"nb_obs": nb_obs, "nb_species": nb_species, "errors": home_errors})
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
 
 
 @login_required
 def observations(request):
-    observations_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
-    observations_list = observations_list.replace({np.nan: None})
-    observations_list = observations_list.to_numpy()
-    return render(request, 'stats/observations.html', {"observations_list": observations_list})
+    try:
+        observations_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+        observations_list = observations_list.replace({np.nan: None})
+        observations_list = observations_list.to_numpy()
+        return render(request, 'stats/observations.html', {"observations_list": observations_list})
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
 
 
 @login_required
 def species(request):
-    species_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces")
-    species_list = species_list.replace({np.nan: None})
-    species_list = species_list.to_numpy()
-    return render(request, 'stats/species.html', {"species_list": species_list})
+    try:
+        species_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces")
+        species_list = species_list.replace({np.nan: None})
+        species_list = species_list.to_numpy()
+        return render(request, 'stats/species.html', {"species_list": species_list})
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
 
 
 @login_required
 def trunks(request):
-    trunks_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Troncs")
-    trunks_list = trunks_list.replace({np.nan: None})
-    trunks_list = trunks_list.to_numpy()
-    return render(request, 'stats/trunks.html', {"trunks_list": trunks_list})
+    try:
+        trunks_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Troncs")
+        trunks_list = trunks_list.replace({np.nan: None})
+        trunks_list = trunks_list.to_numpy()
+        return render(request, 'stats/trunks.html', {"trunks_list": trunks_list})
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
 
 
 @login_required
 def trunk_species(request):
-    trunk_species_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces par tronc")
-    trunk_species_list["Espèces"] = trunk_species_list["Espèces"].str.replace("'", "", regex=False)
-    trunk_species_list["Espèces"] = trunk_species_list["Espèces"].str.replace("[", "", regex=False)
-    trunk_species_list["Espèces"] = trunk_species_list["Espèces"].str.replace("]", "", regex=False)
-    trunk_species_list = trunk_species_list.to_numpy()
-    return render(request, 'stats/trunk_species.html', {"trunk_species_list": trunk_species_list})
+    try:
+        trunk_species_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces par tronc")
+        trunk_species_list["Espèces"] = trunk_species_list["Espèces"].str.replace("'", "", regex=False)
+        trunk_species_list["Espèces"] = trunk_species_list["Espèces"].str.replace("[", "", regex=False)
+        trunk_species_list["Espèces"] = trunk_species_list["Espèces"].str.replace("]", "", regex=False)
+        trunk_species_list = trunk_species_list.to_numpy()
+        return render(request, 'stats/trunk_species.html', {"trunk_species_list": trunk_species_list})
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
 
 
 @login_required
 def errors(request):
-    errors_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Erreurs")
-    errors_list = errors_list.replace({np.nan: None})
-    errors_list = errors_list.to_numpy()
-    return render(request, 'stats/errors.html', {"errors_list": errors_list})
+    try:
+        errors_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Erreurs")
+        errors_list = errors_list.replace({np.nan: None})
+        errors_list = errors_list.to_numpy()
+        return render(request, 'stats/errors.html', {"errors_list": errors_list})
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
 
 
 @login_required
@@ -77,14 +95,22 @@ def export(request):
         original_file = request.FILES['original_file']
         default_storage.save("files/import/liste_originale_" + str(datetime.date(datetime.now())) + ".xls",
                              ContentFile(original_file.read()))
-        export_function(original_file)
-        return redirect('home')
+        try:
+            export_function(original_file)
+            return redirect('home')
+        except:
+            return render(request, 'stats/website_error.html',
+                          {"error_info": "Il y a eu un problème lors de la génération du fichier."})
     return render(request, 'stats/export.html')
 
 
 @login_required
 def distribution(request):
-    data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    try:
+        data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
+
     if request.method == 'POST':
         post_request = request.POST
         location = post_request.get("location")
@@ -107,7 +133,11 @@ def distribution(request):
 
 @login_required
 def cramer(request):
-    data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    try:
+        data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
+
     if request.method == 'POST':
         post_request = request.POST
         location = post_request.get("location")
@@ -126,7 +156,11 @@ def cramer(request):
 
 @login_required
 def chi2(request):
-    data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    try:
+        data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
+
     if request.method == 'POST':
         post_request = request.POST
         location = post_request.get("location")
@@ -155,7 +189,11 @@ def chi2(request):
 
 @login_required
 def anova(request):
-    data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    try:
+        data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
+
     if request.method == 'POST':
         post_request = request.POST
         location = post_request.get("location")
@@ -179,7 +217,11 @@ def anova(request):
 
 @login_required
 def nb_species_evolution(request):
-    data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    try:
+        data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
+
     if request.method == 'POST':
         post_request = request.POST
         location = post_request.get("location")
