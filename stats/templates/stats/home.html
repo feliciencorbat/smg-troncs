@@ -37,5 +37,31 @@
             </div>
         </div>
     </div>
+    <div class="row mt-3">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Espèces à l'orthographe fixée</h5>
+                    <p class="card-text">
+                        {% for species in default_species_writing %}
+                        <i>{{ species }}</i><br/>
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Espèces avec la synonymie GBIF fausse</h5>
+                    <p class="card-text">
+                        {% for species in gbif_synonyms_errors %}
+                            <i>{{ species }}</i><br/>
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}

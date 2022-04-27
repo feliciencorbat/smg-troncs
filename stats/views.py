@@ -9,6 +9,8 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+
+import constants
 from stats.functions.anova_function import anova_function
 from stats.functions.chi2_function import chi2_function
 from stats.functions.cramer_function import cramer_function
@@ -27,7 +29,11 @@ def home(request):
         nb_obs = stats.shape[0]
         home_species = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Espèces")
         nb_species = home_species.shape[0]
-        return render(request, 'stats/home.html', {"nb_obs": nb_obs, "nb_species": nb_species, "errors": home_errors})
+        default_species_writing = constants.Constants.default_species_writing
+        gbif_synonyms_errors = constants.Constants.gbif_synonyms_errors
+        return render(request, 'stats/home.html', {"nb_obs": nb_obs, "nb_species": nb_species, "errors": home_errors,
+                                                   "default_species_writing": default_species_writing,
+                                                   "gbif_synonyms_errors": gbif_synonyms_errors})
     except:
         return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
 
