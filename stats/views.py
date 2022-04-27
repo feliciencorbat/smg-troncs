@@ -55,9 +55,10 @@ def last_observations(request):
         observations_list = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
         last_date = max(observations_list["Date"])
         observations_list = observations_list[observations_list['Date'] == last_date]
-        observations_list = observations_list[["Tronc", "Espèce"]].groupby("Tronc")["Espèce"].apply(
-            lambda x: list(np.unique(x))).to_frame()
-        observations_list = pd.DataFrame({'Tronc': observations_list.index, 'Espèces': observations_list["Espèce"]})
+        observations_list = observations_list[["Tronc", "Espèce", "Espèce du tronc"]].groupby(["Tronc", "Espèce du tronc"])["Espèce"].apply(
+            lambda x: list(np.unique(x)))
+        print(observations_list)
+        observations_list = pd.DataFrame({'Tronc': observations_list.index.get_level_values(0), 'Espèce du tronc': observations_list.index.get_level_values(1), 'Espèces': observations_list})
         observations_list.index.name = None
         observations_list["Tronc_int"] = observations_list["Tronc"]
         observations_list["Tronc_int"] = observations_list["Tronc_int"].str.replace("G", "", regex=False)
@@ -65,7 +66,6 @@ def last_observations(request):
         observations_list["Tronc_int"] = observations_list["Tronc_int"].str.replace("_2", "", regex=False)
         observations_list["Tronc_int"] = pd.to_numeric(observations_list["Tronc_int"], errors='coerce')
         observations_list = observations_list.sort_values('Tronc_int')
-        observations_list = observations_list[["Espèces", "Tronc"]]
         observations_list = observations_list.to_numpy()
         return render(request, 'stats/last_observations.html', {"date": last_date, "observations_list": observations_list})
     except:
