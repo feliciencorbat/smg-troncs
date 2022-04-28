@@ -13,3 +13,26 @@
 ## Site web
 
 https://troncs.champis.net
+
+## Installation en local
+
+- installer docker
+- dans le dossier **website**, ajouter un fichier **.env** avec les variables:
+
+      SECRET_KEY=... (générer avec https://djecrety.ir)
+      DEBUG=True
+
+- lancer la commande:
+
+      docker-compose up -d --build
+
+- dans la console du container troncs, lancer la commande:
+
+      python manage.py migrate
+
+- toujours dans cette console, créer un utilisateur avec la commande:
+
+      python manage.py createsuperuser
+
+- se connecter
+- mettre à jour les données via le menu Données -> Mettre à jour les données
