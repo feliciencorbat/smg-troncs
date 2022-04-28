@@ -34,5 +34,5 @@ https://troncs.champis.net
 
       python manage.py createsuperuser
 
-- se connecter
+- se connecter sur le site en local
 - mettre à jour les données via le menu Données -> Mettre à jour les données
