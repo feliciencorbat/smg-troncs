@@ -2,10 +2,62 @@
 {% block content %}
 <div class="container mt-5">
         <h3>Anova</h3>
-        <div>
+        <h4 class="mt-5">Test de Shapiro-Wilk</h4>
+        <table class="table table-striped">
+                <tbody>
+                {% for shapiro_row in shapiro %}
+                <tr>
+                        {% for shapiro_element in shapiro_row %}
+                        <td>{{ shapiro_element }}</td>
+                        {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+        <h4 class="mt-5">Test de Levene</h4>
+        <table class="table table-striped">
+                <tbody>
+                {% for levene_row in levene %}
+                <tr>
+                        {% for levene_element in levene_row %}
+                        <td>{{ levene_element }}</td>
+                        {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+        <h4 class="mt-5">Test ANOVA one-way</h4>
+        <table class="table table-striped">
+                <tbody>
+                {% for anova_row in anova %}
+                <tr>
+                        {% for anova_element in anova_row %}
+                        <td>{{ anova_element }}</td>
+                        {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+        {% if kruskal|length >= 1 %}
+        <h4 class="mt-5">Test de Kruskal-Wallis (car test Anova avec données non paramétriques)</h4>
+        <table class="table table-striped">
+                <tbody>
+                {% for kruskal_row in kruskal %}
+                <tr>
+                        {% for kruskal_element in kruskal_row %}
+                        <td>{{ kruskal_element }}</td>
+                        {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+        {% endif %}
+        <h4 class="mt-5">Graphe boîte à moustaches</h4>
+        <div class="container row">
                 <a href="{% url 'file' folder='anova' filename='boite_moustaches' extension='svg' %}"><img src="{% url 'file' folder='anova' filename='boite_moustaches' extension='svg' %}" alt="Graphe boîte à moustaches"></a>
         </div>
-        <div>
+        <h4 class="mt-5">Données</h4>
+        <div class="container row">
                 <a href="{% url 'file' folder='anova' filename='anova' extension='xlsx' %}">Télécharger le fichier de données</a>
         </div>
 </div>

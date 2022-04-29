@@ -11,7 +11,7 @@ Fonction ANOVA entre variable qualitative et quantitative
 
 
 def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: str,
-                   with_cf: bool, location: str) -> None:
+                   with_cf: bool, location: str):
     # Filtrer lieu
     if location != "Tous les lieux":
         data = data.loc[data["Lieu"] == location]
@@ -19,8 +19,6 @@ def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: st
     # Si sans cf
     if not with_cf:
         data = data.loc[data["cf"] != "cf."]
-
-    print("\nTest ANOVA pour les variables " + variable1 + " et " + variable2 + "\n")
 
     data = data[[variable1, variable2]]
     data = data.dropna()
@@ -40,9 +38,8 @@ def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: st
     data.to_excel(writer, sheet_name='Données')
 
     # Analyse des données
-    print("Analyse des données")
-    print(rp.summary_cont(data[variable2].groupby(data[variable1])))
-    data_excel = pd.DataFrame(rp.summary_cont(data[variable2].groupby(data[variable1])))
+    analyzed_data = rp.summary_cont(data[variable2].groupby(data[variable1]))
+    data_excel = pd.DataFrame(analyzed_data)
     data_excel.to_excel(writer, sheet_name='Analyse des données')
     mods = data[variable1].unique()
 
@@ -53,63 +50,54 @@ def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: st
     # Validité de l'ANOVA
     anova_validity = True
 
-    # Test de distribution Jarque-Bera
+    # Test de normalité de Shapiro-Wilk
     i = 0
+    shapiro_dataframe = pd.DataFrame([], )
     for arg in args:
-        print("\n\nTest de distribution de Jarque-Bera pour la modalité " + mods[i])
-        statistic_jarque_bera, p_value_jarque_bera = stats.jarque_bera(arg)
-        print("\nP-value de Jarque-Bera est " + str(p_value_jarque_bera))
-
-        i = i + 1
-
-        if p_value_jarque_bera < 0.05:
-            print("\nLa distribution ne suit pas une loi normale"
-                  "\nLe test ANOVA sera donc caduque.")
+        print(arg)
+        statistic_shapiro, p_value_shapiro = stats.shapiro(arg)
+        if p_value_shapiro < 0.05:
+            interpretation = "La modalité ne suit pas une distribution normale."
             anova_validity = False
         else:
-            print("\nLa distribution suit une loi normale.")
+            interpretation = "La modalité suit une distribution normale."
+
+        shapiro_row = pd.DataFrame([[mods[i], statistic_shapiro, p_value_shapiro, interpretation]], columns=['Modalité', 'Statistique', 'P-value', 'Interprétation'] )
+        shapiro_dataframe = pd.concat([shapiro_dataframe, shapiro_row])
+
+        i = i + 1
+    shapiro_dataframe.to_excel(writer, sheet_name='Test Shapiro-Wilk', index=False)
 
     # Test de Levene
-    print("\n\nTest de Levene (homogénéité des variances)")
     statistic_levene, p_value_levene = stats.levene(*args, center="mean")
-    data_excel = pd.DataFrame({"Statistiques": [statistic_levene], "P-value": [p_value_levene]})
-    data_excel.to_excel(writer, sheet_name='Test Levene', index=False)
-    print("\nP-value de Levene est " + str(p_value_levene))
-
     if p_value_levene < 0.05:
-        print("\nLes variances des populations ne sont pas homogènes."
-              "\nLe test ANOVA sera donc caduque.")
+        interpretation = "Les variances des populations ne sont pas homogènes."
         anova_validity = False
     else:
-        print("\nLes variances des populations sont homogènes.")
+        interpretation = "Les variances des populations sont homogènes."
+    levene_dataframe = pd.DataFrame({"Statistiques": [statistic_levene], "P-value": [p_value_levene], "Interprétation": interpretation})
+    levene_dataframe.to_excel(writer, sheet_name='Test Levene', index=False)
 
     # Anova one-way
-    print("\n\nTest ANOVA one-way")
     statistic_anova, p_value_anova = stats.f_oneway(*args)
-    data_excel = pd.DataFrame({"Statistiques": [statistic_anova], "P-value": [p_value_anova]})
-    data_excel.to_excel(writer, sheet_name='Test ANOVA', index=False)
-    print("\nP-value de l'ANOVA est " + str(p_value_anova))
-
     if p_value_anova < 0.05:
-        print("\nDonc il y a bien une différence observée entre les moyennes des modalités.")
+        interpretation = "Il y a une différence entre les moyennes des modalités."
     else:
-        print("\nIl n'y a pas de différence observée entre les moyennes des modalités.")
+        interpretation = "Il n'y a pas de différence entre les moyennes des modalités."
+    anova_dataframe = pd.DataFrame({"Statistiques": [statistic_anova], "P-value": [p_value_anova], "Interprétation": interpretation})
+    anova_dataframe.to_excel(writer, sheet_name='Test ANOVA', index=False)
 
     if anova_validity:
-        print("Les tests de normalité et d'homogénéité des variances rendent le test ANOVA valide.")
+        kruskal_dataframe = pd.DataFrame([], )
     else:
-        print("Les tests de normalité et d'homogénéité des variances rendent le test ANOVA non valide."
-              "\nNous utilisons alors un test non paramétrique.")
-
-        print("\n\nTest de Kruskal-Wallis")
         statistic_kruskal, p_value_kruskal = stats.kruskal(*args)
-        data_excel = pd.DataFrame({"Statistiques": [statistic_kruskal], "P-value": [p_value_kruskal]})
-        data_excel.to_excel(writer, sheet_name='Test Kruskal-Wallis', index=False)
-        print("\nP-value de Kruskal-Wallis est " + str(p_value_kruskal))
-
         if p_value_kruskal < 0.05:
-            print("\nAu moins un échantillon domine stochastiquement un autre échantillon.")
+            interpretation = "Au moins un échantillon domine stochastiquement un autre échantillon."
         else:
-            print("\nIl n'y a pas de différences entre les échantillons.")
+            interpretation = "Il n'y a pas de différences entre les échantillons."
+        kruskal_dataframe = pd.DataFrame({"Statistiques": [statistic_kruskal], "P-value": [p_value_kruskal], "Interprétation": interpretation})
+        kruskal_dataframe.to_excel(writer, sheet_name='Test Kruskal-Wallis', index=False)
 
     writer.save()
+
+    return shapiro_dataframe, levene_dataframe, anova_dataframe, kruskal_dataframe

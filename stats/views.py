@@ -248,8 +248,21 @@ def anova(request):
         else:
             cf = True
 
-        anova_function(data, variable1, variable2, title, cf, location)
-        return render(request, 'stats/anova_view.html')
+        shapiro, levene, anova, kruskal = anova_function(data, variable1, variable2, title, cf, location)
+
+        shapiro = pd.DataFrame(np.vstack([shapiro.columns, shapiro]))
+        shapiro = shapiro.to_numpy()
+
+        levene = pd.DataFrame(np.vstack([levene.columns, levene]))
+        levene = levene.to_numpy()
+
+        anova = pd.DataFrame(np.vstack([anova.columns, anova]))
+        anova = anova.to_numpy()
+
+        kruskal = pd.DataFrame(np.vstack([kruskal.columns, kruskal]))
+        kruskal = kruskal.to_numpy()
+
+        return render(request, 'stats/anova_view.html', {"shapiro": shapiro, "levene": levene, "anova": anova, "kruskal": kruskal})
     else:
         locations = data["Lieu"].dropna().unique()
         variables = data.columns.values
