@@ -38,16 +38,10 @@ def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str
     else:
         contingency = pd.crosstab(data[variable1], data[variable2])
 
-    print("\nTest Chi-2 pour les variables " + contingency.index.name + " et " + contingency.columns.name + "\n")
-
     # dossier d'export
     directory = "files/chi2"
     if not os.path.exists(directory):
         os.makedirs(directory)
-
-    # affichage du tableau de contingence (contingency)
-    print("Tableau de contingence\n")
-    print(contingency)
 
     # création du tableau des effectifs attendus (expected)
     chi2, p_value, deg_freedom, expected = stats.chi2_contingency(contingency)
@@ -60,37 +54,15 @@ def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str
 
     # transformation ndarray en dataframe
     expected = pd.DataFrame(data=expected, index=contingency.index, columns=contingency.columns)
-    print("\nTableau des effectifs attendus")
-    print("Attention: il ne doit pas y avoir d'effectif inférieur à 5...\n")
-    print(expected)
 
     # création du tableau des différences
     differences = contingency - expected
-    print("\nTableau des différences\n")
-    print(differences)
 
     # récupérer la valeur absolue des différences
     absolute = differences / differences.abs()
 
     # création du tableau des contributions à la dépendance (0 = faible, 1 ou -1 = forte)
     dependence_contribution = (((contingency - expected) ** 2 * absolute / expected) / chi2)
-
-    print("\nTableau des contribution à la dépendance\n")
-    print(dependence_contribution)
-
-    # affichage des données chi2, p-value, degré de liberté
-    print("\nP-value: " + str(p_value) + "\n")
-    print("Chi2: " + str(chi2) + "\n")
-    print("Degré de liberté: " + str(deg_freedom) + "\n")
-
-    if p_value < 0.05:
-        print("L'hypothèse H0 qui indique qu'il n'y a pas de dépendance entre la variable " + variable1 +
-              " et la variable " + variable2 + " est rejetée car p-value est inférieure à 0.5. "
-                                               "\nIl y a donc une dépendance entre ces 2 variables.")
-    else:
-        print("L'hypothèse H0 qui indique qu'il n'y a pas de dépendance entre la variable " + variable1 +
-              " et la variable " + variable2 + " est acceptée car p-value est supérieure à 0.5. "
-                                               "\nIl n'y a donc pas de dépendance entre ces 2 variables.")
 
     if expected.min().min() < 5:
         print("\nAttention, il y a dans le tableau des effectifs attendus une ou des valeurs inférieures à 5."
