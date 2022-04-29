@@ -15,16 +15,16 @@
             <div class="mt-5 col-md-6">
                 <label for="variable1" class="form-label">Variable 1 (qualitative)</label>
                 <select name="variable1" id="variable1" class="form-select" aria-label="variable1 select">
-                    {% for variable in variables %}
-                        <option value="{{ variable }}">{{ variable }}</option>
+                    {% for qualitative_variable in qualitative_variables %}
+                        <option value="{{ qualitative_variable }}">{{ qualitative_variable }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="mt-5 col-md-6">
                 <label for="variable2" class="form-label">Variable 2 (quantitative)</label>
                 <select name="variable2" id="variable2" class="form-select" aria-label="variable2 select">
-                    {% for variable in variables %}
-                        <option value="{{ variable }}">{{ variable }}</option>
+                    {% for quantitative_variable in quantitative_variables %}
+                        <option value="{{ quantitative_variable }}">{{ quantitative_variable }}</option>
                     {% endfor %}
                 </select>
             </div>

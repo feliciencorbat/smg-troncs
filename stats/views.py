@@ -149,7 +149,7 @@ def distribution(request):
         return render(request, 'stats/distribution_view.html')
     else:
         locations = data["Lieu"].dropna().unique()
-        variables = data.columns.values
+        variables = get_qualitative_variables()
         return render(request, 'stats/distribution.html', {"locations": locations, "variables": variables})
 
 
@@ -224,7 +224,7 @@ def chi2(request):
         return render(request, 'stats/chi2_view.html', {"p_value": p_value, "chi2": chi2, "deg_freedom": deg_freedom, "contingency": contingency, "expected": expected, "differences": differences, "dependence_contribution": dependence_contribution})
     else:
         locations = data["Lieu"].dropna().unique()
-        variables = data.columns.values
+        variables = get_qualitative_variables()
         return render(request, 'stats/chi2.html', {"locations": locations, "variables": variables})
 
 
@@ -265,8 +265,9 @@ def anova(request):
         return render(request, 'stats/anova_view.html', {"shapiro": shapiro, "levene": levene, "anova": anova, "kruskal": kruskal})
     else:
         locations = data["Lieu"].dropna().unique()
-        variables = data.columns.values
-        return render(request, 'stats/anova.html', {"locations": locations, "variables": variables})
+        qualitative_variables = get_qualitative_variables()
+        quantitative_variables = get_quantitative_variables()
+        return render(request, 'stats/anova.html', {"locations": locations, "qualitative_variables": qualitative_variables, "quantitative_variables": quantitative_variables})
 
 
 @login_required
@@ -310,3 +311,9 @@ def archives_original_files(request):
     files_list = os.listdir(base_dir + "/files/import")
     files_list = [i.split('.') for i in files_list]
     return render(request, 'stats/archives_original_files.html', {"files_list": files_list})
+
+def get_qualitative_variables():
+    return ['Saison', 'Mois', 'Espèce', 'Espèce actuelle', 'Phylum', 'Ordre', 'Liste rouge', 'Menace', 'Tronc', 'Espèce du tronc', "Lieu", "Groupe tronc"]
+
+def get_quantitative_variables():
+     return ['Longueur', 'Diamètre moyen', 'Age du tronc']
