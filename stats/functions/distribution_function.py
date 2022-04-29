@@ -9,7 +9,6 @@ Fonction de distribution d'une variable et création d'un graphe en tuyaux d'org
 
 def distribution_function(data: pd.DataFrame, variable: str, title: str, limit: int, with_cf: bool,
                           location: str) -> None:
-    print("\nDistribution de la variable " + variable + "\n")
 
     # Filtrer lieu
     if location != "Tous les lieux":

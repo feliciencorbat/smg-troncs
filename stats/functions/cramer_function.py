@@ -24,8 +24,6 @@ def cramer_function(data: pd.DataFrame, with_cf: bool, location: str) -> None:
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    print("\nMatrice V de Cramer (variables qualitatives)\n")
-
     data = data[["Saison", "Mois", "Espèce", "Liste rouge", "Menace", "Tronc", "Espèce du tronc", "Groupe troncs"]]
     data = data.dropna()
 
@@ -42,7 +40,6 @@ def cramer_function(data: pd.DataFrame, with_cf: bool, location: str) -> None:
         no_row = no_row + 1
 
     matrix = matrix.astype(float)
-    print(matrix)
 
     writer = pd.ExcelWriter(directory + '/cramer.xlsx', engine='xlsxwriter')
     matrix.to_excel(writer, sheet_name='Matrice V de Cramer')
