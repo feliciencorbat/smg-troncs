@@ -2,7 +2,6 @@
 {% block content %}
 <div class="container mt-5">
         <h3>Evolution du nombre d'espèces</h3>
-        {% load static %}
         <div>
                 <a href="{% url 'file' folder='nb_species_evolution' filename='nbre_especes_par_mois' extension='svg' %}"><img src="{% url 'file' folder='nb_species_evolution' filename='nbre_especes_par_mois' extension='svg' %}"></a>
         </div>

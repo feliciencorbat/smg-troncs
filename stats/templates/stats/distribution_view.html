@@ -2,14 +2,14 @@
 {% block content %}
 <div class="container mt-5">
         <h3>Distribution</h3>
-        {% load static %}
         <div>
                 <a href="{% url 'file' folder='distribution' filename='bars' extension='svg' %}"><img src="{% url 'file' folder='distribution' filename='bars' extension='svg' %}" alt="Graphe en tuyaux d'orgue"></a>
         </div>
         <div>
                 <a href="{% url 'file' folder='distribution' filename='pie' extension='svg' %}"><img src="{% url 'file' folder='distribution' filename='pie' extension='svg' %}" alt="Graphe en camembert"></a>
         </div>
-        <div>
+        <h4 class="mt-5">Données</h4>
+        <div class="container row">
                 <a href="{% url 'file' folder='distribution' filename='distribution' extension='xlsx' %}">Télécharger le fichier de données</a>
         </div>
 </div>
