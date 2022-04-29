@@ -10,7 +10,7 @@ Fonction Chi-2 entre 2 variables qualitatives et création heatmap
 
 
 def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str, species_agg: bool,
-                  with_cf: bool, location: str) -> None:
+                  with_cf: bool, location: str, minimum: int) -> None:
     # Filtrer lieu
     if location != "Tous les lieux":
         data = data.loc[data["Lieu"] == location]
@@ -18,6 +18,17 @@ def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str
     # Si sans cf
     if not with_cf:
         data = data.loc[data["cf"] != "cf."]
+
+    if minimum != 0:
+        contingency2 = pd.crosstab(data[variable1], data[variable2], margins=True)
+        for index, value in contingency2["All"].items():
+            if value < minimum:
+                data = data.loc[data[variable1] != index]
+
+        var2 = contingency2.iloc[-1]
+        for index, value in var2.items():
+            if value < minimum:
+                data = data.loc[data[variable2] != index]
 
     # Si aggrégation par nom binomial
     if species_agg:

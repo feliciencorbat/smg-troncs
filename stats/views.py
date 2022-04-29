@@ -201,7 +201,9 @@ def chi2(request):
         else:
             cf = True
 
-        chi2_function(data, variable1, variable2, title, species_agg, cf, location)
+        minimum = int(post_request.get("minimum"))
+
+        chi2_function(data, variable1, variable2, title, species_agg, cf, location, minimum)
         return render(request, 'stats/chi2_view.html')
     else:
         locations = data["Lieu"].dropna().unique()

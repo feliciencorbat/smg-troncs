@@ -44,6 +44,11 @@
                     Avec cf.
                 </label>
             </div>
+            <div class="mt-5 col-md-6">
+                <label for="minimum" class="form-label">Minimum d'occurences pour les variables</label>
+                <input name="minimum" type="text" class="form-control" id="minimum" value="0">
+            </div>
+
             {% csrf_token %}
             <div class="mt-5">
                 <input type="submit" class="btn btn-primary" name="submit" value="Créer le chi2" />
