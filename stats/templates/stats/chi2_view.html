@@ -2,14 +2,77 @@
 {% block content %}
 <div class="container mt-5">
         <h3>Chi-2</h3>
-        {% load static %}
-        <div>
+        <h4 class="mt-5">Résultats du Chi-2</h4>
+        <div class="container row">
+                <ul class="list-group">
+                        <li class="list-group-item"><strong>P-value</strong>: {{ p_value }}</li>
+                        <li class="list-group-item"><strong>Chi-2</strong>: {{ chi2 }}</li>
+                        <li class="list-group-item"><strong>Degrés de liberté</strong>: {{ deg_freedom }}</li>
+                        {% if p_value < 0.05 %}
+                        <li class="list-group-item"><strong>Comme p-value est inférieure à 0.05, il y a bien un dépendance entre les 2 variables.</strong></li>
+                        {% else %}
+                        <li class="list-group-item"><strong>Comme p-value est supérieure à 0.05, il n'y a pas de dépendance entre les 2 variables.</strong></li>
+                        {% endif %}
+                </ul>
+        </div>
+        <h4 class="mt-5">Tableau de contingence</h4>
+        <table class="table table-striped">
+                <tbody>
+                {% for contingency_row in contingency %}
+                <tr>
+                        {% for contingency_element in contingency_row %}
+                        <td>{{ contingency_element }}</td>
+                        {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+        <h4 class="mt-5">Tableau des valeurs attendues</h4>
+        <table class="table table-striped">
+                <tbody>
+                {% for expected_row in expected %}
+                <tr>
+                        {% for expected_element in expected_row %}
+                        <td>{{ expected_element }}</td>
+                        {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+        <h4 class="mt-5">Tableau des différences</h4>
+        <table class="table table-striped">
+                <tbody>
+                {% for differences_row in differences %}
+                <tr>
+                        {% for differences_element in differences_row %}
+                        <td>{{ differences_element }}</td>
+                        {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+        <h4 class="mt-5">Tableau des contributions à la dépendance</h4>
+        <table class="table table-striped">
+                <tbody>
+                {% for dependence_contribution_row in dependence_contribution %}
+                <tr>
+                        {% for dependence_contribution_element in dependence_contribution_row %}
+                        <td>{{ dependence_contribution_element }}</td>
+                        {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+        <h4 class="mt-5">Graphe heatmap</h4>
+        <div class="container row">
                 <a href="{% url 'file' folder='chi2' filename='dependance_contribution_heatmap' extension='svg' %}"><img src="{% url 'file' folder='chi2' filename='dependance_contribution_heatmap' extension='svg' %}" alt="Heatmap"></a>
         </div>
-        <div>
+        <h4 class="mt-5">Graphe en tuyaux d'orgue</h4>
+        <div class="container row">
                 <a href="{% url 'file' folder='chi2' filename='contingence_bar' extension='svg' %}"><img src="{% url 'file' folder='chi2' filename='contingence_bar' extension='svg' %}" alt="Graphe en barres"></a>
         </div>
-        <div>
+        <h4 class="mt-5">Données</h4>
+        <div class="container row">
                 <a href="{% url 'file' folder='chi2' filename='chi2' extension='xlsx' %}">Télécharger le fichier de données</a>
         </div>
 </div>

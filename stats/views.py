@@ -203,8 +203,25 @@ def chi2(request):
 
         minimum = int(post_request.get("minimum"))
 
-        chi2_function(data, variable1, variable2, title, species_agg, cf, location, minimum)
-        return render(request, 'stats/chi2_view.html')
+        p_value, chi2, deg_freedom, contingency, expected, differences, dependence_contribution = chi2_function(data, variable1, variable2, title, species_agg, cf, location, minimum)
+
+        contingency.reset_index(inplace=True)
+        contingency = pd.DataFrame(np.vstack([contingency.columns, contingency]))
+        contingency = contingency.to_numpy()
+
+        expected.reset_index(inplace=True)
+        expected = pd.DataFrame(np.vstack([expected.columns, expected]))
+        expected = expected.to_numpy()
+
+        differences.reset_index(inplace=True)
+        differences = pd.DataFrame(np.vstack([differences.columns, differences]))
+        differences = differences.to_numpy()
+
+        dependence_contribution.reset_index(inplace=True)
+        dependence_contribution = pd.DataFrame(np.vstack([dependence_contribution.columns, dependence_contribution]))
+        dependence_contribution = dependence_contribution.to_numpy()
+
+        return render(request, 'stats/chi2_view.html', {"p_value": p_value, "chi2": chi2, "deg_freedom": deg_freedom, "contingency": contingency, "expected": expected, "differences": differences, "dependence_contribution": dependence_contribution})
     else:
         locations = data["Lieu"].dropna().unique()
         variables = data.columns.values
