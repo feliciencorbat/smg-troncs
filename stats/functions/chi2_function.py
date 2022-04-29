@@ -19,12 +19,13 @@ def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str
     if not with_cf:
         data = data.loc[data["cf"] != "cf."]
 
-    if minimum != 0:
+    if minimum > 0:
         contingency2 = pd.crosstab(data[variable1], data[variable2], margins=True)
         for index, value in contingency2["All"].items():
             if value < minimum:
                 data = data.loc[data[variable1] != index]
 
+        contingency2 = pd.crosstab(data[variable1], data[variable2], margins=True)
         var2 = contingency2.iloc[-1]
         for index, value in var2.items():
             if value < minimum:
