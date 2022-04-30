@@ -11,7 +11,7 @@ Fonction ANOVA entre variable qualitative et quantitative
 
 
 def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: str,
-                   with_cf: bool, location: str):
+                   with_cf: bool, location: str, minimum: int):
     # Filtrer lieu
     if location != "Tous les lieux":
         data = data.loc[data["Lieu"] == location]
@@ -22,6 +22,16 @@ def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: st
 
     data = data[[variable1, variable2]]
     data = data.dropna()
+
+    # Minimum d'occurences par modalité
+    if minimum < 3:
+        minimum = 3
+
+    variables_size = data.groupby([variable1]).size()
+    print(variables_size)
+    for index, value in variables_size.items():
+        if value < minimum:
+            data = data.loc[data[variable1] != index]
 
     # dossier d'export
     directory = "files/anova"
@@ -54,7 +64,6 @@ def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: st
     i = 0
     shapiro_dataframe = pd.DataFrame([], )
     for arg in args:
-        print(arg)
         statistic_shapiro, p_value_shapiro = stats.shapiro(arg)
         if p_value_shapiro < 0.05:
             interpretation = "La modalité ne suit pas une distribution normale."

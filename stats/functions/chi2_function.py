@@ -19,6 +19,7 @@ def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str
     if not with_cf:
         data = data.loc[data["cf"] != "cf."]
 
+    # Minimum d'occurences par modalité
     if minimum > 0:
         contingency2 = pd.crosstab(data[variable1], data[variable2], margins=True)
         for index, value in contingency2["All"].items():

@@ -248,7 +248,9 @@ def anova(request):
         else:
             cf = True
 
-        shapiro, levene, anova, kruskal = anova_function(data, variable1, variable2, title, cf, location)
+        minimum = int(post_request.get("minimum"))
+
+        shapiro, levene, anova, kruskal = anova_function(data, variable1, variable2, title, cf, location, minimum)
 
         shapiro = pd.DataFrame(np.vstack([shapiro.columns, shapiro]))
         shapiro = shapiro.to_numpy()
