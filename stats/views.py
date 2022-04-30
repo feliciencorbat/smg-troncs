@@ -311,6 +311,7 @@ def file(request, folder, filename, extension):
 def archives_original_files(request):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     files_list = os.listdir(base_dir + "/files/import")
+    files_list.sort(reverse=True)
     files_list = [i.split('.') for i in files_list]
     return render(request, 'stats/archives_original_files.html', {"files_list": files_list})
 
