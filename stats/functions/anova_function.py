@@ -11,7 +11,7 @@ Fonction ANOVA entre variable qualitative et quantitative
 
 
 def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: str,
-                   with_cf: bool, location: str, minimum: int):
+                   with_cf: bool, location: str, minimum: int, user_id: str):
     # Filtrer lieu
     if location != "Tous les lieux":
         data = data.loc[data["Lieu"] == location]
@@ -34,7 +34,7 @@ def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: st
             data = data.loc[data[variable1] != index]
 
     # dossier d'export
-    directory = "files/anova"
+    directory = "files/anova_" + user_id
     if not os.path.exists(directory):
         os.makedirs(directory)
 

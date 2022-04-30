@@ -145,8 +145,8 @@ def distribution(request):
         else:
             cf = True
 
-        distribution_function(data, variable, title, int(limit), cf, location)
-        return render(request, 'stats/distribution_view.html')
+        distribution_function(data, variable, title, int(limit), cf, location, str(request.user.id))
+        return render(request, 'stats/distribution_view.html', {"folder": "distribution_" + str(request.user.id)})
     else:
         locations = data["Lieu"].dropna().unique()
         variables = get_qualitative_variables()
@@ -169,8 +169,8 @@ def cramer(request):
         else:
             cf = True
 
-        cramer_function(data, cf, location)
-        return render(request, 'stats/cramer_view.html')
+        cramer_function(data, cf, location, str(request.user.id))
+        return render(request, 'stats/cramer_view.html', {"folder": "cramer_" + str(request.user.id)})
     else:
         locations = data["Lieu"].dropna().unique()
         return render(request, 'stats/cramer.html', {"locations": locations})
@@ -203,7 +203,7 @@ def chi2(request):
 
         minimum = int(post_request.get("minimum"))
 
-        p_value, chi2, deg_freedom, contingency, expected, differences, dependence_contribution = chi2_function(data, variable1, variable2, title, species_agg, cf, location, minimum)
+        p_value, chi2, deg_freedom, contingency, expected, differences, dependence_contribution = chi2_function(data, variable1, variable2, title, species_agg, cf, location, minimum, str(request.user.id))
 
         contingency.reset_index(inplace=True)
         contingency = pd.DataFrame(np.vstack([contingency.columns, contingency]))
@@ -221,7 +221,7 @@ def chi2(request):
         dependence_contribution = pd.DataFrame(np.vstack([dependence_contribution.columns, dependence_contribution]))
         dependence_contribution = dependence_contribution.to_numpy()
 
-        return render(request, 'stats/chi2_view.html', {"p_value": p_value, "chi2": chi2, "deg_freedom": deg_freedom, "contingency": contingency, "expected": expected, "differences": differences, "dependence_contribution": dependence_contribution})
+        return render(request, 'stats/chi2_view.html', {"p_value": p_value, "chi2": chi2, "deg_freedom": deg_freedom, "contingency": contingency, "expected": expected, "differences": differences, "dependence_contribution": dependence_contribution, "folder": "chi2_" + str(request.user.id)})
     else:
         locations = data["Lieu"].dropna().unique()
         variables = get_qualitative_variables()
@@ -250,7 +250,7 @@ def anova(request):
 
         minimum = int(post_request.get("minimum"))
 
-        shapiro, levene, anova, kruskal = anova_function(data, variable1, variable2, title, cf, location, minimum)
+        shapiro, levene, anova, kruskal = anova_function(data, variable1, variable2, title, cf, location, minimum, str(request.user.id))
 
         shapiro = pd.DataFrame(np.vstack([shapiro.columns, shapiro]))
         shapiro = shapiro.to_numpy()
@@ -264,7 +264,7 @@ def anova(request):
         kruskal = pd.DataFrame(np.vstack([kruskal.columns, kruskal]))
         kruskal = kruskal.to_numpy()
 
-        return render(request, 'stats/anova_view.html', {"shapiro": shapiro, "levene": levene, "anova": anova, "kruskal": kruskal})
+        return render(request, 'stats/anova_view.html', {"shapiro": shapiro, "levene": levene, "anova": anova, "kruskal": kruskal, "folder": "anova_" + str(request.user.id)})
     else:
         locations = data["Lieu"].dropna().unique()
         qualitative_variables = get_qualitative_variables()
@@ -289,8 +289,8 @@ def nb_species_evolution(request):
         else:
             cf = True
 
-        nb_species_evolution_function(data, cf, location)
-        return render(request, 'stats/nb_species_evolution_view.html')
+        nb_species_evolution_function(data, cf, location, str(request.user.id))
+        return render(request, 'stats/nb_species_evolution_view.html', {"folder": "nb_species_evolution_" + str(request.user.id)})
     else:
         locations = data["Lieu"].dropna().unique()
         return render(request, 'stats/nb_species_evolution.html', {"locations": locations})

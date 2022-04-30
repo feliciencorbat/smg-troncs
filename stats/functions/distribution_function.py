@@ -8,7 +8,7 @@ Fonction de distribution d'une variable et création d'un graphe en tuyaux d'org
 
 
 def distribution_function(data: pd.DataFrame, variable: str, title: str, limit: int, with_cf: bool,
-                          location: str) -> None:
+                          location: str, user_id: str) -> None:
 
     # Filtrer lieu
     if location != "Tous les lieux":
@@ -25,7 +25,7 @@ def distribution_function(data: pd.DataFrame, variable: str, title: str, limit: 
         data = data[variable].value_counts(normalize=False)[:limit]
 
     # dossier files/distribution
-    directory = "files/distribution"
+    directory = "files/distribution_" + user_id
     if not os.path.exists(directory):
         os.makedirs(directory)
 

@@ -54,11 +54,11 @@
         {% endif %}
         <h4 class="mt-5">Graphe boîte à moustaches</h4>
         <div class="container row">
-                <a href="{% url 'file' folder='anova' filename='boite_moustaches' extension='svg' %}"><img src="{% url 'file' folder='anova' filename='boite_moustaches' extension='svg' %}" alt="Graphe boîte à moustaches"></a>
+                <a href="{% url 'file' folder=folder filename='boite_moustaches' extension='svg' %}"><img src="{% url 'file' folder=folder filename='boite_moustaches' extension='svg' %}" alt="Graphe boîte à moustaches"></a>
         </div>
         <h4 class="mt-5">Données</h4>
         <div class="container row">
-                <a href="{% url 'file' folder='anova' filename='anova' extension='xlsx' %}">Télécharger le fichier de données</a>
+                <a href="{% url 'file' folder=folder filename='anova' extension='xlsx' %}">Télécharger le fichier de données</a>
         </div>
 </div>
 {% endblock content %}

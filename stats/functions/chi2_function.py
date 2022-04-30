@@ -10,7 +10,7 @@ Fonction Chi-2 entre 2 variables qualitatives et création heatmap
 
 
 def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str, species_agg: bool,
-                  with_cf: bool, location: str, minimum: int):
+                  with_cf: bool, location: str, minimum: int, user_id: str):
     # Filtrer lieu
     if location != "Tous les lieux":
         data = data.loc[data["Lieu"] == location]
@@ -40,7 +40,7 @@ def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str
         contingency = pd.crosstab(data[variable1], data[variable2])
 
     # dossier d'export
-    directory = "files/chi2"
+    directory = "files/chi2_" + user_id
     if not os.path.exists(directory):
         os.makedirs(directory)
 

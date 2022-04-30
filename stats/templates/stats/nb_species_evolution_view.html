@@ -3,23 +3,23 @@
 <div class="container mt-5">
         <h3>Evolution du nombre d'espèces</h3>
         <div>
-                <a href="{% url 'file' folder='nb_species_evolution' filename='nbre_especes_par_mois' extension='svg' %}"><img src="{% url 'file' folder='nb_species_evolution' filename='nbre_especes_par_mois' extension='svg' %}"></a>
+                <a href="{% url 'file' folder=folder filename='nbre_especes_par_mois' extension='svg' %}"><img src="{% url 'file' folder=folder filename='nbre_especes_par_mois' extension='svg' %}"></a>
         </div>
         <div>
-                <a href="{% url 'file' folder='nb_species_evolution' filename='especes_cumulees_par_mois' extension='svg' %}"><img src="{% url 'file' folder='nb_species_evolution' filename='especes_cumulees_par_mois' extension='svg' %}"></a>
+                <a href="{% url 'file' folder=folder filename='especes_cumulees_par_mois' extension='svg' %}"><img src="{% url 'file' folder=folder filename='especes_cumulees_par_mois' extension='svg' %}"></a>
         </div>
         <div>
-                <a href="{% url 'file' folder='nb_species_evolution' filename='especes_cumulees_par_mois_groupe_troncs' extension='svg' %}"><img src="{% url 'file' folder='nb_species_evolution' filename='especes_cumulees_par_mois_groupe_troncs' extension='svg' %}"></a>
+                <a href="{% url 'file' folder=folder filename='especes_cumulees_par_mois_groupe_troncs' extension='svg' %}"><img src="{% url 'file' folder=folder filename='especes_cumulees_par_mois_groupe_troncs' extension='svg' %}"></a>
         </div>
         <div>
-                <a href="{% url 'file' folder='nb_species_evolution' filename='especes_cumulees_par_mois_lr' extension='svg' %}"><img src="{% url 'file' folder='nb_species_evolution' filename='especes_cumulees_par_mois_lr' extension='svg' %}"></a>
+                <a href="{% url 'file' folder=folder filename='especes_cumulees_par_mois_lr' extension='svg' %}"><img src="{% url 'file' folder=folder filename='especes_cumulees_par_mois_lr' extension='svg' %}"></a>
         </div>
         <div>
-                <a href="{% url 'file' folder='nb_species_evolution' filename='especes_cumulees_par_mois_lr_detaillee' extension='svg' %}"><img src="{% url 'file' folder='nb_species_evolution' filename='especes_cumulees_par_mois_lr_detaillee' extension='svg' %}"></a>
+                <a href="{% url 'file' folder=folder filename='especes_cumulees_par_mois_lr_detaillee' extension='svg' %}"><img src="{% url 'file' folder=folder filename='especes_cumulees_par_mois_lr_detaillee' extension='svg' %}"></a>
         </div>
         <h4 class="mt-5">Données</h4>
         <div class="container row">
-                <a href="{% url 'file' folder='nb_species_evolution' filename='nb_species_evolution' extension='xlsx' %}">Télécharger le fichier de données</a>
+                <a href="{% url 'file' folder=folder filename='nb_species_evolution' extension='xlsx' %}">Télécharger le fichier de données</a>
         </div>
 </div>
 {% endblock content %}

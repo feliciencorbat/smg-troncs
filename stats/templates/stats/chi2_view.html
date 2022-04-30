@@ -65,15 +65,15 @@
         </table>
         <h4 class="mt-5">Graphe heatmap</h4>
         <div class="container row">
-                <a href="{% url 'file' folder='chi2' filename='dependance_contribution_heatmap' extension='svg' %}"><img src="{% url 'file' folder='chi2' filename='dependance_contribution_heatmap' extension='svg' %}" alt="Heatmap"></a>
+                <a href="{% url 'file' folder=folder filename='dependance_contribution_heatmap' extension='svg' %}"><img src="{% url 'file' folder=folder filename='dependance_contribution_heatmap' extension='svg' %}" alt="Heatmap"></a>
         </div>
         <h4 class="mt-5">Graphe en tuyaux d'orgue</h4>
         <div class="container row">
-                <a href="{% url 'file' folder='chi2' filename='contingence_bar' extension='svg' %}"><img src="{% url 'file' folder='chi2' filename='contingence_bar' extension='svg' %}" alt="Graphe en barres"></a>
+                <a href="{% url 'file' folder=folder filename='contingence_bar' extension='svg' %}"><img src="{% url 'file' folder=folder filename='contingence_bar' extension='svg' %}" alt="Graphe en barres"></a>
         </div>
         <h4 class="mt-5">Données</h4>
         <div class="container row">
-                <a href="{% url 'file' folder='chi2' filename='chi2' extension='xlsx' %}">Télécharger le fichier de données</a>
+                <a href="{% url 'file' folder=folder filename='chi2' extension='xlsx' %}">Télécharger le fichier de données</a>
         </div>
 </div>
 {% endblock content %}

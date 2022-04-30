@@ -10,7 +10,7 @@ Matrice Cramer
 """
 
 
-def cramer_function(data: pd.DataFrame, with_cf: bool, location: str) -> None:
+def cramer_function(data: pd.DataFrame, with_cf: bool, location: str, user_id: str) -> None:
     # Filtrer lieu
     if location != "Tous les lieux":
         data = data.loc[data["Lieu"] == location]
@@ -20,7 +20,7 @@ def cramer_function(data: pd.DataFrame, with_cf: bool, location: str) -> None:
         data = data.loc[data["cf"] != "cf."]
 
     # dossier d'export
-    directory = "files/cramer"
+    directory = "files/cramer_" + user_id
     if not os.path.exists(directory):
         os.makedirs(directory)
 
