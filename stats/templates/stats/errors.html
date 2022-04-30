@@ -2,37 +2,43 @@
 {% block content %}
 <div class="container mt-5">
         <h3>Erreurs</h3>
-        <table class="table table-striped">
-                <thead>
-                <tr>
-                        <th scope="col">Ligne</th>
-                        <th scope="col">Espèce</th>
-                        <th scope="col">Type d'erreur</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for error in errors_list %}
-                <tr>
-                        {% if error.0 != None %}
-                        <td>{{ error.0 }}</td>
-                        {% else %}
-                        <td></td>
-                        {% endif %}
+        {% if errors_list|length == 0 %}
+                <div>
+                        Pas d'erreurs détectées...
+                </div>
+        {% else %}
+                <table class="table table-striped">
+                        <thead>
+                        <tr>
+                                <th scope="col">Ligne</th>
+                                <th scope="col">Espèce</th>
+                                <th scope="col">Type d'erreur</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for error in errors_list %}
+                        <tr>
+                                {% if error.0 != None %}
+                                <td>{{ error.0 }}</td>
+                                {% else %}
+                                <td></td>
+                                {% endif %}
 
-                        {% if error.1 != None %}
-                        <td><i>{{ error.1 }}</i></td>
-                        {% else %}
-                        <td></td>
-                        {% endif %}
+                                {% if error.1 != None %}
+                                <td><i>{{ error.1 }}</i></td>
+                                {% else %}
+                                <td></td>
+                                {% endif %}
 
-                        {% if error.2 != None %}
-                        <td>{{ error.2 }}</td>
-                        {% else %}
-                        <td></td>
-                        {% endif %}
-                </tr>
-                {% endfor %}
-                </tbody>
-        </table>
+                                {% if error.2 != None %}
+                                <td>{{ error.2 }}</td>
+                                {% else %}
+                                <td></td>
+                                {% endif %}
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                </table>
+        {% endif %}
 </div>
 {% endblock content %}
