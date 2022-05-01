@@ -18,3 +18,5 @@ WORKDIR /apps/troncs
 
 USER app_user:app_user
 COPY --chown=app_user:app_user . .
+
+RUN mkdir /apps/troncs/files
