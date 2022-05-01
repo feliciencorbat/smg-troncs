@@ -1,22 +1,17 @@
 FROM python:3
 
-WORKDIR /apps/troncs
+RUN pip install --upgrade pip
+RUN pip install pip-tools
 
-# create the app user
-RUN groupadd -r app_troncs && useradd -r -g app_troncs -d /apps/troncs app_troncs
+RUN adduser -D troncs
+USER troncs
+WORKDIR /apps/troncs
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-COPY requirements.in .
-RUN pip install pip-tools
-RUN pip-compile --upgrade
-RUN pip install -r requirements.txt
+COPY --chown=troncs:troncs requirements.in .
+RUN pip-compile --user --upgrade
+RUN pip install --user -r requirements.txt
 
-COPY . .
-
-# chown all the files to the app user
-RUN chown -R app_troncs:app_troncs /apps/troncs
-
-# change to the app user
-USER app_troncs
+COPY --chown=troncs:troncs . .
