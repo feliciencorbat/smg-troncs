@@ -1,7 +1,7 @@
 FROM python:3
 
 # create the app user
-RUN addgroup --system app_troncs && adduser --system --group app_troncs
+RUN groupadd -r app_troncs && useradd -r -g app_troncs -d app_troncs
 
 WORKDIR /apps/troncs
 
