@@ -8,6 +8,7 @@ services:
     container_name: troncs
     volumes:
       - ./files:/apps/troncs/files
+      - ./db.sqlite3:/apps/troncs/db.sqlite3
     restart: unless-stopped
     networks:
       - proxy
