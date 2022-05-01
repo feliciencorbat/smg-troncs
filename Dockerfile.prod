@@ -10,8 +10,7 @@ WORKDIR /apps/troncs
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-COPY --chown=troncs:troncs requirements.in .
-RUN pip-compile --user --upgrade
+COPY --chown=troncs:troncs requirements.txt .
 RUN pip install --user -r requirements.txt
 
 COPY --chown=troncs:troncs . .
