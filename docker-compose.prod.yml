@@ -7,7 +7,7 @@ services:
     command: gunicorn --bind 0.0.0.0:8000 website.wsgi
     container_name: troncs
     volumes:
-      - .:/apps/troncs
+      - ./files:/apps/troncs/files:rw
     restart: unless-stopped
     networks:
       - proxy
