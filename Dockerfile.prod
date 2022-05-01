@@ -13,4 +13,6 @@ ENV PYTHONUNBUFFERED=1
 COPY --chown=troncs:troncs requirements.txt .
 RUN pip install --user -r requirements.txt
 
+ENV PATH="/apps/troncs/.local/bin:${PATH}"
+
 COPY --chown=troncs:troncs . .
