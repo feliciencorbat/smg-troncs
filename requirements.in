@@ -10,5 +10,6 @@ researchpy>=0.3.2
 urllib3>=1.26.9
 virtualenv>=20.13.4
 virtualenv-clone>=0.5.7
+whitenoise>=5.2.0
 xlrd>=2.0.1
 XlsxWriter>=3.0.3

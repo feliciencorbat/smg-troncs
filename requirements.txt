@@ -4,13 +4,13 @@
 #
 #    pip-compile
 #
-asgiref==3.5.0
+asgiref==3.5.1
     # via django
 certifi==2021.10.8
     # via requests
 charset-normalizer==2.0.12
     # via requests
-click==8.1.2
+click==8.1.3
     # via pip-tools
 crispy-bootstrap5==0.6
     # via -r requirements.in
@@ -153,6 +153,8 @@ virtualenv-clone==0.5.7
     # via -r requirements.in
 wheel==0.37.1
     # via pip-tools
+whitenoise==6.0.0
+    # via -r requirements.in
 xarray==2022.3.0
     # via pandas-flavor
 xlrd==2.0.1
