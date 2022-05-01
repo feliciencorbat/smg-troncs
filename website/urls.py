@@ -21,6 +21,7 @@ from django.contrib import admin
 urlpatterns = [
     path('login', authentication.views.login_page, name='login'),
     path('logout/', authentication.views.logout_user, name='logout'),
+    path('admin/', admin.site.urls),
     path('', stats.views.home, name='home'),
     path('observations/', stats.views.observations, name='observations'),
     path('species/', stats.views.species, name='species'),
