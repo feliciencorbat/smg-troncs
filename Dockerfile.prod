@@ -1,18 +1,18 @@
 FROM python:3
 
-RUN pip install --upgrade pip
-RUN pip install pip-tools
-
-RUN adduser troncs
-USER troncs
-WORKDIR /apps/troncs
-
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-COPY --chown=troncs:troncs requirements.txt .
-RUN pip install --user -r requirements.txt
+RUN apt-get update
 
-ENV PATH="/apps/troncs/.local/bin:${PATH}"
+COPY requirements.txt /tmp/requirements.txt
 
-COPY --chown=troncs:troncs . .
+RUN pip install --no-cache-dir -r /tmp/requirements.txt \
+    && rm -rf /tmp/requirements.txt \
+    && useradd -U app_user \
+    && install -d -m 0755 -o app_user -g app_user /apps/troncs/static
+
+WORKDIR /apps/troncs
+
+USER app_user:app_user
+COPY --chown=app_user:app_user . .
