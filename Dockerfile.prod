@@ -3,7 +3,7 @@ FROM python:3
 WORKDIR /apps/troncs
 
 # create the app user
-RUN groupadd -r app_troncs && useradd -r -g app_troncs -d /apps/troncs
+RUN groupadd -r app_troncs && useradd -r -g app_troncs -d /apps/troncs app_troncs
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
