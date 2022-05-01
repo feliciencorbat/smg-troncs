@@ -15,8 +15,10 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        script: cd ${{ secrets.PROJECT_PATH }} && sudo git pull origin master --ff-only \
-          && sudo docker-compose -f docker-compose.prod.yml up -d --build \
-          && sudo docker-compose -f docker-compose.prod.yml exec python manage.py migrate \
-          && sudo docker-compose -f docker-compose.prod.yml exec python manage.py collectstatic
+        script: |
+          cd ${{ secrets.PROJECT_PATH }}
+          sudo git pull origin master --ff-only
+          sudo docker-compose -f docker-compose.prod.yml up -d --build
+          sudo docker-compose -f docker-compose.prod.yml exec python manage.py migrate
+          sudo docker-compose -f docker-compose.prod.yml exec python manage.py collectstatic
 
