@@ -3,7 +3,7 @@ FROM python:3
 RUN pip install --upgrade pip
 RUN pip install pip-tools
 
-RUN adduser -D troncs
+RUN adduser troncs
 USER troncs
 WORKDIR /apps/troncs
 
