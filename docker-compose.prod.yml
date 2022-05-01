@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile.prod
     command: gunicorn --bind 0.0.0.0:8000 website.wsgi
     container_name: troncs
-    user: app_user
+    user: app_user:app_user
     volumes:
       - ./files:/apps/troncs/files:rw
     restart: unless-stopped
