@@ -1,7 +1,7 @@
 FROM python:3
 
 # create the app user
-RUN groupadd -r app_troncs && useradd -r -g app_troncs -d app_troncs
+RUN groupadd -r app_troncs && useradd -r -g app_troncs -d /apps/troncs
 
 WORKDIR /apps/troncs
 
