@@ -2,8 +2,21 @@
 {% block content %}
 <div class="container mt-5">
         <h3>Evolution de {{ species }}</h3>
+
         <div>
                 <a href="{% url 'file' folder=folder filename='observations_cumulees_par_mois' extension='svg' %}"><img src="{% url 'file' folder=folder filename='observations_cumulees_par_mois' extension='svg' %}"></a>
+        </div>
+
+        <div>
+                <a href="{% url 'file' folder=folder filename='observations_cumulees_par_mois_troncs' extension='svg' %}"><img src="{% url 'file' folder=folder filename='observations_cumulees_par_mois_troncs' extension='svg' %}"></a>
+        </div>
+
+        <div>
+                <a href="{% url 'file' folder=folder filename='observations_cumulees_par_mois_groupe_troncs' extension='svg' %}"><img src="{% url 'file' folder=folder filename='observations_cumulees_par_mois_groupe_troncs' extension='svg' %}"></a>
+        </div>
+
+        <div>
+                <a href="{% url 'file' folder=folder filename='observations_cumulees_par_mois_especes_troncs' extension='svg' %}"><img src="{% url 'file' folder=folder filename='observations_cumulees_par_mois_especes_troncs' extension='svg' %}"></a>
         </div>
 
         <h4 class="mt-5">Données</h4>
