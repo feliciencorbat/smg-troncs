@@ -14,7 +14,7 @@ def adjust_columns(data: pd.DataFrame, species: pd.DataFrame, errors: pd.DataFra
 
     # Garder uniquement les colonnes nécessaires
     data = data[
-        ["Date", "Saison", "Mois", "Espèce", "Espèce actuelle", "Phylum", "Ordre", "cf", "Liste rouge", "Menace",
+        ["Date", "Année", "Saison", "Mois", "Espèce", "Espèce actuelle", "Phylum", "Ordre", "cf", "Liste rouge", "Menace",
          "Tronc", "Espèce du tronc", "Diamètre moyen", "Longueur", "Degré de pourriture", "Lieu", "Groupe troncs",
          "Date de coupe", "Age du tronc"]]
 

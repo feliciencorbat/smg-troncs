@@ -31,4 +31,7 @@ def new_date_columns(data: pd.DataFrame) -> pd.DataFrame:
     # Création colonne Mois
     data['Mois'] = data['Date'].dt.month
 
+    # Création colonne Année
+    data['Année'] = data['Date'].dt.year
+
     return data

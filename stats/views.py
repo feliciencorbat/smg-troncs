@@ -344,7 +344,7 @@ def archives_original_files(request):
     return render(request, 'stats/archives_original_files.html', {"files_list": files_list})
 
 def get_qualitative_variables():
-    return ['Saison', 'Mois', 'Espèce', 'Espèce actuelle', 'Phylum', 'Ordre', 'Liste rouge', 'Menace', 'Tronc', 'Espèce du tronc', "Lieu", "Groupe troncs"]
+    return ["Année", 'Saison', 'Mois', 'Espèce', 'Espèce actuelle', 'Phylum', 'Ordre', 'Liste rouge', 'Menace', 'Tronc', 'Espèce du tronc', "Lieu", "Groupe troncs"]
 
 def get_quantitative_variables():
      return ['Longueur', 'Diamètre moyen', 'Age du tronc']
