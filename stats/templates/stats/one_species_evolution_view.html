@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Evolution de {{ species }}</h3>
+        <div>
+                <a href="{% url 'file' folder=folder filename='observations_cumulees_par_mois' extension='svg' %}"><img src="{% url 'file' folder=folder filename='observations_cumulees_par_mois' extension='svg' %}"></a>
+        </div>
+
+        <h4 class="mt-5">Données</h4>
+        <div class="container row">
+                <a href="{% url 'file' folder=folder filename='one_species_evolution' extension='xlsx' %}">Télécharger le fichier de données</a>
+        </div>
+</div>
+{% endblock content %}

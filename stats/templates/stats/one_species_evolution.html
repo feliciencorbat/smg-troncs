@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+        <h3>Evolution d'une espèce</h3>
+        <form method="post">
+            <div class="mt-5 col-md-6">
+                <label for="species" class="form-label">Espèce</label>
+                <select name="species" id="species" class="form-select" aria-label="location select">
+                    {% for species in species_list %}
+                        <option value="{{ species }}">{{ species }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mt-5 col-md-6">
+                <label for="location" class="form-label">Lieu</label>
+                <select name="location" id="location" class="form-select" aria-label="location select">
+                    <option value="Tous les lieux" selected>Tous les lieux</option>
+                    {% for location in locations %}
+                        <option value="{{ location }}">{{ location }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mt-5 col-md-6">
+                <input name="cf" class="form-check-input" type="checkbox" value="1" id="cf" checked>
+                <label class="form-check-label" for="cf">
+                    Avec cf.
+                </label>
+            </div>
+            {% csrf_token %}
+            <div class="mt-5">
+                <input type="submit" class="btn btn-primary" name="submit" value="Créer les graphes pour l'espèce" />
+            </div>
+        </form>
+</div>
+{% endblock content %}

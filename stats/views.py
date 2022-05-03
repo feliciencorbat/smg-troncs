@@ -17,6 +17,7 @@ from stats.functions.cramer_function import cramer_function
 from stats.functions.distribution_function import distribution_function
 from stats.functions.export_function import export_function
 from stats.functions.nb_species_evolution_function import nb_species_evolution_function
+from stats.functions.one_species_evolution_function import one_species_evolution_function
 
 
 @login_required
@@ -294,6 +295,33 @@ def nb_species_evolution(request):
     else:
         locations = data["Lieu"].dropna().unique()
         return render(request, 'stats/nb_species_evolution.html', {"locations": locations})
+
+
+@login_required
+def one_species_evolution(request):
+    try:
+        data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    except:
+        return render(request, 'stats/website_error.html', {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
+
+    if request.method == 'POST':
+        post_request = request.POST
+        location = post_request.get("location")
+        species = post_request.get("species")
+
+        cf = post_request.get("cf")
+        if cf is None:
+            cf = False
+        else:
+            cf = True
+
+        one_species_evolution_function(data, species, cf, location, str(request.user.id))
+        return render(request, 'stats/one_species_evolution_view.html', {"species": species, "folder": "one_species_evolution_" + str(request.user.id)})
+    else:
+        locations = data["Lieu"].dropna().unique()
+        species_list = data["Espèce"].dropna().unique()
+        species_list.sort()
+        return render(request, 'stats/one_species_evolution.html', {"locations": locations, "species_list": species_list})
 
 
 @login_required
