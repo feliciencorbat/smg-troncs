@@ -49,7 +49,7 @@ def one_species_evolution_function(data: pd.DataFrame, species: str, with_cf: bo
     for trunk in data["Tronc"].dropna().unique():
         trunk_obs = data.loc[(data["Tronc"] == trunk)]
         trunk_obs = cumulative_observations(trunk_obs)
-        if trunk_obs.iloc[-1]["Observations cumulées"] > 0:
+        if len(trunk_obs) > 0:
             plt.plot(trunk_obs.index, trunk_obs["Observations cumulées"],
                      label="Tronc " + str(trunk))
             trunk_obs.to_excel(writer, sheet_name="Observations sur tronc " + trunk)
@@ -65,7 +65,7 @@ def one_species_evolution_function(data: pd.DataFrame, species: str, with_cf: bo
     for trunk_group in data["Groupe troncs"].dropna().unique():
         trunk_group_obs = data.loc[(data["Groupe troncs"] == trunk_group)]
         trunk_group_obs = cumulative_observations(trunk_group_obs)
-        if trunk_group_obs.iloc[-1]["Observations cumulées"] > 0:
+        if len(trunk_group_obs) > 0:
             plt.plot(trunk_group_obs.index, trunk_group_obs["Observations cumulées"],
                      label="Groupe de troncs " + str(trunk_group))
             trunk_group_obs.to_excel(writer, sheet_name="Observations groupe tronc " + trunk_group)
@@ -81,7 +81,7 @@ def one_species_evolution_function(data: pd.DataFrame, species: str, with_cf: bo
     for trunk_species in data["Espèce du tronc"].dropna().unique():
         trunk_species_obs = data.loc[(data["Espèce du tronc"] == trunk_species)]
         trunk_species_obs = cumulative_observations(trunk_species_obs)
-        if trunk_species_obs.iloc[-1]["Observations cumulées"] > 0:
+        if len(trunk_species_obs) > 0:
             plt.plot(trunk_species_obs.index, trunk_species_obs["Observations cumulées"],
                      label="Sur " + str(trunk_species))
             trunk_species_obs.to_excel(writer, sheet_name="Observations sur " + trunk_species)
