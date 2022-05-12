@@ -170,7 +170,7 @@ def cramer(request):
         else:
             cf = True
 
-        cramer_function(data, cf, location, str(request.user.id))
+        cramer_function(data, cf, location, str(request.user.id), get_qualitative_variables())
         return render(request, 'stats/cramer_view.html', {"folder": "cramer_" + str(request.user.id)})
     else:
         locations = data["Lieu"].dropna().unique()
@@ -344,7 +344,7 @@ def archives_original_files(request):
     return render(request, 'stats/archives_original_files.html', {"files_list": files_list})
 
 def get_qualitative_variables():
-    return ["Année", 'Saison', 'Mois', 'Espèce', 'Espèce actuelle', 'Phylum', 'Ordre', 'Liste rouge', 'Menace', 'Tronc', 'Espèce du tronc', "Lieu", "Groupe troncs"]
+    return ["Année", 'Saison', 'Mois', 'Espèce', 'Espèce actuelle', 'Phylum', 'Ordre', 'Liste rouge', 'Menace', 'Tronc', 'Espèce du tronc', "Groupe troncs"]
 
 def get_quantitative_variables():
      return ['Longueur', 'Diamètre moyen', 'Age du tronc']

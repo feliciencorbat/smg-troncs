@@ -10,7 +10,7 @@ Matrice Cramer
 """
 
 
-def cramer_function(data: pd.DataFrame, with_cf: bool, location: str, user_id: str) -> None:
+def cramer_function(data: pd.DataFrame, with_cf: bool, location: str, user_id: str, qualitative_variables: list) -> None:
     # Filtrer lieu
     if location != "Tous les lieux":
         data = data.loc[data["Lieu"] == location]
@@ -24,7 +24,7 @@ def cramer_function(data: pd.DataFrame, with_cf: bool, location: str, user_id: s
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    data = data[["Saison", "Mois", "Espèce", "Liste rouge", "Menace", "Tronc", "Espèce du tronc", "Groupe troncs"]]
+    data = data[qualitative_variables]
     data = data.dropna()
 
     matrix = pd.DataFrame(index=data.columns, columns=data.columns)
