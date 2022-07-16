@@ -15,11 +15,11 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.troncs.entrypoints=http
-      - traefik.http.routers.troncs.rule=Host("troncs.champignons-geneve.ch")
+      - traefik.http.routers.troncs.rule=Host("troncs.champignons-geneve.ch") || Host("troncs.champis.net")
       - traefik.http.middlewares.troncs-https-redirect.redirectscheme.scheme=https
       - traefik.http.routers.troncs.middlewares=troncs-https-redirect
       - traefik.http.routers.troncs-secure.entrypoints=https
-      - traefik.http.routers.troncs-secure.rule=Host("troncs.champignons-geneve.ch")
+      - traefik.http.routers.troncs-secure.rule=Host("troncs.champignons-geneve.ch") || Host("troncs.champis.net")
       - traefik.http.routers.troncs-secure.tls=true
       - traefik.http.routers.troncs-secure.tls.certresolver=http
       - traefik.http.routers.troncs-secure.service=troncs
