@@ -17,7 +17,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd ${{ secrets.PROJECT_PATH }}
-          sudo git pull origin master --ff-only
+          git pull origin master --ff-only
           sudo docker-compose -f docker-compose.prod.yml up -d --build
           sudo docker-compose -f docker-compose.prod.yml exec -T troncs python manage.py migrate
           sudo docker-compose -f docker-compose.prod.yml exec -T troncs python manage.py collectstatic
