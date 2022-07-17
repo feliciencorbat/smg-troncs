@@ -18,6 +18,7 @@ jobs:
         script: |
           cd ${{ secrets.PROJECT_PATH }}
           git pull origin master --ff-only
+          sudo docker-compose pull
           sudo docker-compose -f docker-compose.prod.yml up -d --build
           sudo docker-compose -f docker-compose.prod.yml exec -T troncs python manage.py migrate
           sudo docker-compose -f docker-compose.prod.yml exec -T troncs python manage.py collectstatic
