@@ -141,4 +141,4 @@ CSRF_TRUSTED_ORIGINS = ['https://troncs.champis.net', 'https://troncs.champignon
 
 STATIC_ROOT = "/apps/troncs/static/"
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
