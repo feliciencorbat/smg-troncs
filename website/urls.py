@@ -37,4 +37,5 @@ urlpatterns = [
     path('one_species_evolution/', stats.views.one_species_evolution, name='one_species_evolution'),
     path('file/<slug:folder>/<slug:filename>.<slug:extension>', stats.views.file, name="file"),
     path('archives_original_files/', stats.views.archives_original_files, name='archives_original_files'),
+    path('report', stats.views.report, name='report'),
 ]

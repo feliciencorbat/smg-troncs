@@ -19,6 +19,9 @@ from stats.functions.export_function import export_function
 from stats.functions.nb_species_evolution_function import nb_species_evolution_function
 from stats.functions.one_species_evolution_function import one_species_evolution_function
 
+from docx import Document
+from docx.shared import Inches
+
 
 @login_required
 def home(request):
@@ -342,6 +345,37 @@ def archives_original_files(request):
     files_list.sort(reverse=True)
     files_list = [i.split('.') for i in files_list]
     return render(request, 'stats/archives_original_files.html', {"files_list": files_list})
+
+@login_required
+def report(request):
+    try:
+        data = pd.read_excel("files/export/liste_modifiee.xlsx", sheet_name="Statistiques")
+    except:
+        return render(request, 'stats/website_error.html',
+                      {"error_info": "Il n'y a pas de fichier liste_modifiee.xlsx."})
+
+    if request.method == 'POST':
+        post_request = request.POST
+        year = post_request.get("year")
+
+        document = Document()
+        document.add_heading(year, 0)
+        document.add_page_break()
+
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = 'attachment; filename=Rapport intermédiaire '+year+' (troncs).docx'
+        document.save(response)
+        return response
+
+    else:
+        today = datetime.today()
+        year = today.year
+        years = []
+        while year >=2016:
+            years.append(year)
+            year -= 1
+        return render(request, 'stats/report.html',
+                      {"years": years})
 
 def get_qualitative_variables():
     return ["Année", 'Saison', 'Mois', 'Espèce', 'Espèce actuelle', 'Phylum', 'Ordre', 'Liste rouge', 'Menace', 'Tronc', 'Espèce du tronc', "Groupe troncs"]
