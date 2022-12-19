@@ -18,9 +18,8 @@ from stats.functions.distribution_function import distribution_function
 from stats.functions.export_function import export_function
 from stats.functions.nb_species_evolution_function import nb_species_evolution_function
 from stats.functions.one_species_evolution_function import one_species_evolution_function
-
-from docx import Document
-from docx.shared import Inches
+from stats.functions.report.docx_generation import docx_generation
+from stats.functions.report.rare_species_lists import rare_species_lists
 
 
 @login_required
@@ -358,9 +357,8 @@ def report(request):
         post_request = request.POST
         year = post_request.get("year")
 
-        document = Document()
-        document.add_heading(year, 0)
-        document.add_page_break()
+        rare_species_maillettes, rare_species_bossy = rare_species_lists(data, year)
+        document = docx_generation(rare_species_maillettes, rare_species_bossy, year)
 
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
         response['Content-Disposition'] = 'attachment; filename=Rapport intermédiaire '+year+' (troncs).docx'
@@ -371,7 +369,7 @@ def report(request):
         today = datetime.today()
         year = today.year
         years = []
-        while year >=2016:
+        while year >=2014:
             years.append(year)
             year -= 1
         return render(request, 'stats/report.html',
