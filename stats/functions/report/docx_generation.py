@@ -87,17 +87,19 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
     annexe4 = document.add_paragraph('')
     annexe4.add_run('Tableau 4 : Espèces de la liste rouge, rares ou assez rares trouvées en ' + year + ' sur les troncs du chemin des Maillettes').bold = True
 
-    table = document.add_table(rows=1, cols=3)
+    table = document.add_table(rows=1, cols=4)
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = 'Espèce'
     hdr_cells[1].text = 'Espèce actuelle'
     hdr_cells[2].text = 'Statut liste rouge'
+    hdr_cells[3].text = 'Troncs'
     for index, row in rare_species_maillettes.iterrows():
         row_cells = table.add_row().cells
         row_cells[0].text = str(row["Espèce"])
         if row["Espèce actuelle"] != row["Espèce"]:
             row_cells[1].text = str(row["Espèce actuelle"])
         row_cells[2].text = str(row["Liste rouge"])
+        row_cells[3].text = str(row["Tronc"])
 
     document.add_page_break()
 
@@ -105,17 +107,19 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
     annexe5.add_run(
         'Tableau 5 : Espèces de la liste rouge, rares ou assez rares trouvées en ' + year + ' sur les troncs du chemin de Bossy').bold = True
 
-    table = document.add_table(rows=1, cols=3)
+    table = document.add_table(rows=1, cols=4)
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = 'Espèce'
     hdr_cells[1].text = 'Espèce actuelle'
     hdr_cells[2].text = 'Statut liste rouge'
+    hdr_cells[3].text = 'Troncs'
     for index, row in rare_species_bossy.iterrows():
         row_cells = table.add_row().cells
         row_cells[0].text = str(row["Espèce"])
         if row["Espèce actuelle"] != row["Espèce"]:
             row_cells[1].text = str(row["Espèce actuelle"])
         row_cells[2].text = str(row["Liste rouge"])
+        row_cells[3].text = str(row["Tronc"])
 
     document.add_page_break()
 
