@@ -19,6 +19,8 @@ from stats.functions.export_function import export_function
 from stats.functions.nb_species_evolution_function import nb_species_evolution_function
 from stats.functions.one_species_evolution_function import one_species_evolution_function
 from stats.functions.report.docx_generation import docx_generation
+from stats.functions.report.new_species_lists import new_species_lists
+from stats.functions.report.old_species_lists import old_species_lists
 from stats.functions.report.rare_species_lists import rare_species_lists
 
 
@@ -357,8 +359,10 @@ def report(request):
         post_request = request.POST
         year = post_request.get("year")
 
-        rare_species_maillettes, rare_species_bossy = rare_species_lists(data, year)
-        document = docx_generation(rare_species_maillettes, rare_species_bossy, year)
+        old_species_maillettes, old_species_bossy, old_species_isole = old_species_lists(data, year)
+        new_species_maillettes, new_species_bossy, new_species_isole = new_species_lists(data, old_species_maillettes, old_species_bossy, old_species_isole, year)
+        rare_species_maillettes, rare_species_bossy, rare_species_isole = rare_species_lists(data, year)
+        document = docx_generation(new_species_maillettes, new_species_bossy, new_species_isole, rare_species_maillettes, rare_species_bossy, rare_species_isole, year)
 
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
         response['Content-Disposition'] = 'attachment; filename=Rapport intermédiaire '+year+' (troncs).docx'

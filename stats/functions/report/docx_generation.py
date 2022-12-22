@@ -1,7 +1,7 @@
 import pandas as pd
 from docx import Document
 
-def docx_generation(rare_species_maillettes: pd.DataFrame, rare_species_bossy: pd.DataFrame, year):
+def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole, rare_species_maillettes: pd.DataFrame, rare_species_bossy: pd.DataFrame, rare_species_isole: pd.DataFrame, year):
 
     document = Document()
 
@@ -21,13 +21,68 @@ def docx_generation(rare_species_maillettes: pd.DataFrame, rare_species_bossy: p
     annexes = document.add_paragraph('')
     annexes.add_run('Annexes :').bold = True
 
-    document.add_paragraph('Tableau 3 : Nouvelles espèces de la liste rouge, rares ou assez rares trouvées en ' + year + ' sur les troncs du chemin des Maillettes')
-    document.add_paragraph('Tableau 4 : Nouvelles espèces de la liste rouge, rares ou assez rares trouvées en ' + year + ' sur les troncs du chemin de Bossy')
+    document.add_paragraph('Tableau 1 : Nouvelles espèces trouvées en ' + year + ' sur les troncs du chemin des Maillettes')
+    document.add_paragraph('Tableau 2 : Nouvelles espèces trouvées en ' + year + ' sur les troncs du chemin de Bossy')
+    document.add_paragraph('Tableau 3 : Nouvelles espèces trouvées en ' + year + ' sur le tronc SMG')
+    document.add_paragraph('Tableau 4 : Espèces de la liste rouge, rares ou assez rares trouvées en ' + year + ' sur les troncs du chemin des Maillettes')
+    document.add_paragraph('Tableau 5 : Espèces de la liste rouge, rares ou assez rares trouvées en ' + year + ' sur les troncs du chemin de Bossy')
+    document.add_paragraph('Tableau 6 : Espèces de la liste rouge, rares ou assez rares trouvées en ' + year + ' sur le tronc SMG')
+
+    document.add_page_break()
+
+    annexe1 = document.add_paragraph('')
+    annexe1.add_run(
+        'Tableau 1 : Nouvelles espèces trouvées en ' + year + ' sur les troncs du chemin des Maillettes').bold = True
+
+    table = document.add_table(rows=1, cols=3)
+    hdr_cells = table.rows[0].cells
+    hdr_cells[0].text = 'Espèce'
+    hdr_cells[1].text = 'Espèce actuelle'
+    hdr_cells[2].text = 'Statut liste rouge'
+    for index, row in new_species_maillettes.iterrows():
+        row_cells = table.add_row().cells
+        row_cells[0].text = str(row["Espèce"])
+        row_cells[1].text = str(row["Espèce actuelle"])
+        row_cells[2].text = str(row["Liste rouge"])
+
+    document.add_page_break()
+
+    annexe2 = document.add_paragraph('')
+    annexe2.add_run(
+        'Tableau 2 : Nouvelles espèces trouvées en ' + year + ' sur les troncs du chemin de Bossy').bold = True
+
+    table = document.add_table(rows=1, cols=3)
+    hdr_cells = table.rows[0].cells
+    hdr_cells[0].text = 'Espèce'
+    hdr_cells[1].text = 'Espèce actuelle'
+    hdr_cells[2].text = 'Statut liste rouge'
+    for index, row in new_species_bossy.iterrows():
+        row_cells = table.add_row().cells
+        row_cells[0].text = str(row["Espèce"])
+        row_cells[1].text = str(row["Espèce actuelle"])
+        row_cells[2].text = str(row["Liste rouge"])
 
     document.add_page_break()
 
     annexe3 = document.add_paragraph('')
-    annexe3.add_run('Tableau 3 : Nouvelles espèces de la liste rouge, rares ou assez rares trouvées en ' + year + ' sur les troncs du chemin des Maillettes').bold = True
+    annexe3.add_run(
+        'Tableau 3 : Nouvelles espèces trouvées en ' + year + ' sur le tronc SMG').bold = True
+
+    table = document.add_table(rows=1, cols=3)
+    hdr_cells = table.rows[0].cells
+    hdr_cells[0].text = 'Espèce'
+    hdr_cells[1].text = 'Espèce actuelle'
+    hdr_cells[2].text = 'Statut liste rouge'
+    for index, row in new_species_isole.iterrows():
+        row_cells = table.add_row().cells
+        row_cells[0].text = str(row["Espèce"])
+        row_cells[1].text = str(row["Espèce actuelle"])
+        row_cells[2].text = str(row["Liste rouge"])
+
+    document.add_page_break()
+
+    annexe4 = document.add_paragraph('')
+    annexe4.add_run('Tableau 4 : Espèces de la liste rouge, rares ou assez rares trouvées en ' + year + ' sur les troncs du chemin des Maillettes').bold = True
 
     table = document.add_table(rows=1, cols=3)
     hdr_cells = table.rows[0].cells
@@ -42,9 +97,9 @@ def docx_generation(rare_species_maillettes: pd.DataFrame, rare_species_bossy: p
 
     document.add_page_break()
 
-    annexe4 = document.add_paragraph('')
-    annexe4.add_run(
-        'Tableau 4 : Nouvelles espèces de la liste rouge, rares ou assez rares trouvées en ' + year + ' sur les troncs du chemin de Bossy').bold = True
+    annexe5 = document.add_paragraph('')
+    annexe5.add_run(
+        'Tableau 5 : Espèces de la liste rouge, rares ou assez rares trouvées en ' + year + ' sur les troncs du chemin de Bossy').bold = True
 
     table = document.add_table(rows=1, cols=3)
     hdr_cells = table.rows[0].cells
@@ -58,5 +113,20 @@ def docx_generation(rare_species_maillettes: pd.DataFrame, rare_species_bossy: p
         row_cells[2].text = str(row["Liste rouge"])
 
     document.add_page_break()
+
+    annexe6 = document.add_paragraph('')
+    annexe6.add_run(
+        'Tableau 6 : Espèces de la liste rouge, rares ou assez rares trouvées en ' + year + ' sur le tronc SMG').bold = True
+
+    table = document.add_table(rows=1, cols=3)
+    hdr_cells = table.rows[0].cells
+    hdr_cells[0].text = 'Espèce'
+    hdr_cells[1].text = 'Espèce actuelle'
+    hdr_cells[2].text = 'Statut liste rouge'
+    for index, row in rare_species_isole.iterrows():
+        row_cells = table.add_row().cells
+        row_cells[0].text = str(row["Espèce"])
+        row_cells[1].text = str(row["Espèce actuelle"])
+        row_cells[2].text = str(row["Liste rouge"])
 
     return document
