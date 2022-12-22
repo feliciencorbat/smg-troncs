@@ -62,6 +62,9 @@ def new_swiss_fungi_lr_column(species: pd.DataFrame):
 
     species = species.join(swiss_fungi_df.set_index('SwissFungi'), on="SwissFungi")
 
+    # Eliminer les duplicatas
+    species = species.drop_duplicates()
+
     return species
 
 
