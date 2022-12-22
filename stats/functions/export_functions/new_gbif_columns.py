@@ -27,7 +27,11 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
 
                 species_name = species_row.Espèce
                 # Récupérer l'espèce GBIF
-                gbif_species = get_gbif_species(http, "v1/species/match?kingdom=Fungi&name=", species_name)
+                if species_name == "Polyporus badius":
+                    gbif_species = Species("Polyporus badius", "Basidiomycota", "Polyporales", "SPECIES", "SYNONYM", 5238193, 9439058)
+                else:
+                    gbif_species = get_gbif_species(http, "v1/species/match?kingdom=Fungi&name=", species_name)
+
                 old_gbif_id = gbif_species.key
 
                 # Vérifier l'orthographe des noms d'espèces
