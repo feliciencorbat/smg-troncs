@@ -42,7 +42,8 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
     for index, row in new_species_maillettes.iterrows():
         row_cells = table.add_row().cells
         row_cells[0].text = str(row["Espèce"])
-        row_cells[1].text = str(row["Espèce actuelle"])
+        if row["Espèce actuelle"] != row["Espèce"]:
+            row_cells[1].text = str(row["Espèce actuelle"])
         row_cells[2].text = str(row["Liste rouge"])
 
     document.add_page_break()
@@ -59,7 +60,8 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
     for index, row in new_species_bossy.iterrows():
         row_cells = table.add_row().cells
         row_cells[0].text = str(row["Espèce"])
-        row_cells[1].text = str(row["Espèce actuelle"])
+        if row["Espèce actuelle"] != row["Espèce"]:
+            row_cells[1].text = str(row["Espèce actuelle"])
         row_cells[2].text = str(row["Liste rouge"])
 
     document.add_page_break()
@@ -76,7 +78,8 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
     for index, row in new_species_isole.iterrows():
         row_cells = table.add_row().cells
         row_cells[0].text = str(row["Espèce"])
-        row_cells[1].text = str(row["Espèce actuelle"])
+        if row["Espèce actuelle"] != row["Espèce"]:
+            row_cells[1].text = str(row["Espèce actuelle"])
         row_cells[2].text = str(row["Liste rouge"])
 
     document.add_page_break()
@@ -92,7 +95,8 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
     for index, row in rare_species_maillettes.iterrows():
         row_cells = table.add_row().cells
         row_cells[0].text = str(row["Espèce"])
-        row_cells[1].text = str(row["Espèce actuelle"])
+        if row["Espèce actuelle"] != row["Espèce"]:
+            row_cells[1].text = str(row["Espèce actuelle"])
         row_cells[2].text = str(row["Liste rouge"])
 
     document.add_page_break()
@@ -109,7 +113,8 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
     for index, row in rare_species_bossy.iterrows():
         row_cells = table.add_row().cells
         row_cells[0].text = str(row["Espèce"])
-        row_cells[1].text = str(row["Espèce actuelle"])
+        if row["Espèce actuelle"] != row["Espèce"]:
+            row_cells[1].text = str(row["Espèce actuelle"])
         row_cells[2].text = str(row["Liste rouge"])
 
     document.add_page_break()
@@ -126,7 +131,8 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
     for index, row in rare_species_isole.iterrows():
         row_cells = table.add_row().cells
         row_cells[0].text = str(row["Espèce"])
-        row_cells[1].text = str(row["Espèce actuelle"])
+        if row["Espèce actuelle"] != row["Espèce"]:
+            row_cells[1].text = str(row["Espèce actuelle"])
         row_cells[2].text = str(row["Liste rouge"])
 
     return document
