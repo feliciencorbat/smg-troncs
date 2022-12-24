@@ -1,7 +1,7 @@
 import pandas as pd
 from docx import Document
 
-def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole, rare_species_maillettes: pd.DataFrame, rare_species_bossy: pd.DataFrame, rare_species_isole: pd.DataFrame, year):
+def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole, rare_species_maillettes: pd.DataFrame, rare_species_bossy: pd.DataFrame, rare_species_isole: pd.DataFrame, total_species_maillettes, total_species_bossy, total_species_isole, year):
 
     document = Document()
 
@@ -11,6 +11,15 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
     document.add_paragraph('')
 
     document.add_heading("Rapport intermédiaire " + year, level=0)
+
+    data_title = document.add_paragraph('')
+    data_title.add_run('Quelques données pour le rapport :').bold = True
+
+    document.add_paragraph("Nombre total d'espèces recensées au chemin des Maillettes: " + str(total_species_maillettes))
+    document.add_paragraph("Nombre total d'espèces recensées au chemin du Pont-de-Bossy: " + str(total_species_bossy))
+    document.add_paragraph("Nombre total d'espèces recensées du tronc isolé au chemin du Pont-de-Bossy: " + str(total_species_isole))
+
+    document.add_paragraph('')
 
     introduction_title = document.add_paragraph('')
     introduction_title.add_run('Introduction :').bold = True

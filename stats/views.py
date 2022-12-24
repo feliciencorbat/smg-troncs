@@ -360,9 +360,9 @@ def report(request):
         year = post_request.get("year")
 
         old_species_maillettes, old_species_bossy, old_species_isole = old_species_lists(data, year)
-        new_species_maillettes, new_species_bossy, new_species_isole = new_species_lists(data, old_species_maillettes, old_species_bossy, old_species_isole, year)
+        new_species_maillettes, new_species_bossy, new_species_isole, total_species_maillettes, total_species_bossy, total_species_isole = new_species_lists(data, old_species_maillettes, old_species_bossy, old_species_isole, year)
         rare_species_maillettes, rare_species_bossy, rare_species_isole = rare_species_lists(data, year)
-        document = docx_generation(new_species_maillettes, new_species_bossy, new_species_isole, rare_species_maillettes, rare_species_bossy, rare_species_isole, year)
+        document = docx_generation(new_species_maillettes, new_species_bossy, new_species_isole, rare_species_maillettes, rare_species_bossy, rare_species_isole, total_species_maillettes, total_species_bossy, total_species_isole, year)
 
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
         response['Content-Disposition'] = 'attachment; filename=Rapport intermédiaire '+year+' (troncs).docx'

@@ -29,4 +29,8 @@ def new_species_lists(data: pd.DataFrame, old_species_maillettes, old_species_bo
     new_species_bossy = pd.merge(year_species_bossy, old_species_bossy, how='outer', indicator=True).query("_merge == 'left_only'").drop('_merge', axis=1).reset_index(drop=True)
     new_species_isole = pd.merge(year_species_isole, old_species_isole, how='outer', indicator=True).query("_merge == 'left_only'").drop('_merge', axis=1).reset_index(drop=True)
 
-    return new_species_maillettes, new_species_bossy, new_species_isole
+    total_species_maillettes = old_species_maillettes.shape[0] + new_species_maillettes.shape[0]
+    total_species_bossy = old_species_bossy.shape[0] + new_species_bossy.shape[0]
+    total_species_isole = old_species_isole.shape[0] + new_species_isole.shape[0]
+
+    return new_species_maillettes, new_species_bossy, new_species_isole, total_species_maillettes, total_species_bossy, total_species_isole
