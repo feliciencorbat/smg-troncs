@@ -1,7 +1,8 @@
 class Species:
-    def __init__(self, species: str, phylum: str, order: str, rank: str, status: str, key: int,
+    def __init__(self, species: str, author: str, phylum: str, order: str, rank: str, status: str, key: int,
                  accepted_key: int | None):
         self._species = species
+        self.author = author
         self.phylum = phylum
         self.order = order
         self.rank = rank

@@ -160,6 +160,6 @@ def export_function(file) -> None:
         column_length = max(errors[column].astype(str).map(len).max(), len(column))
         col_idx = errors.columns.get_loc(column)
         writer.sheets['Erreurs'].set_column(col_idx, col_idx, column_length)
-    writer.save()
+    writer.close()
 
     print("Exportation terminée")

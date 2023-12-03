@@ -12,16 +12,16 @@ def new_species_lists(data: pd.DataFrame, old_species_maillettes, old_species_bo
     year_species_isole = year_species.loc[data["Tronc"] == "isolé"]
 
     # Filtrer les colonnes
-    year_species_maillettes = year_species_maillettes[["Espèce", "Espèce actuelle", "Liste rouge", "Tronc"]].drop_duplicates().sort_values('Espèce')
-    year_species_bossy = year_species_bossy[["Espèce", "Espèce actuelle", "Liste rouge", "Tronc"]].drop_duplicates().sort_values('Espèce')
-    year_species_isole = year_species_isole[["Espèce", "Espèce actuelle", "Liste rouge"]].drop_duplicates().sort_values('Espèce')
+    year_species_maillettes = year_species_maillettes[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Tronc"]].drop_duplicates().sort_values('Espèce')
+    year_species_bossy = year_species_bossy[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Tronc"]].drop_duplicates().sort_values('Espèce')
+    year_species_isole = year_species_isole[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge"]].drop_duplicates().sort_values('Espèce')
 
     # Group by Tronc
-    year_species_maillettes = year_species_maillettes[["Espèce", "Espèce actuelle", "Liste rouge", "Tronc"]].groupby(
-        by=["Espèce", "Espèce actuelle", "Liste rouge"], dropna=False).agg({'Tronc': ', '.join}).reset_index().reindex(
+    year_species_maillettes = year_species_maillettes[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Tronc"]].groupby(
+        by=["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge"], dropna=False).agg({'Tronc': ', '.join}).reset_index().reindex(
         columns=year_species_maillettes.columns)
-    year_species_bossy = year_species_bossy[["Espèce", "Espèce actuelle", "Liste rouge", "Tronc"]].groupby(
-        by=["Espèce", "Espèce actuelle", "Liste rouge"], dropna=False).agg({'Tronc': ', '.join}).reset_index().reindex(
+    year_species_bossy = year_species_bossy[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Tronc"]].groupby(
+        by=["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge"], dropna=False).agg({'Tronc': ', '.join}).reset_index().reindex(
         columns=year_species_bossy.columns)
 
     # Retirer les anciennes espèces

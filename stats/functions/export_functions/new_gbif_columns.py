@@ -28,11 +28,12 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
                 species_name = species_row.Espèce
                 # Récupérer l'espèce GBIF
                 if species_name == "Polyporus badius":
-                    gbif_species = Species("Polyporus badius", "Basidiomycota", "Polyporales", "SPECIES", "SYNONYM", 5238193, 9439058)
+                    gbif_species = Species("Polyporus badius", "(Pers.) Schwein.", "Basidiomycota", "Polyporales", "SPECIES", "SYNONYM", 5238193, 9439058)
                 else:
                     gbif_species = get_gbif_species(http, "v1/species/match?kingdom=Fungi&name=", species_name)
 
                 old_gbif_id = gbif_species.key
+                author = gbif_species.author
 
                 # Vérifier l'orthographe des noms d'espèces
                 writing_errors_rows = writing_errors(species_name, gbif_species)
@@ -45,7 +46,10 @@ def new_gbif_columns(species: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]
 
                 if gbif_species.rank == "SPECIES" or gbif_species.rank == "VARIETY" or \
                         gbif_species.rank == "SUBSPECIES" or gbif_species.rank == "FORM":
-                    result = pd.DataFrame({"Espèce": [species_name], "Espèce actuelle": [gbif_species.species],
+                    result = pd.DataFrame({"Espèce": [species_name],
+                                           "Auteur": [author],
+                                           "Espèce actuelle": [gbif_species.species],
+                                           "Auteur actuel": [gbif_species.author],
                                            "Phylum": [gbif_species.phylum], "Ordre": [gbif_species.order],
                                            "GBIF1": [old_gbif_id], "GBIF2": [gbif_species.key]})
                     self.species = pd.concat([self.species, result])
@@ -96,6 +100,7 @@ def get_gbif_species(http: urllib3.PoolManager, url: str, query: str) -> Species
         response = http.request('GET', api_url + url + query)
         gbif_match = json.loads(response.data.decode('utf-8'))
         return Species(gbif_match["canonicalName"],
+                       gbif_match["scientificName"].replace(gbif_match["canonicalName"], ''),
                        gbif_match["phylum"] if "phylum" in gbif_match else None,
                        gbif_match["order"] if "order" in gbif_match else None,
                        gbif_match["rank"],
