@@ -5,7 +5,7 @@ def species_errors(data: pd.DataFrame, species: pd.DataFrame) -> pd.DataFrame:
     errors = pd.DataFrame([], )
 
     # Afficher les erreurs dans les espèces qui contiennent une parenthèse non fermée ou égal
-    syn_errors = data.loc[data["Espèce"].str.contains("\)|\(|\=", case=False)]
+    syn_errors = data.loc[data["Espèce"].str.contains(r'\)|\(|\=', case=False)]
     syn_errors = syn_errors[["Espèce"]]
     syn_errors["Type d'erreur"] = "Erreur de parenthèse non fermée ou de caractère indésirable"
     syn_errors["Ligne"] = syn_errors.index + 2
