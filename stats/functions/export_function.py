@@ -46,9 +46,11 @@ def export_function(file) -> None:
     data = new_species_column(data)
 
     # Création du nouveau dataframe species
+    print("Création du dataframe species...")
     species = new_species_dataframe(data)
 
     # Chercher les erreurs dans les noms d'espèces (parenthèses, ...) et les incohérences avec la LR
+    print("Recherche des erreurs dans les noms d'espèces (parenthèses, ...)...")
     sp_errors = species_errors(data, species)
     errors = pd.concat([errors, sp_errors])
 
@@ -56,6 +58,7 @@ def export_function(file) -> None:
     species = new_threat_column(species)
 
     # Création colonnes GBIF dans la dataframe species
+    print("Création de la colonne GBIF...")
     species, gbif_errors = new_gbif_columns(species)
     errors = pd.concat([errors, gbif_errors])
     syn_errors = synonyms_errors(species)
@@ -77,35 +80,45 @@ def export_function(file) -> None:
     species = new_swiss_fungi_lr_column(species)
 
     # Erreurs entre LR et SwissFungi LR
+    print("Erreurs en LR et SwissFungi LR...")
     errors_lr = lr_errors(species)
     errors = pd.concat([errors, errors_lr])
 
     # Joindre le dataframe species au dataframe data
+    print("Joindre dataframe species au Dataframe data...")
     data = data.join(species.set_index('Espèce'), on="Espèce", rsuffix='_right')
 
     # Nettoyer les colonnes liées aux troncs
+    print("Nettoyer les colonnes liées aux troncs...")
     trunks, data = clean_trunks_columns(trunks, data)
 
     # Création du nouveau dataframe de coupe des troncs
+    print("Création dataframe coupe des troncs...")
     cut_trunks = new_cut_trunks_dataframe(trunks)
 
     # Joindre le dataframe coupe des troncs avec troncs
+    print("Joindre le dataframe coupe des troncs avec troncs...")
     trunks = trunks.join(cut_trunks.set_index('Identifiant'), on="Identifiant")
 
     # Joindre le dataframe trunks au dataframe data
+    print("Joindre le dataframe troncs au dataframe data...")
     data = data.join(trunks.set_index('Identifiant'), on="Substrat", rsuffix='_right')
 
     # Ajouter une colonne âge du tronc
+    print("Ajouter une colonne âge du tronc...")
     data["Age du tronc"] = (data["Date"] - data["Date de coupe"]) / 365.25
 
     # Erreurs des troncs
+    print("Erreurs des troncs...")
     tru_errors = trunks_errors(data)
     errors = pd.concat([errors, tru_errors])
 
     # Réarranger les colonnes (ordre, noms, ...)
+    print("Réarranger les colonnes (ordre, noms, ...)...")
     data, species, errors = adjust_columns(data, species, errors)
 
     # Liste des espèces par tronc
+    print("Liste des espèces par tronc...")
     trunks_species_serie = data[["Tronc", "Espèce"]].groupby("Tronc")["Espèce"].apply(
         lambda x: list(np.unique(x))).to_frame()
     trunks_species = pd.DataFrame({'Tronc': trunks_species_serie.index, 'Espèces': trunks_species_serie["Espèce"]})
@@ -119,10 +132,12 @@ def export_function(file) -> None:
     trunks_species = trunks_species[["Tronc", "Espèces"]]
 
     # Tester si le nombre d'observations est toujours le même
+    print("Tester si le nombre d'observations est toujours le même...")
     nb_obs_errors = test_nb_obs(data, nb_obs)
     errors = pd.concat([errors, nb_obs_errors])
 
     # Enregistrer le fichier excel
+    print("Enregistrer le fichier excel...")
     directory = "files/export"
     if not os.path.exists(directory):
         os.makedirs(directory)
