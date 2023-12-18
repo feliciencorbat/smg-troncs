@@ -15,27 +15,27 @@
                 <tbody>
                 {% for species in species_list %}
                 <tr>
-                        {% if species.8 != None %}
-                        <td><a href="https://www.wsl.ch/map_fungi/search?taxon={{ species.8|floatformat:0 }}"><i>{{ species.0 }}</i></i></a></td>
+                        {% if species.10 != None %}
+                        <td><a href="https://www.wsl.ch/map_fungi/search?taxon={{ species.10|floatformat:0 }}"><i>{{ species.0 }}</i></a> {{ species.1 }}</td>
                         {% else %}
-                        <td><i>{{ species.0 }}</i></td>
+                        <td><i>{{ species.0 }}</i> {{ species.1 }}</td>
                         {% endif %}
 
-                        {% if species.0 != species.2 %}
-                        <td><i>{{ species.2 }}</i></td>
+                        {% if species.0 != species.3 %}
+                        <td><i>{{ species.3 }}</i> {{ species.4 }}</td>
                         {% else %}
                         <td></td>
                         {% endif %}
 
-                        <td>{{ species.4 }}</td>
-
-                        {% if species.6 != None %}
                         <td>{{ species.6 }}</td>
+
+                        {% if species.8 != None %}
+                        <td>{{ species.8 }}</td>
                         {% else %}
                         <td></td>
                         {% endif %}
 
-                        <td>{{ species.7 }}</td>
+                        <td>{{ species.9 }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>

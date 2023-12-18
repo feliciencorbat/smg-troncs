@@ -15,9 +15,9 @@
                 {% for observation in observations_list %}
                 <tr>
                         <td>{{ observation.0|date:'d F Y' }}</td>
-                        <td><i>{{ observation.4 }}</i></td>
-                        <td>{{ observation.11 }}</td>
-                        <td>{{ observation.12 }}</td>
+                        <td><i>{{ observation.4 }}</i> {{ observation.5 }}</td>
+                        <td>{{ observation.14 }}</td>
+                        <td>{{ observation.15 }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
