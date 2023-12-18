@@ -10,11 +10,11 @@ def adjust_columns(data: pd.DataFrame, species: pd.DataFrame, errors: pd.DataFra
 
     # Renommer les colonnes de data
     data = data.rename(columns={"LR": "Liste rouge", "Substrat": "Tronc", "Espèce du substrat": "Espèce du tronc",
-                                "D. moyen": "Diamètre moyen", "Pourriture": "Degré de pourriture"})
+                                "D. moyen": "Diamètre moyen", "Pourriture": "Degré de pourriture", "Fréq": "Fréquence"})
 
     # Garder uniquement les colonnes nécessaires
     data = data[
-        ["Date", "Année", "Saison", "Mois", "Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Phylum", "Ordre", "cf", "Liste rouge", "Menace",
+        ["Date", "Année", "Saison", "Mois", "Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Phylum", "Ordre", "cf", "Liste rouge", "Menace", "Fréquence",
          "Tronc", "Espèce du tronc", "Diamètre moyen", "Longueur", "Degré de pourriture", "Lieu", "Groupe troncs",
          "Date de coupe", "Age du tronc"]]
 

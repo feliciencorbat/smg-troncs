@@ -7,7 +7,7 @@ def rare_species_lists(data: pd.DataFrame, year):
     data_year = data.loc[data["Année"] == int(year)]
 
     # Filtrer menace
-    data_threat = data_year.loc[data["Menace"] == "Menacé"]
+    data_threat = data_year.loc[data["Fréquence"] == "Menacé"]
 
     # Filtrer lieu
     data_maillettes = data_threat.loc[data["Lieu"] == "Les Maillettes"]
@@ -16,12 +16,12 @@ def rare_species_lists(data: pd.DataFrame, year):
     data_isole = data_threat.loc[data["Tronc"] == "isolé"]
 
     # Filtrer les colonnes
-    data_maillettes = data_maillettes[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Tronc", "Menace"]].drop_duplicates().sort_values('Espèce')
-    data_bossy = data_bossy[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Tronc", "Menace"]].drop_duplicates().sort_values('Espèce')
-    data_isole = data_isole[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Menace"]].drop_duplicates().sort_values('Espèce')
+    data_maillettes = data_maillettes[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Tronc", "Fréquence"]].drop_duplicates().sort_values('Espèce')
+    data_bossy = data_bossy[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Tronc", "Fréquence"]].drop_duplicates().sort_values('Espèce')
+    data_isole = data_isole[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Fréquence"]].drop_duplicates().sort_values('Espèce')
 
     # Group by Tronc
-    data_maillettes = data_maillettes[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Tronc", "Menace"]].groupby(by=["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Menace"], dropna=False).agg({'Tronc' : ', '.join}).reset_index().reindex(columns=data_maillettes.columns)
-    data_bossy = data_bossy[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Tronc", "Menace"]].groupby(by=["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Menace"], dropna=False).agg({'Tronc' : ', '.join}).reset_index().reindex(columns=data_bossy.columns)
+    data_maillettes = data_maillettes[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Tronc", "Fréquence"]].groupby(by=["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Fréquence"], dropna=False).agg({'Tronc' : ', '.join}).reset_index().reindex(columns=data_maillettes.columns)
+    data_bossy = data_bossy[["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Tronc", "Fréquence"]].groupby(by=["Espèce", "Auteur", "Espèce actuelle", "Auteur actuel", "Liste rouge", "Fréquence"], dropna=False).agg({'Tronc' : ', '.join}).reset_index().reindex(columns=data_bossy.columns)
 
     return data_maillettes, data_bossy, data_isole

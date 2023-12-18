@@ -73,7 +73,7 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
             row_cells[0].text = str(row["Espèce"] + " " + row["Auteur"] + " (= " + row["Espèce actuelle"] + " " + row["Auteur actuel"] + ")")
         row_cells[1].text = str(row["Liste rouge"])
         if str(row["Liste rouge"]) == 'NE' or str(row["Liste rouge"]) == 'DD' or str(row["Liste rouge"]) == 'néant':
-            row_cells[1].text = str(row["Liste rouge"]) + " - " + str(row["Menace"])
+            row_cells[1].text = str(row["Liste rouge"]) + " - " + str(row["Fréquence"])
         else:
             row_cells[1].text = str(row["Liste rouge"])
         row_cells[2].text = str(row["Tronc"])
@@ -95,7 +95,7 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
         if row["Espèce actuelle"] != row["Espèce"]:
             row_cells[0].text = str(row["Espèce"] + " " + row["Auteur"] + " (= " + row["Espèce actuelle"] + " " + row["Auteur actuel"] + ")")
         if str(row["Liste rouge"]) == 'NE' or str(row["Liste rouge"]) == 'DD' or str(row["Liste rouge"]) == 'néant':
-            row_cells[1].text = str(row["Liste rouge"]) + " - " + str(row["Menace"])
+            row_cells[1].text = str(row["Liste rouge"]) + " - " + str(row["Fréquence"])
         else:
             row_cells[1].text = str(row["Liste rouge"])
         row_cells[2].text = str(row["Tronc"])
@@ -116,7 +116,7 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
         if row["Espèce actuelle"] != row["Espèce"]:
             row_cells[0].text = str(row["Espèce"] + " " + row["Auteur"] + " (= " + row["Espèce actuelle"] + " " + row["Auteur actuel"] + ")")
         if str(row["Liste rouge"]) == 'NE' or str(row["Liste rouge"]) == 'DD' or str(row["Liste rouge"]) == 'néant':
-            row_cells[1].text = str(row["Liste rouge"]) + " - " + str(row["Menace"])
+            row_cells[1].text = str(row["Liste rouge"]) + " - " + str(row["Fréquence"])
         else:
             row_cells[1].text = str(row["Liste rouge"])
 
@@ -136,7 +136,7 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
         if row["Espèce actuelle"] != row["Espèce"]:
             row_cells[0].text = str(row["Espèce"] + " " + row["Auteur"] + " (= " + row["Espèce actuelle"] + " " + row["Auteur actuel"] + ")")
         if str(row["Liste rouge"]) == 'NE' or str(row["Liste rouge"]) == 'DD' or str(row["Liste rouge"]) == 'néant':
-            row_cells[1].text = str(row["Liste rouge"]) + " - " + str(row["Menace"])
+            row_cells[1].text = str(row["Liste rouge"]) + " - " + str(row["Fréquence"])
         else:
             row_cells[1].text = str(row["Liste rouge"])
         row_cells[2].text = str(row["Tronc"])
@@ -158,7 +158,7 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
         if row["Espèce actuelle"] != row["Espèce"]:
             row_cells[0].text = str(row["Espèce"] + " " + row["Auteur"] + " (= " + row["Espèce actuelle"] + " " + row["Auteur actuel"] + ")")
         if str(row["Liste rouge"]) == 'NE' or str(row["Liste rouge"]) == 'DD' or str(row["Liste rouge"]) == 'néant':
-            row_cells[1].text = str(row["Liste rouge"]) + " - " + str(row["Menace"])
+            row_cells[1].text = str(row["Liste rouge"]) + " - " + str(row["Fréquence"])
         else:
             row_cells[1].text = str(row["Liste rouge"])
         row_cells[2].text = str(row["Tronc"])
@@ -179,7 +179,7 @@ def docx_generation(new_species_maillettes, new_species_bossy, new_species_isole
         if row["Espèce actuelle"] != row["Espèce"]:
             row_cells[0].text = str(row["Espèce"] + " " + row["Auteur"] + " (= " + row["Espèce actuelle"] + " " + row["Auteur actuel"] + ")")
         if str(row["Liste rouge"]) == 'NE' or str(row["Liste rouge"]) == 'DD' or str(row["Liste rouge"]) == 'néant':
-            row_cells[1].text = str(row["Liste rouge"]) + " - " + str(row["Menace"])
+            row_cells[1].text = str(row["Liste rouge"]) + " - " + str(row["Fréquence"])
         else:
             row_cells[1].text = str(row["Liste rouge"])
 
