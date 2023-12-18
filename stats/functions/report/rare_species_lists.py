@@ -7,7 +7,7 @@ def rare_species_lists(data: pd.DataFrame, year):
     data_year = data.loc[data["Année"] == int(year)]
 
     # Filtrer menace
-    data_threat = data_year.loc[data["Fréquence"] == "Menacé"]
+    data_threat = data_year.loc[data["Menace"] == "Menacé"]
 
     # Filtrer lieu
     data_maillettes = data_threat.loc[data["Lieu"] == "Les Maillettes"]
