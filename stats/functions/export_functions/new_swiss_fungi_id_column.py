@@ -25,7 +25,7 @@ def new_swiss_fungi_id_column(species: pd.DataFrame):
                     break
 
                 species = species_row.Espèce
-                current_species = species_row[5]
+                current_species = species_row[6]
                 gbif1_id = species_row.GBIF1
 
                 # Récupérer l'espèce SwissFungi
@@ -71,16 +71,17 @@ def new_swiss_fungi_id_column(species: pd.DataFrame):
 def get_swiss_fungi_id(http: urllib3.PoolManager, url, query1, query2) -> str | None:
     try:
         api_url = "https://www.wsl.ch/map_fungi/rest/"
-        response = http.request('GET', api_url + url + query1)
-        swissfungi_match = json.loads(response.data.decode('utf-8'))
-        if len(swissfungi_match) > 0:
-            return swissfungi_match[0]["taxonId"]
 
         if query1 != query2:
             response = http.request('GET', api_url + url + query2)
             swissfungi_match = json.loads(response.data.decode('utf-8'))
             if len(swissfungi_match) > 0:
                 return swissfungi_match[0]["taxonId"]
+
+        response = http.request('GET', api_url + url + query1)
+        swissfungi_match = json.loads(response.data.decode('utf-8'))
+        if len(swissfungi_match) > 0:
+            return swissfungi_match[0]["taxonId"]
 
         return None
 

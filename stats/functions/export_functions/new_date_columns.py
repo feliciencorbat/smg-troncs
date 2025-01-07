@@ -3,6 +3,12 @@ import pandas as pd
 
 
 def new_date_columns(data: pd.DataFrame) -> pd.DataFrame:
+
+    data['Date'] = pd.to_datetime(data['Date'], errors='coerce')
+    if data['Date'].isnull().any():
+        raise ValueError("Certaines valeurs dans la colonne 'Date' ne peuvent pas être converties en format datetime.")
+
+
     # Création  colonne saison
     conditions = [
         (data['Date'].dt.month < 3),
@@ -26,7 +32,13 @@ def new_date_columns(data: pd.DataFrame) -> pd.DataFrame:
         'Automne',
         'Hiver'
     ]
-    data["Saison"] = np.select(condlist=conditions, choicelist=choices)
+
+    try:
+        data["Saison"] = np.select(condlist=conditions, choicelist=choices, default="Saison iconnue")
+    except Exception as e:
+        print(f"Une exception s'est produite dans le fichier new_date_columns : {e}")
+        raise
+
 
     # Création colonne Mois
     data['Mois'] = data['Date'].dt.month

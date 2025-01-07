@@ -7,4 +7,4 @@ class Constants:
                                "Phlebia cremeo-alutacea", "Pluteus podospileus fo. podospileus"]
 
     # Espèces dont la synonymie GBIF est refusée
-    gbif_synonyms_errors = ["Tubaria hiemalis", "Galerina autumnalis", "Pluteus brunneoradiatus", "Diatrype undulata", "Coniophora arida var. suffocata", "Pluteus pallescens"]
+    gbif_synonyms_errors = ["Tubaria hiemalis", "Galerina autumnalis", "Pluteus brunneoradiatus", "Diatrype undulata", "Coniophora arida var. suffocata", "Pluteus pallescens", "Aegerita tortuosa", "Pluteus podospileus fo. minutissimus"]
