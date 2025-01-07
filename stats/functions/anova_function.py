@@ -107,6 +107,4 @@ def anova_function(data: pd.DataFrame, variable1: str, variable2: str, title: st
         kruskal_dataframe = pd.DataFrame({"Statistiques": [statistic_kruskal], "P-value": [p_value_kruskal], "Interprétation": interpretation})
         kruskal_dataframe.to_excel(writer, sheet_name='Test Kruskal-Wallis', index=False)
 
-    writer.save()
-
     return shapiro_dataframe, levene_dataframe, anova_dataframe, kruskal_dataframe

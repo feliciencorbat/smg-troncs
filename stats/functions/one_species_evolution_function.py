@@ -98,8 +98,6 @@ def one_species_evolution_function(data: pd.DataFrame, species: str, with_cf: bo
     plt.legend(loc="upper left")
     plt.savefig(directory + "/observations_cumulees_par_mois_especes_troncs.svg", bbox_inches='tight')
 
-    writer.save()
-
 def cumulative_observations(data: pd.DataFrame, last_date) -> pd.DataFrame:
     count = data[["Date", "Espèce"]].groupby(pd.Grouper(key='Date', freq='1M')).count()
     observations = pd.DataFrame([], )

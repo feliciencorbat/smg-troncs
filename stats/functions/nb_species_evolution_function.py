@@ -113,7 +113,6 @@ def nb_species_evolution_function(data: pd.DataFrame, with_cf: bool, location: s
     plt.savefig(directory + "/nbre_especes_par_mois.svg", bbox_inches='tight')
 
     number_species_by_month.to_excel(writer, sheet_name='Nb espèces par mois')
-    writer.save()
 
 
 # Fonction de cumulation des espèces

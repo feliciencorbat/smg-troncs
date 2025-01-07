@@ -43,7 +43,6 @@ def cramer_function(data: pd.DataFrame, with_cf: bool, location: str, user_id: s
 
     writer = pd.ExcelWriter(directory + '/cramer.xlsx', engine='xlsxwriter')
     matrix.to_excel(writer, sheet_name='Matrice V de Cramer')
-    writer.save()
 
     plt.figure()
     sns.heatmap(matrix, annot=matrix, vmin=0, vmax=1,

@@ -91,7 +91,6 @@ def chi2_function(data: pd.DataFrame, variable1: str, variable2: str, title: str
     differences.to_excel(writer, sheet_name='Différences')
     dependence_contribution.to_excel(writer, sheet_name='Contribution dépendance')
     sorted_dependance_contribution.to_excel(writer, sheet_name='Contribution dépendance triée', index=False)
-    writer.save()
 
     # création du graphe des contributions à la dépendance
     plt.figure()
