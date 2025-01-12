@@ -1,5 +1,6 @@
 import json
 import queue
+import difflib
 from threading import Thread
 
 import pandas as pd
@@ -72,16 +73,22 @@ def get_swiss_fungi_id(http: urllib3.PoolManager, url, query1, query2) -> str | 
     try:
         api_url = "https://www.wsl.ch/map_fungi/rest/"
 
+        response = http.request('GET', api_url + url + query1)
+        swissfungi_match = json.loads(response.data.decode('utf-8'))
+        if len(swissfungi_match) > 0:
+            similarities = [
+                (entry["taxonId"], difflib.SequenceMatcher(None, query1, entry["taxonName"]).ratio())
+                for entry in swissfungi_match
+            ]
+
+            closest_match = max(similarities, key=lambda x: x[1])
+            return closest_match[0]
+
         if query1 != query2:
             response = http.request('GET', api_url + url + query2)
             swissfungi_match = json.loads(response.data.decode('utf-8'))
             if len(swissfungi_match) > 0:
                 return swissfungi_match[0]["taxonId"]
-
-        response = http.request('GET', api_url + url + query1)
-        swissfungi_match = json.loads(response.data.decode('utf-8'))
-        if len(swissfungi_match) > 0:
-            return swissfungi_match[0]["taxonId"]
 
         return None
 
